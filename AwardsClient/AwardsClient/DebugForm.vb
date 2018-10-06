@@ -25,4 +25,11 @@ Public Class DebugForm
             RichTextBox1.Text = _log
         End SyncLock
     End Sub
+
+    Private Sub DebugForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+#If DEBUG Then
+#Else
+        Me.Close()
+#End If
+    End Sub
 End Class

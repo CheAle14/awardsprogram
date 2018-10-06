@@ -116,6 +116,14 @@ Public Class MainForm
             ElseIf message = "Errored" Then
                 lblOpeningMessage.Text = "Your vote was rejected because the server encountered an error - its probably happening to everyone."
             End If
+        ElseIf message.StartsWith("REJECT:") Then
+            first_panel_load.Hide()
+            second_panel_prompt.Show()
+            message = message.Replace("REJECT:", "")
+            If message = "Voted" Then
+                lblOpeningMessage.Text = "Refused!" + vbCrLf + vbCrLf + "The server closed the connection because you have already voted"
+            End If
+            Client.Close()
         ElseIf message.StartsWith("CTS:") Then
             message = message.Replace("CTS:", "")
             Dim int As Integer = 0
@@ -223,7 +231,9 @@ Public Class MainForm
 
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+#If DEBUG Then
         DebugForm.Show()
+#End If
         first_panel_load.Location = New Point(0, 0)
         Dim pSize = New Size(Me.Width, Me.Height - 25)
         first_panel_load.Size = pSize
