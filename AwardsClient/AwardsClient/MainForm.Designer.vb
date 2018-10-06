@@ -27,12 +27,20 @@ Partial Class MainForm
         Me.lblFirstPanelDisplay = New System.Windows.Forms.Label()
         Me.contactServerTimer = New System.Windows.Forms.Timer(Me.components)
         Me.second_panel_prompt = New System.Windows.Forms.Panel()
-        Me.btnStart = New System.Windows.Forms.Button()
         Me.lblOpeningMessage = New System.Windows.Forms.Label()
+        Me.btnStart = New System.Windows.Forms.Button()
         Me.lblPrompt = New System.Windows.Forms.Label()
         Me.lblNumRemain = New System.Windows.Forms.Label()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnPrevious = New System.Windows.Forms.Button()
+        Me.lblMaleDisplay = New System.Windows.Forms.Label()
+        Me.lblFemaleDisplay = New System.Windows.Forms.Label()
+        Me.lblQueryMale = New System.Windows.Forms.Label()
+        Me.lblQueryFemale = New System.Windows.Forms.Label()
+        Me.txtQueryMale = New System.Windows.Forms.TextBox()
+        Me.txtQueryFemale = New System.Windows.Forms.TextBox()
+        Me.maleDisplayPanel = New System.Windows.Forms.Panel()
+        Me.femaleDisplayPanel = New System.Windows.Forms.Panel()
         Me.first_panel_load.SuspendLayout()
         Me.second_panel_prompt.SuspendLayout()
         Me.SuspendLayout()
@@ -48,6 +56,7 @@ Partial Class MainForm
         'lblFirstPanelDisplay
         '
         Me.lblFirstPanelDisplay.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lblFirstPanelDisplay.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblFirstPanelDisplay.Location = New System.Drawing.Point(0, 0)
         Me.lblFirstPanelDisplay.Name = "lblFirstPanelDisplay"
         Me.lblFirstPanelDisplay.Size = New System.Drawing.Size(215, 175)
@@ -68,6 +77,17 @@ Partial Class MainForm
         Me.second_panel_prompt.Size = New System.Drawing.Size(233, 175)
         Me.second_panel_prompt.TabIndex = 1
         '
+        'lblOpeningMessage
+        '
+        Me.lblOpeningMessage.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lblOpeningMessage.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblOpeningMessage.Location = New System.Drawing.Point(0, 0)
+        Me.lblOpeningMessage.Name = "lblOpeningMessage"
+        Me.lblOpeningMessage.Size = New System.Drawing.Size(233, 147)
+        Me.lblOpeningMessage.TabIndex = 1
+        Me.lblOpeningMessage.Text = "Hello!"
+        Me.lblOpeningMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'btnStart
         '
         Me.btnStart.Dock = System.Windows.Forms.DockStyle.Bottom
@@ -78,18 +98,9 @@ Partial Class MainForm
         Me.btnStart.Text = "I'm ready, lets begin"
         Me.btnStart.UseVisualStyleBackColor = True
         '
-        'lblOpeningMessage
-        '
-        Me.lblOpeningMessage.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lblOpeningMessage.Location = New System.Drawing.Point(0, 0)
-        Me.lblOpeningMessage.Name = "lblOpeningMessage"
-        Me.lblOpeningMessage.Size = New System.Drawing.Size(233, 147)
-        Me.lblOpeningMessage.TabIndex = 1
-        Me.lblOpeningMessage.Text = "Hello!"
-        Me.lblOpeningMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'lblPrompt
         '
+        Me.lblPrompt.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblPrompt.Location = New System.Drawing.Point(90, 9)
         Me.lblPrompt.Name = "lblPrompt"
         Me.lblPrompt.Size = New System.Drawing.Size(736, 40)
@@ -125,11 +136,89 @@ Partial Class MainForm
         Me.btnPrevious.UseVisualStyleBackColor = True
         Me.btnPrevious.Visible = False
         '
+        'lblMaleDisplay
+        '
+        Me.lblMaleDisplay.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblMaleDisplay.Location = New System.Drawing.Point(12, 91)
+        Me.lblMaleDisplay.Name = "lblMaleDisplay"
+        Me.lblMaleDisplay.Size = New System.Drawing.Size(208, 17)
+        Me.lblMaleDisplay.TabIndex = 6
+        Me.lblMaleDisplay.Text = "Male"
+        Me.lblMaleDisplay.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
+        'lblFemaleDisplay
+        '
+        Me.lblFemaleDisplay.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblFemaleDisplay.Location = New System.Drawing.Point(524, 91)
+        Me.lblFemaleDisplay.Name = "lblFemaleDisplay"
+        Me.lblFemaleDisplay.Size = New System.Drawing.Size(208, 17)
+        Me.lblFemaleDisplay.TabIndex = 7
+        Me.lblFemaleDisplay.Text = "Female"
+        Me.lblFemaleDisplay.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
+        'lblQueryMale
+        '
+        Me.lblQueryMale.AutoSize = True
+        Me.lblQueryMale.Location = New System.Drawing.Point(226, 114)
+        Me.lblQueryMale.Name = "lblQueryMale"
+        Me.lblQueryMale.Size = New System.Drawing.Size(84, 17)
+        Me.lblQueryMale.TabIndex = 9
+        Me.lblQueryMale.Text = "Searching..."
+        Me.lblQueryMale.Visible = False
+        '
+        'lblQueryFemale
+        '
+        Me.lblQueryFemale.AutoSize = True
+        Me.lblQueryFemale.Location = New System.Drawing.Point(738, 114)
+        Me.lblQueryFemale.Name = "lblQueryFemale"
+        Me.lblQueryFemale.Size = New System.Drawing.Size(84, 17)
+        Me.lblQueryFemale.TabIndex = 11
+        Me.lblQueryFemale.Text = "Searching..."
+        Me.lblQueryFemale.Visible = False
+        '
+        'txtQueryMale
+        '
+        Me.txtQueryMale.Location = New System.Drawing.Point(12, 111)
+        Me.txtQueryMale.MaxLength = 20
+        Me.txtQueryMale.Name = "txtQueryMale"
+        Me.txtQueryMale.Size = New System.Drawing.Size(208, 22)
+        Me.txtQueryMale.TabIndex = 12
+        '
+        'txtQueryFemale
+        '
+        Me.txtQueryFemale.Location = New System.Drawing.Point(524, 111)
+        Me.txtQueryFemale.MaxLength = 20
+        Me.txtQueryFemale.Name = "txtQueryFemale"
+        Me.txtQueryFemale.Size = New System.Drawing.Size(208, 22)
+        Me.txtQueryFemale.TabIndex = 13
+        '
+        'maleDisplayPanel
+        '
+        Me.maleDisplayPanel.Location = New System.Drawing.Point(12, 139)
+        Me.maleDisplayPanel.Name = "maleDisplayPanel"
+        Me.maleDisplayPanel.Size = New System.Drawing.Size(298, 229)
+        Me.maleDisplayPanel.TabIndex = 14
+        '
+        'femaleDisplayPanel
+        '
+        Me.femaleDisplayPanel.Location = New System.Drawing.Point(524, 139)
+        Me.femaleDisplayPanel.Name = "femaleDisplayPanel"
+        Me.femaleDisplayPanel.Size = New System.Drawing.Size(298, 229)
+        Me.femaleDisplayPanel.TabIndex = 15
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(834, 450)
+        Me.ClientSize = New System.Drawing.Size(842, 450)
+        Me.Controls.Add(Me.femaleDisplayPanel)
+        Me.Controls.Add(Me.maleDisplayPanel)
+        Me.Controls.Add(Me.txtQueryFemale)
+        Me.Controls.Add(Me.txtQueryMale)
+        Me.Controls.Add(Me.lblQueryFemale)
+        Me.Controls.Add(Me.lblQueryMale)
+        Me.Controls.Add(Me.lblFemaleDisplay)
+        Me.Controls.Add(Me.lblMaleDisplay)
         Me.Controls.Add(Me.btnPrevious)
         Me.Controls.Add(Me.btnNext)
         Me.Controls.Add(Me.lblNumRemain)
@@ -142,6 +231,7 @@ Partial Class MainForm
         Me.first_panel_load.ResumeLayout(False)
         Me.second_panel_prompt.ResumeLayout(False)
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 
@@ -155,4 +245,12 @@ Partial Class MainForm
     Friend WithEvents lblNumRemain As Label
     Friend WithEvents btnNext As Button
     Friend WithEvents btnPrevious As Button
+    Friend WithEvents lblMaleDisplay As Label
+    Friend WithEvents lblFemaleDisplay As Label
+    Friend WithEvents lblQueryMale As Label
+    Friend WithEvents lblQueryFemale As Label
+    Friend WithEvents txtQueryMale As TextBox
+    Friend WithEvents txtQueryFemale As TextBox
+    Friend WithEvents maleDisplayPanel As Panel
+    Friend WithEvents femaleDisplayPanel As Panel
 End Class

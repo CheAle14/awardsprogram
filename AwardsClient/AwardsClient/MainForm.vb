@@ -6,13 +6,31 @@ Public Class MainForm
     Public ConnectionPort As Integer = 56567
     Public Client As TcpClient
 
-    Public Students As New Dictionary(Of String, String) ' account name: display text
+    Public Students As New Dictionary(Of String, Student) ' account name
 
     Public Categories As New Dictionary(Of Integer, Category)
 
     Public CurrentCategory As Category
 
     Public NumberOfCategories = 0
+
+    Public Class Student
+        Public AccountName As String
+        Public FirstName As String
+        Public LastName As String
+        Public Tutor As String
+        Public Sex As Char
+        Public Sub New(accn As String, fn As String, ln As String, tt As String, sx As Char)
+            AccountName = accn
+            FirstName = fn
+            LastName = ln
+            Tutor = tt
+            Sex = sx
+        End Sub
+        Public Overrides Function ToString() As String
+            Return $"{FirstName} {LastName} ({Tutor})"
+        End Function
+    End Class
 
     Public Class Category
         Public ID As Integer = 0
@@ -22,9 +40,9 @@ Public Class MainForm
 
         Public ReadOnly Property MaleDisplay As String
             Get
-                Dim val = ""
+                Dim val As Student = Nothing
                 If MainForm.Students.TryGetValue(MaleWinner, val) Then
-                    Return val
+                    Return val.ToString()
                 End If
                 Return ""
             End Get
@@ -32,9 +50,9 @@ Public Class MainForm
 
         Public ReadOnly Property FemaleDisplay As String
             Get
-                Dim val = ""
+                Dim val As Student = Nothing
                 If MainForm.Students.TryGetValue(FemaleWinner, val) Then
-                    Return val
+                    Return val.ToString()
                 End If
                 Return ""
             End Get
@@ -47,7 +65,14 @@ Public Class MainForm
         DebugForm.Log("MainForm/ " + message)
     End Sub
 
+    Private Disallowed As New List(Of Char) From {
+    "`", "%"
+    }
+
     Private Sub Send(message As String)
+        For Each item In Disallowed
+            message = message.Replace(item, "")
+        Next
         message = $"%{message}`"
         Dim stream = Client.GetStream()
         Dim bytes = System.Text.Encoding.UTF8.GetBytes(message)
@@ -80,6 +105,17 @@ Public Class MainForm
                 + "If you need to go back, hit the 'Previous' button" + vbCrLf + vbCrLf _
                 + "Once you reach the final category, the Next button will become 'Finish' and you will be prompted to confirm your vote."
             first_panel_load.Hide()
+        ElseIf message = "Accepted" Then
+            lblOpeningMessage.Text = "Thanks for your vote!" + vbCrLf + "The server has indicated that your vote was accepted, you can leave now."
+        ElseIf message = "Rejected" Then
+            lblOpeningMessage.Text = "Uh oh!" + vbCrLf + "The server has indicated that your vote was rejected, though a reason was not given" + vbCrLf + vbCrLf + "You may have already voted, or attempted to vote for yourself.. it isn't clear"
+        ElseIf message.StartsWith("Rejected") Then
+            message = message.Substring("Rejected".Length + 1)
+            If message = "Self" Then
+                lblOpeningMessage.Text = "Your vote was rejected because you attempted to vote for yourself."
+            ElseIf message = "Errored" Then
+                lblOpeningMessage.Text = "Your vote was rejected because the server encountered an error - its probably happening to everyone."
+            End If
         ElseIf message.StartsWith("CTS:") Then
             message = message.Replace("CTS:", "")
             Dim int As Integer = 0
@@ -115,6 +151,32 @@ Public Class MainForm
             message = message.Replace("NumCat:", "")
             If Integer.TryParse(message, NumberOfCategories) Then
             End If
+        ElseIf message.StartsWith("Q_RES") Then
+            message = message.Replace("Q_RES:", "")
+            ' format is:
+            ' AccountName-First-Last-Tutor
+            ' with a # seperating
+            Dim male = QueryIsMale
+            Dim splited = message.Split("#").Where(Function(x) String.IsNullOrWhiteSpace(x) = False)
+            For Each value In splited
+                Dim stuSplit = value.Split("-")
+                Dim newSt = New Student(stuSplit(0), stuSplit(1), stuSplit(2), stuSplit(3), If(QueryIsMale, "M", "F"))
+                If Students.ContainsKey(newSt.AccountName) Then
+                    Continue For
+                Else
+                    Students.Add(newSt.AccountName, newSt)
+                End If
+            Next
+            lblQueryFemale.Hide()
+            lblQueryMale.Hide()
+            txtQueryFemale.ReadOnly = False
+            txtQueryMale.ReadOnly = False
+            If male Then
+                txtQueryMale.Focus()
+            Else
+                txtQueryFemale.Focus()
+            End If
+            RefreshCategoryUI()
         End If
     End Sub
 
@@ -219,19 +281,190 @@ Public Class MainForm
         If CurrentCategory IsNot Nothing Then
             lblPrompt.Text = CurrentCategory.Prompt
             lblNumRemain.Text = $"{CurrentCategory.ID}/{NumberOfCategories}"
+
+            txtQueryFemale.Text = If(CurrentCategory.FemaleDisplay = "", txtQueryFemale.Text, CurrentCategory.FemaleDisplay)
+            txtQueryMale.Text = If(CurrentCategory.MaleDisplay = "", txtQueryMale.Text, CurrentCategory.MaleDisplay)
+
+            If txtQueryMale.Text.Length > 3 OrElse txtQueryFemale.Text.Length > 3 Then
+                ' show a "drop down" in the form of buttons..
+
+                Dim maleAutocomplete As New Dictionary(Of String, String) ' display item for each
+                Dim femaleAutocomplete As New Dictionary(Of String, String)
+                Dim accsAlreadyDone As New List(Of String) ' so we dont add two identical
+                Dim count = 0
+                For Each stud As Student In Students.Values
+                    If count > 10 Then
+                        Exit For
+                    End If
+                    If accsAlreadyDone.Contains(stud.AccountName) Then
+                        Continue For
+                    End If
+                    If stud.Sex = "M" AndAlso txtQueryMale.Text.Length > 3 Then
+                        Dim done As Boolean = False
+                        If stud.ToString().StartsWith(txtQueryMale.Text) Then
+                            done = True
+                        ElseIf stud.ToString().ToLower().StartsWith(txtQueryMale.Text.ToLower()) Then
+                            done = True
+                        ElseIf stud.ToString().ToLower().Contains(txtQueryMale.Text.ToLower()) Then
+                            done = True
+                        End If
+                        If done Then
+                            count += 1
+                            maleAutocomplete.Add(stud.AccountName, stud.ToString())
+                            accsAlreadyDone.Add(stud.AccountName)
+                        End If
+                    ElseIf stud.Sex = "F" AndAlso txtQueryFemale.Text.Length > 3 Then
+                        Dim done As Boolean = False
+                        If stud.ToString().StartsWith(txtQueryFemale.Text) Then
+                            done = True
+                        ElseIf stud.ToString().ToLower().StartsWith(txtQueryFemale.Text.ToLower()) Then
+                            done = True
+                        ElseIf stud.ToString().ToLower().Contains(txtQueryFemale.Text.ToLower()) Then
+                            done = True
+                        End If
+                        If done Then
+                            count += 1
+                            femaleAutocomplete.Add(stud.AccountName, stud.ToString())
+                            accsAlreadyDone.Add(stud.AccountName)
+                        End If
+                    End If
+                Next
+
+                ' not selected, so we display..
+                For Each vv In femaleButtons
+                    vv.Hide()
+                Next
+                For i As Integer = 0 To Maximum(femaleAutocomplete.Count - 1, 6)
+                    Dim accName = femaleAutocomplete.Keys(i)
+                    Dim display = femaleAutocomplete(accName)
+                    Dim button As Button = Nothing
+                    Try
+                        button = femaleButtons(i)
+                        button.Show()
+                    Catch ex As Exception
+                        button = New Button()
+                        femaleDisplayPanel.Controls.Add(button)
+                        button.Name = "female-" + i.ToString()
+                        Dim newX = 0
+                        Dim newY = -button.Height
+                        For yy As Integer = 0 To i
+                            newY += button.Height + 1
+                        Next
+                        button.Location = New Point(newX, newY)
+                        button.Width = txtQueryFemale.Width - 15
+                        femaleButtons.Insert(i, button)
+                        AddHandler button.Click, AddressOf UserSelectedWinner
+                    End Try
+                    button.Text = display
+                    button.Tag = accName
+                    If button.Tag = Environment.UserName Then
+                        button.Enabled = False
+                        button.Text += " (you)"
+                    End If
+                Next
+
+                For Each vv In maleButtons
+                    vv.Hide()
+                Next
+                For i As Integer = 0 To Maximum(maleAutocomplete.Count - 1, 6)
+                    Dim accName = maleAutocomplete.Keys(i)
+                    Dim display = maleAutocomplete(accName)
+                    Dim button As Button = Nothing
+                    Try
+                        button = maleButtons(i)
+                        button.Show()
+                    Catch ex As Exception
+                        button = New Button()
+                        maleDisplayPanel.Controls.Add(button)
+                        button.Name = "male-" + i.ToString()
+                        Dim newX = 0
+                        Dim newY = -button.Height
+                        For yy As Integer = 0 To i
+                            newY += button.Height + 1
+                        Next
+                        button.Location = New Point(newX, newY)
+                        button.Width = txtQueryMale.Width - 15
+                        maleButtons.Insert(i, button)
+                        AddHandler button.Click, AddressOf UserSelectedWinner
+                    End Try
+                    button.Text = display
+                    button.Tag = accName
+                    If button.Tag = Environment.UserName Then
+                        button.Enabled = False
+                        button.Text += " (you)"
+                    Else
+                        button.Enabled = True
+                    End If
+                Next
+            End If
+        End If
+    End Sub
+
+    Private Function Maximum(possibleAnyNumber As Integer, maximumAllowed As Integer) As Integer
+        If possibleAnyNumber > maximumAllowed Then
+            Return maximumAllowed
+        End If
+        Return possibleAnyNumber
+    End Function
+
+    Private femaleButtons As New List(Of Button)
+    Private maleButtons As New List(Of Button)
+
+    Private Sub UserSelectedWinner(sender As Object, e As EventArgs)
+        Dim btnClicked = DirectCast(sender, Button)
+        Dim sex = btnClicked.Name.Split("-")(0)
+        Dim accName = DirectCast(btnClicked.Tag, String)
+        lastQuery = "ssssssssssssssssssssssssssssssss" ' so it doesnt query again
+        If sex = "female" Then
+            CurrentCategory.FemaleWinner = accName
+            txtQueryFemale.Text = CurrentCategory.FemaleDisplay
+            femaleDisplayPanel.Hide()
+        Else
+            CurrentCategory.MaleWinner = accName
+            txtQueryMale.Text = CurrentCategory.MaleDisplay
+            maleDisplayPanel.Hide()
         End If
     End Sub
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         If CurrentCategory.ID + 1 > NumberOfCategories Then
             ' end..
+
+            second_panel_prompt.Visible = True
+            btnStart.Text = ".."
+            btnStart.Visible = False
+            lblOpeningMessage.Text = "Your submission is currently being looked at, please wait.."
+            Dim msg = "SUBMIT:"
+            Dim promptConfirm = "Are you sure you are finish?" + vbCrLf
+            For Each categor In Categories
+                promptConfirm += $"{categor.Value.Prompt}: Male: {categor.Value.MaleDisplay}  |  Female: {categor.Value.FemaleDisplay}" + vbCrLf
+                msg += categor.Value.MaleWinner + ";" + categor.Value.FemaleWinner + "#"
+            Next
+            If MsgBox(promptConfirm, MsgBoxStyle.YesNo, "Confirm Voting Submission") = vbYes Then
+                Send(msg.Substring(0, msg.Length - 1))
+            Else
+                MsgBox("You will need to use the 'Previous' button to correct any errors" + vbCrLf + "Reminder: you need to click the button of the person's name in order to properly select them.", MsgBoxStyle.Information, "Note")
+                second_panel_prompt.Visible = False
+            End If
         Else
+            If CurrentCategory.MaleWinner = "" Then
+                If MsgBox("Warning: you have not selected a male winner (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
+                    Return
+                End If
+            End If
+            If CurrentCategory.FemaleWinner = "" Then
+                If MsgBox("Warning: you have not selected a female winner (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
+                    Return
+                End If
+            End If
             Dim nextCat = Categories(CurrentCategory.ID + 1)
-            If (nextCat.ID + 1) > Categories.Count Then
+                If (nextCat.ID + 1) > Categories.Count AndAlso (nextCat.ID + 1) <= NumberOfCategories Then
                 Send("GET_CATE:" + (nextCat.ID + 1).ToString()) ' gets category after this.
                 ' but only gets it if needed
             End If
             CurrentCategory = nextCat
+            txtQueryFemale.Text = ""
+            txtQueryMale.Text = ""
             RefreshCategoryUI()
             btnNext.Text = If(nextCat.ID = NumberOfCategories, "Finish", "Next")
         End If
@@ -243,9 +476,12 @@ Public Class MainForm
         Else
             Dim nextCat = Categories(CurrentCategory.ID - 1)
             CurrentCategory = nextCat
+            txtQueryFemale.Text = ""
+            txtQueryMale.Text = ""
             RefreshCategoryUI()
             btnNext.Text = If(nextCat.ID = NumberOfCategories, "Finish", "Next")
         End If
+        btnPrevious.Visible = CurrentCategory.ID > 1
     End Sub
 
     Private Sub btnStart_Click(sender As Object, e As EventArgs) Handles btnStart.Click
@@ -254,4 +490,54 @@ Public Class MainForm
         ' so we just need to send the message here.
     End Sub
 
+    Private Sub DisableDueToQuery(isMale As Boolean)
+        txtQueryFemale.ReadOnly = True
+        txtQueryMale.ReadOnly = True
+        lblQueryFemale.Visible = Not isMale
+        lblQueryMale.Visible = isMale
+        maleDisplayPanel.Visible = isMale
+        femaleDisplayPanel.Visible = Not isMale
+    End Sub
+
+    ''' <summary>
+    ''' Returns true if the query is for a male student
+    ''' 
+    ''' Note: this will return even if there is no query, but it will return False.
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property QueryIsMale As Boolean
+        Get
+            Return lblQueryMale.Visible
+        End Get
+    End Property
+
+    Private lastQuery As String = ""
+
+    Private Sub txtQueryMale_TextChanged(sender As Object, e As EventArgs) Handles txtQueryMale.TextChanged
+        If txtQueryMale.Text.Length > 3 AndAlso txtQueryMale.Text.Contains(")") = False Then
+            ' query it.
+            If txtQueryMale.Text.StartsWith(lastQuery) Then
+                If txtQueryMale.TextLength < lastQuery.Length + 2 Then
+                    Return ' must enter a few more characters prior.
+                End If
+            End If
+            DisableDueToQuery(True)
+            Send("QUERY:M:" + txtQueryMale.Text)
+            lastQuery = txtQueryMale.Text
+        End If
+    End Sub
+
+    Private Sub txtQueryFemale_TextChanged(sender As Object, e As EventArgs) Handles txtQueryFemale.TextChanged
+        If txtQueryFemale.Text.Length > 3 AndAlso txtQueryFemale.Text.Contains(")") = False Then
+            ' query it.
+            If txtQueryFemale.Text.StartsWith(lastQuery) Then
+                If txtQueryFemale.TextLength < lastQuery.Length + 2 Then
+                    Return ' must enter a few more characters prior.
+                End If
+            End If
+            DisableDueToQuery(False)
+            Send("QUERY:F:" + txtQueryFemale.Text)
+            lastQuery = txtQueryFemale.Text
+        End If
+    End Sub
 End Class
