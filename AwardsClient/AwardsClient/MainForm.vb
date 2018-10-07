@@ -5,6 +5,7 @@ Public Class MainForm
     Public ConnectionIP As String = "127.0.0.1"
     Public ConnectionPort As Integer = 56567
     Public Client As TcpClient
+    Public Const MaximumStudentsDisplayInDropDown = 15
 
     Public Students As New Dictionary(Of String, Student) ' account name
 
@@ -79,10 +80,17 @@ Public Class MainForm
         stream.Write(bytes, 0, bytes.Length)
     End Sub
 
+    Public recieveMessageThread As Threading.Thread
+
+
     Private Sub ClientConnected()
+        ' for some reason, this also gets called when the client 
+        ' hasnt disconnected, such as when it errors
         If Client.Connected Then
-            Dim recThread = New Threading.Thread(AddressOf ReceiveMessage)
-            recThread.Start()
+            contactServerTimer.Stop()
+            connThread.Abort()
+            recieveMessageThread = New Threading.Thread(AddressOf ReceiveMessage)
+            recieveMessageThread.Start()
             AddHandler Me.Messaged, AddressOf MessageRecievedHandler
             EndConnection("Connected, waiting for server to confirm be ready..")
             Send(Environment.UserName)
@@ -99,6 +107,7 @@ Public Class MainForm
 
         If message.StartsWith("Ready:") Then
             message = message.Replace("Ready:", "")
+            btnStart.Visible = True
             lblOpeningMessage.Text = "Hello, " + message + vbCrLf _
                 + "For each of the award categories, select the Male and Female winner" + vbCrLf _
                 + "Then, hit the Next button in the bottom left." + vbCrLf _
@@ -185,25 +194,46 @@ Public Class MainForm
                 txtQueryFemale.Focus()
             End If
             RefreshCategoryUI()
+        ElseIf message.StartsWith("QUEUE:") Then
+            message = message.Replace("QUEUE:", "")
+            first_panel_load.Hide()
+            second_panel_prompt.Show()
+            btnStart.Visible = False
+            lblOpeningMessage.Text = "You are currently in a queue, since many people are trying to vote." + vbCrLf + vbCrLf + $"You are {message} in line."
         End If
     End Sub
 
     Private Sub ReceiveMessage()
-        While Client IsNot Nothing AndAlso Client.Connected
-            Dim stream = Client.GetStream()
-            Dim bytes(Client.ReceiveBufferSize) As Byte
-            stream.Read(bytes, 0, Client.ReceiveBufferSize)
-            Dim msg = System.Text.Encoding.UTF8.GetString(bytes).Replace(vbNullChar, String.Empty)
-            For Each message As String In msg.Split("%")
-                If String.IsNullOrWhiteSpace(message) Then
-                    Continue For
-                End If
-                RaiseEvent Messaged(Me, message.Substring(0, message.LastIndexOf("`")))
-            Next
-        End While
+        Try
+            While Client IsNot Nothing AndAlso Client.Connected
+                Dim stream = Client.GetStream()
+                Dim bytes(Client.ReceiveBufferSize) As Byte
+                stream.Read(bytes, 0, Client.ReceiveBufferSize)
+                Dim msg = System.Text.Encoding.UTF8.GetString(bytes).Replace(vbNullChar, String.Empty)
+                For Each message As String In msg.Split("%")
+                    If String.IsNullOrWhiteSpace(message) Then
+                        Continue For
+                    End If
+                    RaiseEvent Messaged(Me, message.Substring(0, message.LastIndexOf("`")))
+                Next
+            End While
+        Catch ex As Exception
+            Log(ex.ToString())
+            second_panel_prompt.Show()
+            lblOpeningMessage.Text = "Errored!" + vbCrLf + "Connection to the server unexpectedly failed."
+        End Try
     End Sub
 
-    Private Sub AttemptConnection()
+    Private Sub AttemptConnection(Optional delay As Integer = 0)
+        If delay > 15 Then
+            Threading.Thread.Sleep(delay)
+        End If
+        Me.Invoke(Sub() contactServerTimer.Start())
+        If Client IsNot Nothing Then
+            If Client.Connected Then
+                Return
+            End If
+        End If
         Client = New TcpClient()
         Log($"Starting connection to {ConnectionIP}:{ConnectionPort}")
         Dim conn = Client.BeginConnect(ConnectionIP, ConnectionPort, AddressOf ClientConnected, Nothing)
@@ -216,17 +246,20 @@ Public Class MainForm
         Catch ex As Exception
             Log(ex.ToString())
         End Try
-        EndConnection("Connection timed out, either the server is overloaded or offline or setup incorrectly")
+        EndConnection("Connection timed out, either the server is overloaded or offline or setup incorrectly" + vbCrLf + "Restarting in 5 seconds")
     End Sub
 
+
+    Private numberOfFailures = 0
     Private Sub EndConnection(message As String)
         If Me.InvokeRequired Then
             Me.Invoke(Sub() EndConnection(message))
             Return
         End If
-
+        numberOfFailures += 1
         contactServerTimer.Stop()
         lblFirstPanelDisplay.Text = message
+        LoadedStartCon(5000)
     End Sub
 
 
@@ -248,9 +281,22 @@ Public Class MainForm
         first_panel_load.BringToFront()
 
         Log("Loaded")
-        lblFirstPanelDisplay.Text = "Contacting server"
-        contactServerTimer.Start()
-        Dim connThread As New Threading.Thread(AddressOf AttemptConnection)
+        LoadedStartCon()
+    End Sub
+    Private connThread As Threading.Thread
+    Private Sub LoadedStartCon(Optional delay As Integer = 0)
+        If numberOfFailures > 2 Then
+            lblFirstPanelDisplay.Text = "Having issues contacting server.. Retrying in 5 seconds.."
+        Else
+            lblFirstPanelDisplay.Text = "Contacting server"
+        End If
+        If connThread IsNot Nothing Then
+            Try
+                connThread.Abort()
+            Catch ex As Exception
+            End Try
+        End If
+        connThread = New Threading.Thread(New Threading.ParameterizedThreadStart(Sub() AttemptConnection(delay)))
         connThread.Name = "Connectiong Thread"
         connThread.Start()
         Log("Started conn thread")
@@ -376,7 +422,7 @@ Public Class MainForm
                 For Each vv In maleButtons
                     vv.Hide()
                 Next
-                For i As Integer = 0 To Maximum(maleAutocomplete.Count - 1, 6)
+                For i As Integer = 0 To Maximum(maleAutocomplete.Count - 1, MaximumStudentsDisplayInDropDown)
                     Dim accName = maleAutocomplete.Keys(i)
                     Dim display = maleAutocomplete(accName)
                     Dim button As Button = Nothing
@@ -468,7 +514,7 @@ Public Class MainForm
                 End If
             End If
             Dim nextCat = Categories(CurrentCategory.ID + 1)
-                If (nextCat.ID + 1) > Categories.Count AndAlso (nextCat.ID + 1) <= NumberOfCategories Then
+            If (nextCat.ID + 1) > Categories.Count AndAlso (nextCat.ID + 1) <= NumberOfCategories Then
                 Send("GET_CATE:" + (nextCat.ID + 1).ToString()) ' gets category after this.
                 ' but only gets it if needed
             End If
@@ -549,5 +595,16 @@ Public Class MainForm
             Send("QUERY:F:" + txtQueryFemale.Text)
             lastQuery = txtQueryFemale.Text
         End If
+    End Sub
+
+    Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        Try
+            recieveMessageThread.Abort()
+        Catch ex As Exception
+        End Try
+        Try
+            Client.Close()
+        Catch ex As Exception
+        End Try
     End Sub
 End Class
