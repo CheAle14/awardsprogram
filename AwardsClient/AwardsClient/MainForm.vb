@@ -2,7 +2,7 @@
 Imports System.Net.Sockets
 
 Public Class MainForm
-    Public ConnectionIP As String = "127.0.0.1"
+    Public ConnectionIP As String = "10.249.67.87"
     Public ConnectionPort As Integer = 56567
     Public Client As TcpClient
     Public Const MaximumStudentsDisplayInDropDown = 15
@@ -219,8 +219,6 @@ Public Class MainForm
             End While
         Catch ex As Exception
             Log(ex.ToString())
-            second_panel_prompt.Show()
-            lblOpeningMessage.Text = "Errored!" + vbCrLf + "Connection to the server unexpectedly failed."
         End Try
     End Sub
 
