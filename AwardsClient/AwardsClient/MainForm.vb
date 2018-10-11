@@ -2,12 +2,19 @@
 Imports System.Net.Sockets
 
 Public Class MainForm
-    Public ConnectionIP As String = "10.249.67.87"
+    Public ConnectionIP As String = "10.249.67.56"
     Public ConnectionPort As Integer = 56567
     Public Client As TcpClient
     Public Const MaximumStudentsDisplayInDropDown = 15
 
     Public Students As New Dictionary(Of String, Student) ' account name
+
+    Dim MaleCache As New Dictionary(Of String, Student)
+    Dim FemaleCache As New Dictionary(Of String, Student)
+
+
+
+
 
     Public Categories As New Dictionary(Of Integer, Category)
 
@@ -29,10 +36,22 @@ Public Class MainForm
             Sex = sx
         End Sub
         Public Overrides Function ToString() As String
-            Return $"{FirstName} {LastName} ({Tutor})"
+            Return Me.ToString("FN LN (TT)")
+        End Function
+        Public Overloads Function ToString(format As String) As String
+            format = format.Replace("AN", "{0}")
+            format = format.Replace("FN", "{1}")
+            format = format.Replace("LN", "{2}")
+            format = format.Replace("TT", "{3}")
+            format = format.Replace("SX", "{4}")
+            Return String.Format(format, AccountName, FirstName, LastName, Tutor, Sex)
+        End Function
+
+        Public Function ToQueryFormat() As String
+            Return Me.ToString("AN-FN-LN-TT-SX")
         End Function
     End Class
-
+    Public PreviousClicked As Boolean = False
     Public Class Category
         Public ID As Integer = 0
         Public Prompt As String = ""
@@ -481,9 +500,9 @@ Public Class MainForm
     End Sub
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
+        PreviousClicked = False
         If CurrentCategory.ID + 1 > NumberOfCategories Then
-            ' end..
-
+            ' end.. me..
             second_panel_prompt.Visible = True
             btnStart.Text = ".."
             btnStart.Visible = False
@@ -505,10 +524,18 @@ Public Class MainForm
                 If MsgBox("Warning: you have not selected a male winner (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
                     Return
                 End If
+            Else
+                If Not MaleCache.ContainsKey(CurrentCategory.MaleWinner) Then
+                    MaleCache.Add(CurrentCategory.MaleWinner, Students(CurrentCategory.MaleWinner))
+                End If
             End If
             If CurrentCategory.FemaleWinner = "" Then
                 If MsgBox("Warning: you have not selected a female winner (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
                     Return
+                End If
+            Else
+                If Not FemaleCache.ContainsKey(CurrentCategory.FemaleWinner) Then
+                    FemaleCache.Add(CurrentCategory.FemaleWinner, Students(CurrentCategory.FemaleWinner))
                 End If
             End If
             Dim nextCat = Categories(CurrentCategory.ID + 1)
@@ -528,6 +555,7 @@ Public Class MainForm
         If CurrentCategory.ID = 1 Then
             ' this shouldnt even be possible since the button should be hidden
         Else
+            PreviousClicked = True
             Dim nextCat = Categories(CurrentCategory.ID - 1)
             CurrentCategory = nextCat
             txtQueryFemale.Text = ""
@@ -575,6 +603,7 @@ Public Class MainForm
                     Return ' must enter a few more characters prior.
                 End If
             End If
+            CurrentCategory.MaleWinner = ""
             DisableDueToQuery(True)
             Send("QUERY:M:" + txtQueryMale.Text)
             lastQuery = txtQueryMale.Text
@@ -589,6 +618,7 @@ Public Class MainForm
                     Return ' must enter a few more characters prior.
                 End If
             End If
+            CurrentCategory.FemaleWinner = ""
             DisableDueToQuery(False)
             Send("QUERY:F:" + txtQueryFemale.Text)
             lastQuery = txtQueryFemale.Text
