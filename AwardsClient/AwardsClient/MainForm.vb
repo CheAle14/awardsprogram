@@ -2,7 +2,7 @@
 Imports System.Net.Sockets
 
 Public Class MainForm
-    Public ConnectionIP As String = "10.249.67.56"
+    Public ConnectionIP As String = "127.0.0.1"
     Public ConnectionPort As Integer = 56567
     Public Client As TcpClient
     Public Const MaximumStudentsDisplayInDropDown = 15
@@ -132,6 +132,10 @@ Public Class MainForm
                 + "Then, hit the Next button in the bottom left." + vbCrLf _
                 + "If you need to go back, hit the 'Previous' button" + vbCrLf + vbCrLf _
                 + "Once you reach the final category, the Next button will become 'Finish' and you will be prompted to confirm your vote."
+            first_panel_load.Hide()
+        ElseIf message = "UnknownUser" Then
+            lblOpeningMessage.Text = "Errored" + vbCrLf + "Your account name is unknown." + vbCrLf + "Please contact someone."
+            btnStart.Visible = False
             first_panel_load.Hide()
         ElseIf message = "Accepted" Then
             lblOpeningMessage.Text = "Thanks for your vote!" + vbCrLf + "The server has indicated that your vote was accepted, you can leave now."
@@ -366,7 +370,7 @@ Public Class MainForm
                 Dim accsAlreadyDone As New List(Of String) ' so we dont add two identical
                 Dim count = 0
                 For Each stud As Student In Students.Values
-                    If count > 10 Then
+                    If count > MaximumStudentsDisplayInDropDown Then
                         Exit For
                     End If
                     If accsAlreadyDone.Contains(stud.AccountName) Then
@@ -404,73 +408,78 @@ Public Class MainForm
                 Next
 
                 ' not selected, so we display..
-                For Each vv In femaleButtons
-                    vv.Hide()
-                Next
-                For i As Integer = 0 To Maximum(femaleAutocomplete.Count - 1, 6)
-                    Dim accName = femaleAutocomplete.Keys(i)
-                    Dim display = femaleAutocomplete(accName)
-                    Dim button As Button = Nothing
-                    Try
-                        button = femaleButtons(i)
-                        button.Show()
-                    Catch ex As Exception
-                        button = New Button()
-                        femaleDisplayPanel.Controls.Add(button)
-                        button.Name = "female-" + i.ToString()
-                        Dim newX = 0
-                        Dim newY = -button.Height
-                        For yy As Integer = 0 To i
-                            newY += button.Height + 1
-                        Next
-                        button.Location = New Point(newX, newY)
-                        button.Width = txtQueryFemale.Width - 15
-                        femaleButtons.Insert(i, button)
-                        AddHandler button.Click, AddressOf UserSelectedWinner
-                    End Try
-                    button.Text = display
-                    button.Tag = accName
-                    If button.Tag = Environment.UserName Then
-                        button.Enabled = False
-                        button.Text += " (you)"
-                    End If
-                Next
-
-                For Each vv In maleButtons
-                    vv.Hide()
-                Next
-                For i As Integer = 0 To Maximum(maleAutocomplete.Count - 1, MaximumStudentsDisplayInDropDown)
-                    Dim accName = maleAutocomplete.Keys(i)
-                    Dim display = maleAutocomplete(accName)
-                    Dim button As Button = Nothing
-                    Try
-                        button = maleButtons(i)
-                        button.Show()
-                    Catch ex As Exception
-                        button = New Button()
-                        maleDisplayPanel.Controls.Add(button)
-                        button.Name = "male-" + i.ToString()
-                        Dim newX = 0
-                        Dim newY = -button.Height
-                        For yy As Integer = 0 To i
-                            newY += button.Height + 1
-                        Next
-                        button.Location = New Point(newX, newY)
-                        button.Width = txtQueryMale.Width - 15
-                        maleButtons.Insert(i, button)
-                        AddHandler button.Click, AddressOf UserSelectedWinner
-                    End Try
-                    button.Text = display
-                    button.Tag = accName
-                    If button.Tag = Environment.UserName Then
-                        button.Enabled = False
-                        button.Text += " (you)"
-                    Else
-                        button.Enabled = True
-                    End If
-                Next
+                SetFemaleDropDown(femaleAutocomplete)
+                SetMaleDropDown(maleAutocomplete)
             End If
         End If
+    End Sub
+
+    Private Sub SetFemaleDropDown(names As Dictionary(Of String, String))
+        For Each vv In femaleButtons
+            vv.Hide()
+        Next
+        For i As Integer = 0 To Maximum(names.Count - 1, MaximumStudentsDisplayInDropDown)
+            Dim accName = names.Keys(i)
+            Dim display = names(accName)
+            Dim button As Button = Nothing
+            Try
+                button = femaleButtons(i)
+                button.Show()
+            Catch ex As Exception
+                button = New Button()
+                femaleDisplayPanel.Controls.Add(button)
+                button.Name = "female-" + i.ToString()
+                Dim newX = 0
+                Dim newY = -button.Height
+                For yy As Integer = 0 To i
+                    newY += button.Height + 1
+                Next
+                button.Location = New Point(newX, newY)
+                button.Width = txtQueryFemale.Width - 15
+                femaleButtons.Insert(i, button)
+                AddHandler button.Click, AddressOf UserSelectedWinner
+            End Try
+            button.Text = display
+            button.Tag = accName
+            If button.Tag = Environment.UserName Then
+                button.Enabled = False
+                button.Text += " (you)"
+            End If
+        Next
+    End Sub
+
+    Private Sub SetMaleDropDown(names As Dictionary(Of String, String))
+        For Each vv In maleButtons
+            vv.Hide()
+        Next
+        For i As Integer = 0 To Maximum(names.Count - 1, MaximumStudentsDisplayInDropDown)
+            Dim accName = names.Keys(i)
+            Dim display = names(accName)
+            Dim button As Button = Nothing
+            Try
+                button = maleButtons(i)
+                button.Show()
+            Catch ex As Exception
+                button = New Button()
+                maleDisplayPanel.Controls.Add(button)
+                button.Name = "male-" + i.ToString()
+                Dim newX = 0
+                Dim newY = -button.Height
+                For yy As Integer = 0 To i
+                    newY += button.Height + 1
+                Next
+                button.Location = New Point(newX, newY)
+                button.Width = txtQueryMale.Width - 15
+                maleButtons.Insert(i, button)
+                AddHandler button.Click, AddressOf UserSelectedWinner
+            End Try
+            button.Text = display
+            button.Tag = accName
+            If button.Tag = Environment.UserName Then
+                button.Enabled = False
+                button.Text += " (you)"
+            End If
+        Next
     End Sub
 
     Private Function Maximum(possibleAnyNumber As Integer, maximumAllowed As Integer) As Integer
@@ -548,6 +557,27 @@ Public Class MainForm
             txtQueryMale.Text = ""
             RefreshCategoryUI()
             btnNext.Text = If(nextCat.ID = NumberOfCategories, "Finish", "Next")
+
+
+            ' Show cache of males/females.
+
+            Dim males As New Dictionary(Of String, String) 'name: display
+            For Each st In MaleCache
+                males.Add(st.Key, st.Value.ToString("FN LN (TT)"))
+            Next
+
+            Dim females As New Dictionary(Of String, String) 'name: display
+            For Each st In FemaleCache
+                females.Add(st.Key, st.Value.ToString("FN LN (TT)"))
+            Next
+            If males.Count > 0 Then
+                maleDisplayPanel.Show()
+                SetMaleDropDown(males)
+            End If
+            If females.Count > 0 Then
+                femaleDisplayPanel.Show()
+                SetFemaleDropDown(females)
+            End If
         End If
         btnPrevious.Visible = CurrentCategory.ID > 1
     End Sub
