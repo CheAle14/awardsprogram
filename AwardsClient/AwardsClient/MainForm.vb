@@ -12,10 +12,6 @@ Public Class MainForm
     Dim MaleCache As New Dictionary(Of String, Student)
     Dim FemaleCache As New Dictionary(Of String, Student)
 
-
-
-
-
     Public Categories As New Dictionary(Of Integer, Category)
 
     Public CurrentCategory As Category
@@ -219,6 +215,17 @@ Public Class MainForm
             RefreshCategoryUI()
         ElseIf message.StartsWith("QUEUE:") Then
             message = message.Replace("QUEUE:", "")
+            If message.EndsWith("11") Or message.EndsWith("12") Or message.EndsWith("13") Then
+                message += "th"
+            ElseIf message.EndsWith("1") Then
+                message += "st"
+            ElseIf message.EndsWith("2") Then
+                message += "nd"
+            ElseIf message.EndsWith("3") Then
+                message += "rd"
+            Else
+                message += "th"
+            End If
             first_panel_load.Hide()
             second_panel_prompt.Show()
             btnStart.Visible = False
@@ -282,8 +289,6 @@ Public Class MainForm
         lblFirstPanelDisplay.Text = message
         LoadedStartCon(5000)
     End Sub
-
-
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 #If DEBUG Then
         DebugForm.Show()
