@@ -298,7 +298,6 @@ Public Class MainForm
         first_panel_load.Size = pSize
         first_panel_load.Dock = DockStyle.Fill
 
-
         second_panel_prompt.Location = New Point(0, 0)
         second_panel_prompt.Size = pSize
         second_panel_prompt.Dock = DockStyle.Fill
@@ -308,6 +307,8 @@ Public Class MainForm
 
         Log("Loaded")
         LoadedStartCon()
+
+        MsgBox("If you have any suggestions or bugs please report them to us" + vbCrLf + "Also if you have any suggestions for categories please tell us and we can consider")
     End Sub
     Private connThread As Threading.Thread
     Private Sub LoadedStartCon(Optional delay As Integer = 0)
