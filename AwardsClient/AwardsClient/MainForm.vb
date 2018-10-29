@@ -2,7 +2,7 @@
 Imports System.Net.Sockets
 
 Public Class MainForm
-    Public ConnectionIP As String = "10.249.67.170"
+    Public ConnectionIP As String = "10.249.67.69"
     Public ConnectionPort As Integer = 56567
     Public Client As TcpClient
     Public Const MaximumStudentsDisplayInDropDown = 15
@@ -450,6 +450,8 @@ Public Class MainForm
             If button.Tag = Environment.UserName Then
                 button.Enabled = False
                 button.Text += " (you)"
+            Else
+                button.Enabled = True ' otherwise it remains disabled
             End If
         Next
     End Sub
@@ -484,6 +486,8 @@ Public Class MainForm
             If button.Tag = Environment.UserName Then
                 button.Enabled = False
                 button.Text += " (you)"
+            Else
+                button.Enabled = True
             End If
         Next
     End Sub
