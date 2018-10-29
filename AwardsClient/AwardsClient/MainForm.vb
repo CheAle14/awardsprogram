@@ -2,7 +2,7 @@
 Imports System.Net.Sockets
 
 Public Class MainForm
-    Public ConnectionIP As String = "10.249.67.170"
+    Public ConnectionIP As String = "10.249.67.69"
     Public ConnectionPort As Integer = 56567
     Public Client As TcpClient
     Public Const MaximumStudentsDisplayInDropDown = 15
@@ -523,17 +523,18 @@ Public Class MainForm
             btnStart.Visible = False
             lblOpeningMessage.Text = "Your submission is currently being looked at, please wait.."
             Dim msg = "SUBMIT:"
-            Dim promptConfirm = "Are you sure you are finish?" + vbCrLf
-            For Each categor In Categories
-                promptConfirm += $"{categor.Value.Prompt}: Male: {categor.Value.MaleDisplay}  |  Female: {categor.Value.FemaleDisplay}" + vbCrLf
-                msg += categor.Value.MaleWinner + ";" + categor.Value.FemaleWinner + "#"
+            Dim promptConfirm = "Are you sure you are finished?" + vbCrLf
+            For Each category In Categories
+                promptConfirm += $"{category.Value.Prompt}: Male: {category.Value.MaleDisplay}  |  Female: {category.Value.FemaleDisplay}" + vbCrLf
+                msg += category.Value.MaleWinner + ";" + category.Value.FemaleWinner + "#"
+                Dim row() As String = {category.Value.Prompt, category.Value.MaleDisplay, category.Value.FemaleDisplay}
+                DataGridView1.Rows.Add(row)
             Next
-            If MsgBox(promptConfirm, MsgBoxStyle.YesNo, "Confirm Voting Submission") = vbYes Then
-                Send(msg.Substring(0, msg.Length - 1))
-            Else
-                MsgBox("You will need to use the 'Previous' button to correct any errors" + vbCrLf + "Reminder: you need to click the button of the person's name in order to properly select them.", MsgBoxStyle.Information, "Note")
-                second_panel_prompt.Visible = False
-            End If
+            finalPromptPanel.Location = New Point(0, 0)
+            Dim pSize = New Size(Me.Width, Me.Height - 25)
+            finalPromptPanel.Size = pSize
+            finalPromptPanel.Dock = DockStyle.Fill
+            finalPromptPanel.BringToFront()
         Else
             If CurrentCategory.MaleWinner = "" Then
                 If MsgBox("Warning: you have not selected a male winner (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
@@ -603,7 +604,9 @@ Public Class MainForm
     End Sub
 
     Private Sub btnStart_Click(sender As Object, e As EventArgs) Handles btnStart.Click
-        Send("GET_CATE:1") ' gets first category.
+        Send("GET_CATE:1")
+        second_panel_prompt.BringToFront()
+        ' gets first category.
         ' in the recieve of the response, it also handles the hiding/showing of things.
         ' so we just need to send the message here.
     End Sub
