@@ -526,11 +526,9 @@ Public Class MainForm
             btnStart.Text = ".."
             btnStart.Visible = False
             lblOpeningMessage.Text = "Your submission is currently being looked at, please wait.."
-            Dim msg = "SUBMIT:"
             Dim promptConfirm = "Are you sure you are finished?" + vbCrLf
             For Each category In Categories
                 promptConfirm += $"{category.Value.Prompt}: Male: {category.Value.MaleDisplay}  |  Female: {category.Value.FemaleDisplay}" + vbCrLf
-                msg += category.Value.MaleWinner + ";" + category.Value.FemaleWinner + "#"
                 Dim row() As String = {category.Value.Prompt, category.Value.MaleDisplay, category.Value.FemaleDisplay}
                 DataGridView1.Rows.Add(row)
             Next
@@ -677,5 +675,13 @@ Public Class MainForm
             Client.Close()
         Catch ex As Exception
         End Try
+    End Sub
+    Private Sub cmdConfirm_Click(sender As Object, e As EventArgs) Handles cmdConfirm.Click
+        Dim msg = "SUBMIT:"
+        For Each category In Categories
+            msg += category.Value.MaleWinner + ";" + category.Value.FemaleWinner + "#"
+        Next
+        Send(msg)
+        finalPromptPanel.Hide()
     End Sub
 End Class

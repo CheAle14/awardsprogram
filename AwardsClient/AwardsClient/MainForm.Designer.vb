@@ -46,6 +46,7 @@ Partial Class MainForm
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.cmdConfirm = New System.Windows.Forms.Button()
         Me.first_panel_load.SuspendLayout()
         Me.second_panel_prompt.SuspendLayout()
         Me.finalPromptPanel.SuspendLayout()
@@ -81,7 +82,7 @@ Partial Class MainForm
         '
         Me.second_panel_prompt.Controls.Add(Me.lblOpeningMessage)
         Me.second_panel_prompt.Controls.Add(Me.btnStart)
-        Me.second_panel_prompt.Location = New System.Drawing.Point(716, 157)
+        Me.second_panel_prompt.Location = New System.Drawing.Point(716, 201)
         Me.second_panel_prompt.Margin = New System.Windows.Forms.Padding(2)
         Me.second_panel_prompt.Name = "second_panel_prompt"
         Me.second_panel_prompt.Size = New System.Drawing.Size(175, 142)
@@ -233,10 +234,11 @@ Partial Class MainForm
         '
         'finalPromptPanel
         '
+        Me.finalPromptPanel.Controls.Add(Me.cmdConfirm)
         Me.finalPromptPanel.Controls.Add(Me.DataGridView1)
         Me.finalPromptPanel.Location = New System.Drawing.Point(930, 74)
         Me.finalPromptPanel.Name = "finalPromptPanel"
-        Me.finalPromptPanel.Size = New System.Drawing.Size(346, 220)
+        Me.finalPromptPanel.Size = New System.Drawing.Size(346, 246)
         Me.finalPromptPanel.TabIndex = 16
         '
         'DataGridView1
@@ -252,7 +254,7 @@ Partial Class MainForm
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
         Me.DataGridView1.RowHeadersVisible = False
-        Me.DataGridView1.Size = New System.Drawing.Size(346, 220)
+        Me.DataGridView1.Size = New System.Drawing.Size(346, 246)
         Me.DataGridView1.TabIndex = 0
         '
         'Column1
@@ -272,6 +274,16 @@ Partial Class MainForm
         Me.Column3.HeaderText = "Female selected"
         Me.Column3.Name = "Column3"
         Me.Column3.ReadOnly = True
+        '
+        'cmdConfirm
+        '
+        Me.cmdConfirm.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.cmdConfirm.Location = New System.Drawing.Point(0, 223)
+        Me.cmdConfirm.Name = "cmdConfirm"
+        Me.cmdConfirm.Size = New System.Drawing.Size(346, 23)
+        Me.cmdConfirm.TabIndex = 1
+        Me.cmdConfirm.Text = "Confirm"
+        Me.cmdConfirm.UseVisualStyleBackColor = True
         '
         'MainForm
         '
@@ -329,4 +341,5 @@ Partial Class MainForm
     Friend WithEvents Column1 As DataGridViewTextBoxColumn
     Friend WithEvents Column2 As DataGridViewTextBoxColumn
     Friend WithEvents Column3 As DataGridViewTextBoxColumn
+    Friend WithEvents cmdConfirm As Button
 End Class
