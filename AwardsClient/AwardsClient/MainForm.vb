@@ -6,6 +6,7 @@ Public Class MainForm
     Public ConnectionPort As Integer = 56567
     Public Client As TcpClient
     Public Const MaximumStudentsDisplayInDropDown = 15
+    Public Const LettersBeforeQuery = 3
 
     Public Students As New Dictionary(Of String, Student) ' account name
 
@@ -368,7 +369,7 @@ Public Class MainForm
             txtQueryFemale.Text = If(CurrentCategory.FemaleDisplay = "", txtQueryFemale.Text, CurrentCategory.FemaleDisplay)
             txtQueryMale.Text = If(CurrentCategory.MaleDisplay = "", txtQueryMale.Text, CurrentCategory.MaleDisplay)
 
-            If txtQueryMale.Text.Length > 3 OrElse txtQueryFemale.Text.Length > 3 Then
+            If txtQueryMale.Text.Length >= LettersBeforeQuery OrElse txtQueryFemale.Text.Length >= LettersBeforeQuery Then
                 ' show a "drop down" in the form of buttons..
 
                 Dim maleAutocomplete As New Dictionary(Of String, String) ' display item for each
@@ -382,7 +383,7 @@ Public Class MainForm
                     If accsAlreadyDone.Contains(stud.AccountName) Then
                         Continue For
                     End If
-                    If stud.Sex = "M" AndAlso txtQueryMale.Text.Length > 3 Then
+                    If stud.Sex = "M" AndAlso txtQueryMale.Text.Length >= LettersBeforeQuery Then
                         Dim done As Boolean = False
                         If stud.ToString().StartsWith(txtQueryMale.Text) Then
                             done = True
@@ -396,7 +397,7 @@ Public Class MainForm
                             maleAutocomplete.Add(stud.AccountName, stud.ToString())
                             accsAlreadyDone.Add(stud.AccountName)
                         End If
-                    ElseIf stud.Sex = "F" AndAlso txtQueryFemale.Text.Length > 3 Then
+                    ElseIf stud.Sex = "F" AndAlso txtQueryFemale.Text.Length >= LettersBeforeQuery Then
                         Dim done As Boolean = False
                         If stud.ToString().StartsWith(txtQueryFemale.Text) Then
                             done = True
@@ -639,7 +640,7 @@ Public Class MainForm
     Private lastQuery As String = ""
 
     Private Sub txtQueryMale_TextChanged(sender As Object, e As EventArgs) Handles txtQueryMale.TextChanged
-        If txtQueryMale.Text.Length >= 3 AndAlso txtQueryMale.Text.Contains(")") = False Then
+        If txtQueryMale.Text.Length >= LettersBeforeQuery AndAlso txtQueryMale.Text.Contains(")") = False Then
             ' query it.
             If txtQueryMale.Text.StartsWith(lastQuery) Then
                 If txtQueryMale.TextLength < lastQuery.Length + 2 Then
@@ -654,7 +655,7 @@ Public Class MainForm
     End Sub
 
     Private Sub txtQueryFemale_TextChanged(sender As Object, e As EventArgs) Handles txtQueryFemale.TextChanged
-        If txtQueryFemale.Text.Length >= 3 AndAlso txtQueryFemale.Text.Contains(")") = False Then
+        If txtQueryFemale.Text.Length >= LettersBeforeQuery AndAlso txtQueryFemale.Text.Contains(")") = False Then
             ' query it.
             If txtQueryFemale.Text.StartsWith(lastQuery) Then
                 If txtQueryFemale.TextLength < lastQuery.Length + 2 Then
