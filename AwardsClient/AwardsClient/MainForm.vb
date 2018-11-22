@@ -2,7 +2,7 @@
 Imports System.Net.Sockets
 
 Public Class MainForm
-    Public ConnectionIP As String = "10.249.67.69"
+    Public ConnectionIP As String = "10.249.67.172"
     Public ConnectionPort As Integer = 56567
     Public Client As TcpClient
     Public Const MaximumStudentsDisplayInDropDown = 15
@@ -527,6 +527,7 @@ Public Class MainForm
             btnStart.Visible = False
             lblOpeningMessage.Text = "Your submission is currently being looked at, please wait.."
             Dim promptConfirm = "Are you sure you are finished?" + vbCrLf
+            DataGridView1.Rows.Clear()
             For Each category In Categories
                 promptConfirm += $"{category.Value.Prompt}: Male: {category.Value.MaleDisplay}  |  Female: {category.Value.FemaleDisplay}" + vbCrLf
                 Dim row() As String = {category.Value.Prompt, category.Value.MaleDisplay, category.Value.FemaleDisplay}
@@ -537,6 +538,7 @@ Public Class MainForm
             finalPromptPanel.Size = pSize
             finalPromptPanel.Dock = DockStyle.Fill
             finalPromptPanel.BringToFront()
+            finalPromptPanel.Visible = True
         Else
             If CurrentCategory.MaleWinner = "" Then
                 If MsgBox("Warning: you have not selected a male winner (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
@@ -637,7 +639,7 @@ Public Class MainForm
     Private lastQuery As String = ""
 
     Private Sub txtQueryMale_TextChanged(sender As Object, e As EventArgs) Handles txtQueryMale.TextChanged
-        If txtQueryMale.Text.Length > 3 AndAlso txtQueryMale.Text.Contains(")") = False Then
+        If txtQueryMale.Text.Length >= 3 AndAlso txtQueryMale.Text.Contains(")") = False Then
             ' query it.
             If txtQueryMale.Text.StartsWith(lastQuery) Then
                 If txtQueryMale.TextLength < lastQuery.Length + 2 Then
@@ -652,7 +654,7 @@ Public Class MainForm
     End Sub
 
     Private Sub txtQueryFemale_TextChanged(sender As Object, e As EventArgs) Handles txtQueryFemale.TextChanged
-        If txtQueryFemale.Text.Length > 3 AndAlso txtQueryFemale.Text.Contains(")") = False Then
+        If txtQueryFemale.Text.Length >= 3 AndAlso txtQueryFemale.Text.Contains(")") = False Then
             ' query it.
             If txtQueryFemale.Text.StartsWith(lastQuery) Then
                 If txtQueryFemale.TextLength < lastQuery.Length + 2 Then
@@ -677,12 +679,17 @@ Public Class MainForm
         End Try
     End Sub
     Private Sub cmdConfirm_Click(sender As Object, e As EventArgs) Handles cmdConfirm.Click
-        Dim msg = "SUBMIT:"
-        For Each category In Categories
-            msg += category.Value.MaleWinner + ";" + category.Value.FemaleWinner + "#"
-        Next
-        Send(msg)
-        finalPromptPanel.Hide()
+        If ModifierKeys.HasFlag(Keys.Shift) Then
+            finalPromptPanel.Visible = False
+            second_panel_prompt.Visible = False
+        Else
+            Dim msg = "SUBMIT:"
+            For Each category In Categories
+                msg += category.Value.MaleWinner + ";" + category.Value.FemaleWinner + "#"
+            Next
+            Send(msg)
+            finalPromptPanel.Hide()
+        End If
     End Sub
 
     Private Sub cmdConfirm_Resize(sender As Object, e As EventArgs) Handles cmdConfirm.Resize
