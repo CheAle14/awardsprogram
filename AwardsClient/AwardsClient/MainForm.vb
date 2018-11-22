@@ -692,4 +692,8 @@ Public Class MainForm
             finalPromptPanel.Hide()
         End If
     End Sub
+
+    Private Sub cmdConfirm_Resize(sender As Object, e As EventArgs) Handles cmdConfirm.Resize
+        cmdConfirm.Font = New Font(cmdConfirm.Font.FontFamily, cmdConfirm.Height / 2.5)
+    End Sub
 End Class
