@@ -2,7 +2,7 @@
 Imports System.Net.Sockets
 
 Public Class MainForm
-    Public ConnectionIP As String = "10.249.67.69"
+    Public ConnectionIP As String = "10.249.67.172"
     Public ConnectionPort As Integer = 56567
     Public Client As TcpClient
     Public Const MaximumStudentsDisplayInDropDown = 15
@@ -637,7 +637,7 @@ Public Class MainForm
     Private lastQuery As String = ""
 
     Private Sub txtQueryMale_TextChanged(sender As Object, e As EventArgs) Handles txtQueryMale.TextChanged
-        If txtQueryMale.Text.Length > 3 AndAlso txtQueryMale.Text.Contains(")") = False Then
+        If txtQueryMale.Text.Length >= 3 AndAlso txtQueryMale.Text.Contains(")") = False Then
             ' query it.
             If txtQueryMale.Text.StartsWith(lastQuery) Then
                 If txtQueryMale.TextLength < lastQuery.Length + 2 Then
@@ -652,7 +652,7 @@ Public Class MainForm
     End Sub
 
     Private Sub txtQueryFemale_TextChanged(sender As Object, e As EventArgs) Handles txtQueryFemale.TextChanged
-        If txtQueryFemale.Text.Length > 3 AndAlso txtQueryFemale.Text.Contains(")") = False Then
+        If txtQueryFemale.Text.Length >= 3 AndAlso txtQueryFemale.Text.Contains(")") = False Then
             ' query it.
             If txtQueryFemale.Text.StartsWith(lastQuery) Then
                 If txtQueryFemale.TextLength < lastQuery.Length + 2 Then
