@@ -2,7 +2,7 @@
 Imports System.Net.Sockets
 
 Public Class MainForm
-    Public ConnectionIP As String = "192.168.0.14"
+    Public ConnectionIP As String = "127.0.0.1"
     Public ConnectionPort As Integer = 56567
     Public Client As TcpClient
     Public Const MaximumStudentsDisplayInDropDown = 15
@@ -18,6 +18,8 @@ Public Class MainForm
     Public CurrentCategory As Category
 
     Public NumberOfCategories = 0
+
+    Public HasConnectedAtleastOnce = False
 
     Public Class Student
         Public AccountName As String
@@ -103,6 +105,7 @@ Public Class MainForm
         ' for some reason, this also gets called when the client 
         ' hasnt disconnected, such as when it errors
         If Client.Connected Then
+            HasConnectedAtleastOnce = True
             contactServerTimer.Stop()
             connThread.Abort()
             recieveMessageThread = New Threading.Thread(AddressOf ReceiveMessage)
@@ -133,6 +136,7 @@ Public Class MainForm
         ElseIf message = "UnknownUser" Then
             lblOpeningMessage.Text = "Errored" + vbCrLf + "Your account name is unknown." + vbCrLf + "Please contact someone."
             btnStart.Visible = False
+            HasConnectedAtleastOnce = True
             first_panel_load.Hide()
         ElseIf message = "Accepted" Then
             lblOpeningMessage.Text = "Thanks for your vote!" + vbCrLf + "The server has indicated that your vote was accepted, you can leave now."
@@ -152,7 +156,9 @@ Public Class MainForm
             If message = "Voted" Then
                 lblOpeningMessage.Text = "Refused!" + vbCrLf + vbCrLf + "The server closed the connection because you have already voted"
             End If
+            HasConnectedAtleastOnce = True
             Client.Close()
+            btnStart.Visible = False
         ElseIf message.StartsWith("CTS:") Then
             message = message.Replace("CTS:", "")
             Dim int As Integer = 0
@@ -262,6 +268,9 @@ Public Class MainForm
             If Client.Connected Then
                 Return
             End If
+        End If
+        If HasConnectedAtleastOnce Then
+            Return ' They have already recieved an error message
         End If
         Client = New TcpClient()
         Log($"Starting connection to {ConnectionIP}:{ConnectionPort}")
@@ -451,7 +460,7 @@ Public Class MainForm
             End Try
             button.Text = display
             button.Tag = accName
-            If button.Tag = Environment.UserName Then
+            If button.Tag.ToString().ToLower() = Environment.UserName.ToLower() Then
                 button.Enabled = False
                 button.Text += " (you)"
             Else
