@@ -47,6 +47,7 @@ Partial Class MainForm
         Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.cmdBack = New System.Windows.Forms.Button()
         Me.first_panel_load.SuspendLayout()
         Me.second_panel_prompt.SuspendLayout()
         Me.finalPromptPanel.SuspendLayout()
@@ -236,6 +237,7 @@ Partial Class MainForm
         '
         Me.finalPromptPanel.Controls.Add(Me.cmdConfirm)
         Me.finalPromptPanel.Controls.Add(Me.DataGridView1)
+        Me.finalPromptPanel.Controls.Add(Me.cmdBack)
         Me.finalPromptPanel.Location = New System.Drawing.Point(930, 74)
         Me.finalPromptPanel.Name = "finalPromptPanel"
         Me.finalPromptPanel.Size = New System.Drawing.Size(346, 246)
@@ -244,11 +246,11 @@ Partial Class MainForm
         'cmdConfirm
         '
         Me.cmdConfirm.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.cmdConfirm.Location = New System.Drawing.Point(0, 225)
+        Me.cmdConfirm.Location = New System.Drawing.Point(0, 206)
         Me.cmdConfirm.Name = "cmdConfirm"
-        Me.cmdConfirm.Size = New System.Drawing.Size(346, 21)
+        Me.cmdConfirm.Size = New System.Drawing.Size(346, 0)
         Me.cmdConfirm.TabIndex = 1
-        Me.cmdConfirm.Text = "Confirm" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "or" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Shift + Click to change choices"
+        Me.cmdConfirm.Text = "Confirm" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         Me.cmdConfirm.UseVisualStyleBackColor = True
         '
         'DataGridView1
@@ -264,7 +266,7 @@ Partial Class MainForm
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
         Me.DataGridView1.RowHeadersVisible = False
-        Me.DataGridView1.Size = New System.Drawing.Size(346, 225)
+        Me.DataGridView1.Size = New System.Drawing.Size(346, 206)
         Me.DataGridView1.TabIndex = 0
         '
         'Column1
@@ -285,11 +287,21 @@ Partial Class MainForm
         Me.Column3.Name = "Column3"
         Me.Column3.ReadOnly = True
         '
+        'cmdBack
+        '
+        Me.cmdBack.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.cmdBack.Location = New System.Drawing.Point(0, 206)
+        Me.cmdBack.Name = "cmdBack"
+        Me.cmdBack.Size = New System.Drawing.Size(346, 40)
+        Me.cmdBack.TabIndex = 2
+        Me.cmdBack.Text = "Back"
+        Me.cmdBack.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(636, 366)
+        Me.ClientSize = New System.Drawing.Size(1309, 366)
         Me.Controls.Add(Me.finalPromptPanel)
         Me.Controls.Add(Me.femaleDisplayPanel)
         Me.Controls.Add(Me.maleDisplayPanel)
@@ -306,6 +318,7 @@ Partial Class MainForm
         Me.Controls.Add(Me.second_panel_prompt)
         Me.Controls.Add(Me.first_panel_load)
         Me.Margin = New System.Windows.Forms.Padding(2)
+        Me.MaximizeBox = False
         Me.MinimumSize = New System.Drawing.Size(652, 405)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -343,4 +356,5 @@ Partial Class MainForm
     Friend WithEvents Column2 As DataGridViewTextBoxColumn
     Friend WithEvents Column3 As DataGridViewTextBoxColumn
     Friend WithEvents cmdConfirm As Button
+    Friend WithEvents cmdBack As Button
 End Class

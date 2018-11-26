@@ -294,6 +294,9 @@ Public Class MainForm
 #If DEBUG Then
         DebugForm.Show()
 #End If
+        Me.Size = New Size(652, 405)
+        Me.MaximumSize = New Size(652, 405)
+        Me.MinimumSize = New Size(652, 405)
         first_panel_load.Location = New Point(0, 0)
         Dim pSize = New Size(Me.Width, Me.Height - 25)
         first_panel_load.Size = pSize
@@ -680,23 +683,25 @@ Public Class MainForm
         End Try
     End Sub
     Private Sub cmdConfirm_Click(sender As Object, e As EventArgs) Handles cmdConfirm.Click
-        If ModifierKeys.HasFlag(Keys.Shift) Then
-            finalPromptPanel.Visible = False
-            second_panel_prompt.Visible = False
-        Else
-            Dim msg = "SUBMIT:"
-            For Each category In Categories
-                msg += category.Value.MaleWinner + ";" + category.Value.FemaleWinner + "#"
-            Next
-            Send(msg)
-            finalPromptPanel.Hide()
-        End If
+        Dim msg = "SUBMIT:"
+        For Each category In Categories
+            msg += category.Value.MaleWinner + ";" + category.Value.FemaleWinner + "#"
+        Next
+        Send(msg)
+        finalPromptPanel.Hide()
+    End Sub
+    Private Sub cmdBack_Click(sender As Object, e As EventArgs) Handles cmdBack.Click
+        finalPromptPanel.Visible = False
+        second_panel_prompt.Visible = False
     End Sub
 
     Private Sub cmdConfirm_Resize(sender As Object, e As EventArgs) Handles cmdConfirm.Resize
         Try
             cmdConfirm.Font = New Font(cmdConfirm.Font.FontFamily, cmdConfirm.Height / 7.5)
+            cmdBack.Font = New Font(cmdConfirm.Font.FontFamily, cmdBack.Height / 5)
         Catch
         End Try
     End Sub
+
+
 End Class
