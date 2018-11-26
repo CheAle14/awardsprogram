@@ -57,7 +57,7 @@ Partial Class MainForm
         '
         Me.first_panel_load.Controls.Add(Me.lblFirstPanelDisplay)
         Me.first_panel_load.Location = New System.Drawing.Point(716, 10)
-        Me.first_panel_load.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.first_panel_load.Margin = New System.Windows.Forms.Padding(2)
         Me.first_panel_load.Name = "first_panel_load"
         Me.first_panel_load.Size = New System.Drawing.Size(161, 142)
         Me.first_panel_load.TabIndex = 0
@@ -83,7 +83,7 @@ Partial Class MainForm
         Me.second_panel_prompt.Controls.Add(Me.lblOpeningMessage)
         Me.second_panel_prompt.Controls.Add(Me.btnStart)
         Me.second_panel_prompt.Location = New System.Drawing.Point(716, 201)
-        Me.second_panel_prompt.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.second_panel_prompt.Margin = New System.Windows.Forms.Padding(2)
         Me.second_panel_prompt.Name = "second_panel_prompt"
         Me.second_panel_prompt.Size = New System.Drawing.Size(175, 142)
         Me.second_panel_prompt.TabIndex = 1
@@ -104,7 +104,7 @@ Partial Class MainForm
         '
         Me.btnStart.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.btnStart.Location = New System.Drawing.Point(0, 119)
-        Me.btnStart.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnStart.Margin = New System.Windows.Forms.Padding(2)
         Me.btnStart.Name = "btnStart"
         Me.btnStart.Size = New System.Drawing.Size(175, 23)
         Me.btnStart.TabIndex = 0
@@ -135,7 +135,7 @@ Partial Class MainForm
         'btnNext
         '
         Me.btnNext.Location = New System.Drawing.Point(532, 310)
-        Me.btnNext.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnNext.Margin = New System.Windows.Forms.Padding(2)
         Me.btnNext.Name = "btnNext"
         Me.btnNext.Size = New System.Drawing.Size(88, 46)
         Me.btnNext.TabIndex = 4
@@ -145,7 +145,7 @@ Partial Class MainForm
         'btnPrevious
         '
         Me.btnPrevious.Location = New System.Drawing.Point(9, 310)
-        Me.btnPrevious.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnPrevious.Margin = New System.Windows.Forms.Padding(2)
         Me.btnPrevious.Name = "btnPrevious"
         Me.btnPrevious.Size = New System.Drawing.Size(88, 46)
         Me.btnPrevious.TabIndex = 5
@@ -200,7 +200,7 @@ Partial Class MainForm
         'txtQueryMale
         '
         Me.txtQueryMale.Location = New System.Drawing.Point(9, 90)
-        Me.txtQueryMale.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtQueryMale.Margin = New System.Windows.Forms.Padding(2)
         Me.txtQueryMale.MaxLength = 20
         Me.txtQueryMale.Name = "txtQueryMale"
         Me.txtQueryMale.Size = New System.Drawing.Size(157, 20)
@@ -209,7 +209,7 @@ Partial Class MainForm
         'txtQueryFemale
         '
         Me.txtQueryFemale.Location = New System.Drawing.Point(393, 90)
-        Me.txtQueryFemale.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtQueryFemale.Margin = New System.Windows.Forms.Padding(2)
         Me.txtQueryFemale.MaxLength = 20
         Me.txtQueryFemale.Name = "txtQueryFemale"
         Me.txtQueryFemale.Size = New System.Drawing.Size(157, 20)
@@ -219,7 +219,7 @@ Partial Class MainForm
         '
         Me.maleDisplayPanel.AutoScroll = True
         Me.maleDisplayPanel.Location = New System.Drawing.Point(9, 113)
-        Me.maleDisplayPanel.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.maleDisplayPanel.Margin = New System.Windows.Forms.Padding(2)
         Me.maleDisplayPanel.Name = "maleDisplayPanel"
         Me.maleDisplayPanel.Size = New System.Drawing.Size(224, 186)
         Me.maleDisplayPanel.TabIndex = 14
@@ -227,7 +227,7 @@ Partial Class MainForm
         'femaleDisplayPanel
         '
         Me.femaleDisplayPanel.Location = New System.Drawing.Point(393, 113)
-        Me.femaleDisplayPanel.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.femaleDisplayPanel.Margin = New System.Windows.Forms.Padding(2)
         Me.femaleDisplayPanel.Name = "femaleDisplayPanel"
         Me.femaleDisplayPanel.Size = New System.Drawing.Size(224, 186)
         Me.femaleDisplayPanel.TabIndex = 15
@@ -248,7 +248,7 @@ Partial Class MainForm
         Me.cmdConfirm.Name = "cmdConfirm"
         Me.cmdConfirm.Size = New System.Drawing.Size(346, 21)
         Me.cmdConfirm.TabIndex = 1
-        Me.cmdConfirm.Text = "Confirm" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "or" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Shift Click to change your choices"
+        Me.cmdConfirm.Text = "Confirm" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "or" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Shift + Click to change choices"
         Me.cmdConfirm.UseVisualStyleBackColor = True
         '
         'DataGridView1
@@ -305,7 +305,7 @@ Partial Class MainForm
         Me.Controls.Add(Me.lblPrompt)
         Me.Controls.Add(Me.second_panel_prompt)
         Me.Controls.Add(Me.first_panel_load)
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Year 11 Awards"
