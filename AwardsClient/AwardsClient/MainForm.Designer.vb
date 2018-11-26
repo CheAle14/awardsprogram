@@ -306,6 +306,7 @@ Partial Class MainForm
         Me.Controls.Add(Me.second_panel_prompt)
         Me.Controls.Add(Me.first_panel_load)
         Me.Margin = New System.Windows.Forms.Padding(2)
+        Me.MinimumSize = New System.Drawing.Size(652, 405)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Year 11 Awards"
