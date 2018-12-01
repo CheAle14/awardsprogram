@@ -571,7 +571,7 @@ Public Class MainForm
                     FemaleCache.Add(CurrentCategory.FemaleWinner, Students(CurrentCategory.FemaleWinner))
                 End If
             End If
-            Dim nextCat = Categories(CurrentCategory.ID + 1)
+            Dim nextCat = If(Categories(CurrentCategory.ID + 1), CurrentCategory) ' this should prevent an error, but it might bug it in other ways?
             If (nextCat.ID + 1) > Categories.Count AndAlso (nextCat.ID + 1) <= NumberOfCategories Then
                 Send("GET_CATE:" + (nextCat.ID + 1).ToString()) ' gets category after this.
                 ' but only gets it if needed
