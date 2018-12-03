@@ -2,7 +2,7 @@
 Imports System.Net.Sockets
 
 Public Class MainForm
-    Public ConnectionIP As String = "127.0.0.1"
+    Public ConnectionIP As String = "10.249.67.54"
     Public ConnectionPort As Integer = 56567
     Public Client As TcpClient
     Public Const MaximumStudentsDisplayInDropDown = 15
@@ -539,10 +539,8 @@ Public Class MainForm
             btnStart.Text = ".."
             btnStart.Visible = False
             lblOpeningMessage.Text = "Your submission is currently being looked at, please wait.."
-            Dim promptConfirm = "Are you sure you are finished?" + vbCrLf
             DataGridView1.Rows.Clear()
             For Each category In Categories
-                promptConfirm += $"{category.Value.Prompt}: Male: {category.Value.MaleDisplay}  |  Female: {category.Value.FemaleDisplay}" + vbCrLf
                 Dim row() As String = {category.Value.Prompt, category.Value.MaleDisplay, category.Value.FemaleDisplay}
                 DataGridView1.Rows.Add(row)
             Next
@@ -552,6 +550,15 @@ Public Class MainForm
             finalPromptPanel.Dock = DockStyle.Fill
             finalPromptPanel.BringToFront()
             finalPromptPanel.Visible = True
+            If Me.InvokeRequired Then
+                Me.Invoke(Sub()
+                              Dim response = InputBox("Please type a category you think should be added" + vbCrLf + "Or some other category-related change.", "Category Altrication", "TYPE HERE")
+                              Send("QUES:" + response)
+                          End Sub)
+            Else
+                Dim response = InputBox("Please type a category you think should be added" + vbCrLf + "Or some other category-related change.", "Category Altrication", "TYPE HERE")
+                Send("QUES:" + response)
+            End If
         Else
             If CurrentCategory.MaleWinner = "" Then
                 If MsgBox("Warning: you have not selected a male winner (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
@@ -571,7 +578,10 @@ Public Class MainForm
                     FemaleCache.Add(CurrentCategory.FemaleWinner, Students(CurrentCategory.FemaleWinner))
                 End If
             End If
-            Dim nextCat = If(Categories(CurrentCategory.ID + 1), CurrentCategory) ' this should prevent an error, but it might bug it in other ways?
+            Dim nextCat = New Category() With {.ID = CurrentCategory.ID + 1}
+            If Categories.ContainsKey(nextCat.ID) Then
+                nextCat = If(Categories(nextCat.ID), CurrentCategory) ' this should prevent an error, but it might bug it in other ways?
+            End If
             If (nextCat.ID + 1) > Categories.Count AndAlso (nextCat.ID + 1) <= NumberOfCategories Then
                 Send("GET_CATE:" + (nextCat.ID + 1).ToString()) ' gets category after this.
                 ' but only gets it if needed
