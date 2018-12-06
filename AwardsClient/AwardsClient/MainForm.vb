@@ -2,7 +2,7 @@
 Imports System.Net.Sockets
 
 Public Class MainForm
-    Public ConnectionIP As String = "10.249.67.54"
+    Public ConnectionIP As String = "10.249.67.121"
     Public ConnectionPort As Integer = 56567
     Public Client As TcpClient
     Public Const MaximumStudentsDisplayInDropDown = 15
@@ -89,13 +89,23 @@ Public Class MainForm
     }
 
     Private Sub Send(message As String)
-        For Each item In Disallowed
-            message = message.Replace(item, "")
-        Next
-        message = $"%{message}`"
-        Dim stream = Client.GetStream()
-        Dim bytes = System.Text.Encoding.UTF8.GetBytes(message)
-        stream.Write(bytes, 0, bytes.Length)
+        Try
+            For Each item In Disallowed
+                message = message.Replace(item, "")
+            Next
+            message = $"%{message}`"
+            Dim stream = Client.GetStream()
+            Dim bytes = System.Text.Encoding.UTF8.GetBytes(message)
+            stream.Write(bytes, 0, bytes.Length)
+        Catch x As Exception
+            Try
+                System.IO.File.WriteAllText("Log.txt", x.ToString())
+                MsgBox("Server has disconnected, the error has been logged")
+            Catch
+                MsgBox("Server has disconnected, error cannot be logged" + vbCrLf + x.ToString())
+            End Try
+            Me.Close()
+        End Try
     End Sub
 
     Public recieveMessageThread As Threading.Thread
