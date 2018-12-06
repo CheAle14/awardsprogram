@@ -139,7 +139,7 @@ Partial Class MainForm
         Me.btnNext.Margin = New System.Windows.Forms.Padding(2)
         Me.btnNext.Name = "btnNext"
         Me.btnNext.Size = New System.Drawing.Size(88, 46)
-        Me.btnNext.TabIndex = 4
+        Me.btnNext.TabIndex = 5
         Me.btnNext.Text = "Next"
         Me.btnNext.UseVisualStyleBackColor = True
         '
@@ -205,7 +205,7 @@ Partial Class MainForm
         Me.txtQueryMale.MaxLength = 20
         Me.txtQueryMale.Name = "txtQueryMale"
         Me.txtQueryMale.Size = New System.Drawing.Size(157, 20)
-        Me.txtQueryMale.TabIndex = 12
+        Me.txtQueryMale.TabIndex = 0
         '
         'txtQueryFemale
         '
@@ -214,7 +214,7 @@ Partial Class MainForm
         Me.txtQueryFemale.MaxLength = 20
         Me.txtQueryFemale.Name = "txtQueryFemale"
         Me.txtQueryFemale.Size = New System.Drawing.Size(157, 20)
-        Me.txtQueryFemale.TabIndex = 13
+        Me.txtQueryFemale.TabIndex = 2
         '
         'maleDisplayPanel
         '
@@ -223,7 +223,7 @@ Partial Class MainForm
         Me.maleDisplayPanel.Margin = New System.Windows.Forms.Padding(2)
         Me.maleDisplayPanel.Name = "maleDisplayPanel"
         Me.maleDisplayPanel.Size = New System.Drawing.Size(224, 186)
-        Me.maleDisplayPanel.TabIndex = 14
+        Me.maleDisplayPanel.TabIndex = 1
         '
         'femaleDisplayPanel
         '
@@ -231,7 +231,7 @@ Partial Class MainForm
         Me.femaleDisplayPanel.Margin = New System.Windows.Forms.Padding(2)
         Me.femaleDisplayPanel.Name = "femaleDisplayPanel"
         Me.femaleDisplayPanel.Size = New System.Drawing.Size(224, 186)
-        Me.femaleDisplayPanel.TabIndex = 15
+        Me.femaleDisplayPanel.TabIndex = 3
         '
         'finalPromptPanel
         '
@@ -301,7 +301,7 @@ Partial Class MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1309, 366)
+        Me.ClientSize = New System.Drawing.Size(1309, 367)
         Me.Controls.Add(Me.finalPromptPanel)
         Me.Controls.Add(Me.femaleDisplayPanel)
         Me.Controls.Add(Me.maleDisplayPanel)
