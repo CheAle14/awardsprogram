@@ -2,7 +2,31 @@
 Imports System.Net.Sockets
 
 Public Class MainForm
-    Public ConnectionIP As String = "10.249.67.121"
+    Public Const HardCodedConnectionIP = "127.0.0.1"
+
+    Private CurrentIPStage = 0 ' 0 = Not tried, 1 = Tried github ip, 2 = tried hardcoded, >3 = currently looping.
+    Public ReadOnly Property ConnectionIP As String
+        Get
+            Dim ip = ""
+            If CurrentIPStage = 0 Then
+                Dim url = "https://raw.githubusercontent.com/TheGrandCoding/awardsserver/master/AwardsServer/ServerIP"
+                Using wc = New WebClient()
+                    ip = wc.DownloadString(url)
+                End Using
+            ElseIf CurrentIPStage = 1 Then
+                ip = HardCodedConnectionIP
+            Else
+                ' We have tried the above, so now we need to loop through them all.
+                Dim baseString = "10.249.67."
+                ip = baseString + (CurrentIPStage - 1).ToString()
+                If (CurrentIPStage - 2) > 255 Then
+                    ip = "10.249.68." + (CurrentIPStage - (1 + 255)).ToString()
+                End If
+            End If
+            CurrentIPStage += 1
+            Return ip
+        End Get
+    End Property
     Public ConnectionPort As Integer = 56567
     Public Client As TcpClient
     Public Const MaximumStudentsDisplayInDropDown = 15
@@ -283,8 +307,9 @@ Public Class MainForm
             Return ' They have already recieved an error message
         End If
         Client = New TcpClient()
-        Log($"Starting connection to {ConnectionIP}:{ConnectionPort}")
-        Dim conn = Client.BeginConnect(ConnectionIP, ConnectionPort, AddressOf ClientConnected, Nothing)
+        Dim tempIP = ConnectionIP ' needs to only do it once, since we +1 each time we access this variable
+        Log($"Starting connection to {tempIP}:{ConnectionPort}")
+        Dim conn = Client.BeginConnect(tempIP, ConnectionPort, AddressOf ClientConnected, Nothing)
         Threading.Thread.Sleep(1000 * 10)
         If Client.Connected Then
             Return
