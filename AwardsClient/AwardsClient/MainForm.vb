@@ -8,8 +8,8 @@ Public Class MainForm
     Public ReadOnly Property ConnectionIP As String
         Get
             Dim ip = ""
-            If CurrentIPStage = 0 Then
-                Dim url = "https://raw.githubusercontent.com/TheGrandCoding/awardsserver/master/AwardsServer/ServerIP"
+            If CurrentIPStage = 0 Then ' use the /dev/ branch for now, for testing purposes - eventually change it back to /master/
+                Dim url = "https://raw.githubusercontent.com/TheGrandCoding/awardsserver/dev/AwardsServer/ServerIP"
                 Using wc = New WebClient()
                     ip = wc.DownloadString(url)
                 End Using
