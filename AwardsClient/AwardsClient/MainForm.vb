@@ -620,7 +620,7 @@ Public Class MainForm
             End If
             If CurrentCategory.FirstWinner = CurrentCategory.SecondWinner And Not String.IsNullOrWhiteSpace(CurrentCategory.FirstWinner) Then
                 MsgBox("You have nominated the same person twice - this is forbidden" + vbCrLf + "Please select two different people as your two winners", MsgBoxStyle.Critical, "Error - duplicate")
-                'Return
+                Return
             End If
             Dim nextCat = New Category() With {.ID = CurrentCategory.ID + 1}
             If Categories.ContainsKey(nextCat.ID) Then
