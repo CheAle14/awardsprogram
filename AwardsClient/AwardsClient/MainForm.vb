@@ -2,7 +2,7 @@
 Imports System.Net.Sockets
 
 Public Class MainForm
-    Public Const HardCodedConnectionIP = "127.0.0.1"
+    Public Const HardCodedConnectionIP = "10.249.67.44"
 
     Private CurrentIPStage = 0 ' 0 = Not tried, 1 = Tried github ip, 2 = tried hardcoded, >3 = currently looping.
     Public ReadOnly Property ConnectionIP As String
