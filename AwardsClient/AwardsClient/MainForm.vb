@@ -500,7 +500,7 @@ Public Class MainForm
             button.Tag = accName
             If button.Tag.ToString().ToLower() = Environment.UserName.ToLower() Then
                 button.Enabled = False
-                button.Text += " (you)"
+                button.Text += " (You)"
             Else
                 button.Enabled = True ' otherwise it remains disabled
             End If
@@ -536,7 +536,7 @@ Public Class MainForm
             button.Tag = accName
             If button.Tag = Environment.UserName Then
                 button.Enabled = False
-                button.Text += " (you)"
+                button.Text += " (You)"
             Else
                 button.Enabled = True
             End If
