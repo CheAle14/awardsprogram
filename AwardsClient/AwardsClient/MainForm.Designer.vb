@@ -23,10 +23,13 @@ Partial Class MainForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.first_panel_load = New System.Windows.Forms.Panel()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.lblFirstPanelDisplay = New System.Windows.Forms.Label()
         Me.contactServerTimer = New System.Windows.Forms.Timer(Me.components)
         Me.second_panel_prompt = New System.Windows.Forms.Panel()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.lblOpeningMessage = New System.Windows.Forms.Label()
         Me.btnStart = New System.Windows.Forms.Button()
         Me.lblPrompt = New System.Windows.Forms.Label()
@@ -48,14 +51,12 @@ Partial Class MainForm
         Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.cmdBack = New System.Windows.Forms.Button()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.first_panel_load.SuspendLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.second_panel_prompt.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.finalPromptPanel.SuspendLayout()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'first_panel_load
@@ -69,6 +70,17 @@ Partial Class MainForm
         Me.first_panel_load.Name = "first_panel_load"
         Me.first_panel_load.Size = New System.Drawing.Size(215, 175)
         Me.first_panel_load.TabIndex = 0
+        '
+        'PictureBox2
+        '
+        Me.PictureBox2.BackgroundImage = Global.AwardsClient.My.Resources.Resources.logo
+        Me.PictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.PictureBox2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.PictureBox2.Location = New System.Drawing.Point(0, 0)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(215, 53)
+        Me.PictureBox2.TabIndex = 3
+        Me.PictureBox2.TabStop = False
         '
         'lblFirstPanelDisplay
         '
@@ -97,6 +109,17 @@ Partial Class MainForm
         Me.second_panel_prompt.Name = "second_panel_prompt"
         Me.second_panel_prompt.Size = New System.Drawing.Size(233, 175)
         Me.second_panel_prompt.TabIndex = 1
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.BackgroundImage = Global.AwardsClient.My.Resources.Resources.logo
+        Me.PictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.PictureBox1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.PictureBox1.Location = New System.Drawing.Point(0, 0)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(233, 53)
+        Me.PictureBox1.TabIndex = 2
+        Me.PictureBox1.TabStop = False
         '
         'lblOpeningMessage
         '
@@ -264,7 +287,7 @@ Partial Class MainForm
         Me.finalPromptPanel.Font = New System.Drawing.Font("MS Reference Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.finalPromptPanel.ForeColor = System.Drawing.SystemColors.ButtonHighlight
         Me.finalPromptPanel.Location = New System.Drawing.Point(1240, 91)
-        Me.finalPromptPanel.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.finalPromptPanel.Margin = New System.Windows.Forms.Padding(4)
         Me.finalPromptPanel.Name = "finalPromptPanel"
         Me.finalPromptPanel.Size = New System.Drawing.Size(461, 303)
         Me.finalPromptPanel.TabIndex = 16
@@ -273,7 +296,7 @@ Partial Class MainForm
         '
         Me.cmdConfirm.Dock = System.Windows.Forms.DockStyle.Fill
         Me.cmdConfirm.Location = New System.Drawing.Point(0, 254)
-        Me.cmdConfirm.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cmdConfirm.Margin = New System.Windows.Forms.Padding(4)
         Me.cmdConfirm.Name = "cmdConfirm"
         Me.cmdConfirm.Size = New System.Drawing.Size(461, 0)
         Me.cmdConfirm.TabIndex = 1
@@ -288,9 +311,17 @@ Partial Class MainForm
         Me.DataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3})
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("MS Reference Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridView1.DefaultCellStyle = DataGridViewCellStyle2
         Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Top
         Me.DataGridView1.Location = New System.Drawing.Point(0, 0)
-        Me.DataGridView1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.DataGridView1.Margin = New System.Windows.Forms.Padding(4)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
         Me.DataGridView1.RowHeadersVisible = False
@@ -318,35 +349,14 @@ Partial Class MainForm
         'cmdBack
         '
         Me.cmdBack.Dock = System.Windows.Forms.DockStyle.Bottom
+        Me.cmdBack.ForeColor = System.Drawing.Color.Black
         Me.cmdBack.Location = New System.Drawing.Point(0, 254)
-        Me.cmdBack.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cmdBack.Margin = New System.Windows.Forms.Padding(4)
         Me.cmdBack.Name = "cmdBack"
         Me.cmdBack.Size = New System.Drawing.Size(461, 49)
         Me.cmdBack.TabIndex = 2
         Me.cmdBack.Text = "Back"
         Me.cmdBack.UseVisualStyleBackColor = True
-        '
-        'PictureBox1
-        '
-        Me.PictureBox1.BackgroundImage = Global.AwardsClient.My.Resources.Resources.logo
-        Me.PictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.PictureBox1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PictureBox1.Location = New System.Drawing.Point(0, 0)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(233, 53)
-        Me.PictureBox1.TabIndex = 2
-        Me.PictureBox1.TabStop = False
-        '
-        'PictureBox2
-        '
-        Me.PictureBox2.BackgroundImage = Global.AwardsClient.My.Resources.Resources.logo
-        Me.PictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.PictureBox2.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PictureBox2.Location = New System.Drawing.Point(0, 0)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(215, 53)
-        Me.PictureBox2.TabIndex = 3
-        Me.PictureBox2.TabStop = False
         '
         'MainForm
         '
@@ -377,11 +387,11 @@ Partial Class MainForm
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Year 11 Awards"
         Me.first_panel_load.ResumeLayout(False)
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.second_panel_prompt.ResumeLayout(False)
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.finalPromptPanel.ResumeLayout(False)
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

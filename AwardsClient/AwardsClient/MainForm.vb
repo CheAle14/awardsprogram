@@ -2,7 +2,7 @@
 Imports System.Net.Sockets
 
 Public Class MainForm
-    Public Const HardCodedConnectionIP = "10.249.67.44"
+    Public Const HardCodedConnectionIP = "127.0.0.1"
 
     Private CurrentIPStage = 0 ' 0 = Not tried, 1 = Tried github ip, 2 = tried hardcoded, >3 = currently looping.
     Public ReadOnly Property ConnectionIP As String
@@ -589,17 +589,10 @@ Public Class MainForm
             finalPromptPanel.Dock = DockStyle.Fill
             finalPromptPanel.BringToFront()
             finalPromptPanel.Visible = True
-            If Me.InvokeRequired Then
-                Me.Invoke(Sub()
-                              Dim response = InputBox("Please type a category you think should be added" + vbCrLf + "Or some other category-related change.", "Category Altrication", "TYPE HERE")
-                              Send("QUES:" + response)
-                          End Sub)
-            Else
-                Dim response = InputBox("Please type a category you think should be added" + vbCrLf + "Or some other category-related change.", "Category Altrication", "TYPE HERE")
-                If Not (String.IsNullOrWhiteSpace(response) Or response = "TYPE HERE") Then
-                    Send("QUES:" + response)
-                End If
-            End If
+            Me.Invoke(Sub()
+                          Dim response = InputBox("Please type a category you think should be added" + vbCrLf + "Or some other category-related change.", "Category Altrication", "TYPE HERE")
+                          Send("QUES:" + response)
+                      End Sub)
         Else
             If CurrentCategory.FirstWinner = "" Then
                 If MsgBox("Warning: you have not selected a First winner (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
