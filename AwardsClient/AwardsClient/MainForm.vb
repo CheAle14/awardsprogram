@@ -344,6 +344,7 @@ Public Class MainForm
 #End If
         Me.Size = New Size(652, 405)
         Me.MinimumSize = New Size(652, 405)
+        Me.MaximumSize = New Size(652, 405)
         first_panel_load.Location = New Point(0, 0)
         Dim pSize = New Size(Me.Width, Me.Height - 25)
         first_panel_load.Size = pSize
