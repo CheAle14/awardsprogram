@@ -612,17 +612,10 @@ Public Class MainForm
             finalPromptPanel.Dock = DockStyle.Fill
             finalPromptPanel.BringToFront()
             finalPromptPanel.Visible = True
-            If Me.InvokeRequired Then
-                Me.Invoke(Sub()
-                              Dim response = InputBox("Please type a category you think should be added" + vbCrLf + "Or some other category-related change.", "Category Altrication", "TYPE HERE")
-                              Send("QUES:" + response)
-                          End Sub)
-            Else
-                Dim response = InputBox("Please type a category you think should be added" + vbCrLf + "Or some other category-related change.", "Category Altrication", "TYPE HERE")
-                If Not (String.IsNullOrWhiteSpace(response) Or response = "TYPE HERE") Then
-                    Send("QUES:" + response)
-                End If
-            End If
+            Me.Invoke(Sub()
+                          Dim response = InputBox("Please type a category you think should be added" + vbCrLf + "Or some other category-related change.", "Category Altrication", "TYPE HERE")
+                          Send("QUES:" + response)
+                      End Sub)
         Else
             If CurrentCategory.FirstWinner = "" Then
                 If MsgBox("Warning: you have not selected a First Choice (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then

@@ -23,7 +23,11 @@ Partial Class MainForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+<<<<<<< HEAD
         Dim DataGridViewCellStyle6 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+=======
+        Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+>>>>>>> e2e1b0cd2c1d0f4c2a2c58af588dfc19bae96495
         Me.first_panel_load = New System.Windows.Forms.Panel()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.lblFirstPanelDisplay = New System.Windows.Forms.Label()
@@ -49,8 +53,11 @@ Partial Class MainForm
         Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.cmdConfirm = New System.Windows.Forms.Button()
         Me.cmdBack = New System.Windows.Forms.Button()
+<<<<<<< HEAD
         Me.lblQueryFirst = New System.Windows.Forms.Label()
         Me.lblQuerySecond = New System.Windows.Forms.Label()
+=======
+>>>>>>> e2e1b0cd2c1d0f4c2a2c58af588dfc19bae96495
         Me.first_panel_load.SuspendLayout()
         CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.second_panel_prompt.SuspendLayout()
@@ -77,9 +84,14 @@ Partial Class MainForm
         Me.PictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
         Me.PictureBox2.Dock = System.Windows.Forms.DockStyle.Top
         Me.PictureBox2.Location = New System.Drawing.Point(0, 0)
+<<<<<<< HEAD
         Me.PictureBox2.Margin = New System.Windows.Forms.Padding(2)
         Me.PictureBox2.Name = "PictureBox2"
         Me.PictureBox2.Size = New System.Drawing.Size(161, 62)
+=======
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(215, 53)
+>>>>>>> e2e1b0cd2c1d0f4c2a2c58af588dfc19bae96495
         Me.PictureBox2.TabIndex = 3
         Me.PictureBox2.TabStop = False
         '
@@ -118,9 +130,14 @@ Partial Class MainForm
         Me.PictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
         Me.PictureBox1.Dock = System.Windows.Forms.DockStyle.Top
         Me.PictureBox1.Location = New System.Drawing.Point(0, 0)
+<<<<<<< HEAD
         Me.PictureBox1.Margin = New System.Windows.Forms.Padding(2)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(175, 50)
+=======
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(233, 53)
+>>>>>>> e2e1b0cd2c1d0f4c2a2c58af588dfc19bae96495
         Me.PictureBox1.TabIndex = 2
         Me.PictureBox1.TabStop = False
         '
@@ -274,11 +291,30 @@ Partial Class MainForm
         Me.finalPromptPanel.Controls.Add(Me.DataGridView1)
         Me.finalPromptPanel.Font = New System.Drawing.Font("MS Reference Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.finalPromptPanel.ForeColor = System.Drawing.SystemColors.ButtonHighlight
+<<<<<<< HEAD
         Me.finalPromptPanel.Location = New System.Drawing.Point(930, 74)
+=======
+        Me.finalPromptPanel.Location = New System.Drawing.Point(1240, 91)
+        Me.finalPromptPanel.Margin = New System.Windows.Forms.Padding(4)
+>>>>>>> e2e1b0cd2c1d0f4c2a2c58af588dfc19bae96495
         Me.finalPromptPanel.Name = "finalPromptPanel"
         Me.finalPromptPanel.Size = New System.Drawing.Size(346, 246)
         Me.finalPromptPanel.TabIndex = 16
         '
+<<<<<<< HEAD
+=======
+        'cmdConfirm
+        '
+        Me.cmdConfirm.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.cmdConfirm.Location = New System.Drawing.Point(0, 254)
+        Me.cmdConfirm.Margin = New System.Windows.Forms.Padding(4)
+        Me.cmdConfirm.Name = "cmdConfirm"
+        Me.cmdConfirm.Size = New System.Drawing.Size(461, 0)
+        Me.cmdConfirm.TabIndex = 1
+        Me.cmdConfirm.Text = "Confirm" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        Me.cmdConfirm.UseVisualStyleBackColor = True
+        '
+>>>>>>> e2e1b0cd2c1d0f4c2a2c58af588dfc19bae96495
         'DataGridView1
         '
         Me.DataGridView1.AllowUserToAddRows = False
@@ -287,6 +323,7 @@ Partial Class MainForm
         Me.DataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3})
+<<<<<<< HEAD
         DataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window
         DataGridViewCellStyle6.Font = New System.Drawing.Font("MS Reference Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -297,6 +334,19 @@ Partial Class MainForm
         Me.DataGridView1.DefaultCellStyle = DataGridViewCellStyle6
         Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Top
         Me.DataGridView1.Location = New System.Drawing.Point(0, 0)
+=======
+        DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
+        DataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window
+        DataGridViewCellStyle2.Font = New System.Drawing.Font("MS Reference Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        DataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight
+        DataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black
+        DataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.[False]
+        Me.DataGridView1.DefaultCellStyle = DataGridViewCellStyle2
+        Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.DataGridView1.Location = New System.Drawing.Point(0, 0)
+        Me.DataGridView1.Margin = New System.Windows.Forms.Padding(4)
+>>>>>>> e2e1b0cd2c1d0f4c2a2c58af588dfc19bae96495
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
         Me.DataGridView1.RowHeadersVisible = False
@@ -337,13 +387,19 @@ Partial Class MainForm
         '
         Me.cmdBack.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.cmdBack.ForeColor = System.Drawing.Color.Black
+<<<<<<< HEAD
         Me.cmdBack.Location = New System.Drawing.Point(0, 206)
+=======
+        Me.cmdBack.Location = New System.Drawing.Point(0, 254)
+        Me.cmdBack.Margin = New System.Windows.Forms.Padding(4)
+>>>>>>> e2e1b0cd2c1d0f4c2a2c58af588dfc19bae96495
         Me.cmdBack.Name = "cmdBack"
         Me.cmdBack.Size = New System.Drawing.Size(346, 40)
         Me.cmdBack.TabIndex = 2
         Me.cmdBack.Text = "Back"
         Me.cmdBack.UseVisualStyleBackColor = True
         '
+<<<<<<< HEAD
         'lblQueryFirst
         '
         Me.lblQueryFirst.AutoSize = True
@@ -370,6 +426,8 @@ Partial Class MainForm
         Me.lblQuerySecond.Text = "Searching..."
         Me.lblQuerySecond.Visible = False
         '
+=======
+>>>>>>> e2e1b0cd2c1d0f4c2a2c58af588dfc19bae96495
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
