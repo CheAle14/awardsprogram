@@ -2,7 +2,7 @@
 Imports System.Net.Sockets
 
 Public Class MainForm
-    Public Const HardCodedConnectionIP = "10.249.67.44"
+    Public Const HardCodedConnectionIP = "127.0.0.1"
 
     Private CurrentIPStage = 0 ' 0 = Not tried, 1 = Tried github ip, 2 = tried hardcoded, >3 = currently looping.
     Public ReadOnly Property ConnectionIP As String
@@ -164,7 +164,7 @@ Public Class MainForm
             message = message.Replace("Ready:", "")
             btnStart.Visible = True
             lblOpeningMessage.Text = "Hello, " + message + vbCrLf _
-                + "For each of the award categories, two people that you want to win" + vbCrLf _
+                + "For each of the award categories, chose two people that you want to win" + vbCrLf _
                 + "Then, hit the Next button in the bottom right." + vbCrLf _
                 + "If you need to go back, hit the 'Previous' button" + vbCrLf + vbCrLf _
                 + "Once you reach the final category, the Next button will become 'Finish' and you will be prompted to confirm your vote."
@@ -175,7 +175,7 @@ Public Class MainForm
             HasConnectedAtleastOnce = True
             first_panel_load.Hide()
         ElseIf message = "Accepted" Then
-            lblOpeningMessage.Text = "Thanks for your vote!" + vbCrLf + "The server has indicated that your vote was accepted, you can leave now."
+            lblOpeningMessage.Text = "The server has indicated that your vote was accepted" + vbCrLf + "Thanks for voting and have a nice day."
         ElseIf message = "Rejected" Then
             lblOpeningMessage.Text = "Uh oh!" + vbCrLf + "The server has indicated that your vote was rejected, though a reason was not given" + vbCrLf + vbCrLf + "You may have already voted, or attempted to vote for yourself.. it isn't clear"
         ElseIf message.StartsWith("Rejected") Then
@@ -252,11 +252,11 @@ Public Class MainForm
             lblQueryFirst.Hide()
             txtQuerySecond.ReadOnly = False
             txtQueryFirst.ReadOnly = False
-            If First Then
-                txtQueryFirst.Focus()
-            Else
-                txtQuerySecond.Focus()
-            End If
+            'If First Then Took cout cause it caused the focus to move to next text box when i types 3 letters in first text box
+            '    txtQueryFirst.Focus()
+            'Else
+            '    txtQuerySecond.Focus()
+            'End If
             RefreshCategoryUI()
         ElseIf message.StartsWith("QUEUE:") Then
             message = message.Replace("QUEUE:", "")
@@ -493,7 +493,7 @@ Public Class MainForm
                     newY += button.Height + 1
                 Next
                 button.Location = New Point(newX, newY)
-                button.Width = txtQuerySecond.Width - 15
+                button.Width = 224
                 SecondButtons.Insert(i, button)
                 AddHandler button.Click, AddressOf UserSelectedWinner
             End Try
@@ -529,7 +529,7 @@ Public Class MainForm
                     newY += button.Height + 1
                 Next
                 button.Location = New Point(newX, newY)
-                button.Width = txtQueryFirst.Width - 15
+                button.Width = 224
                 FirstButtons.Insert(i, button)
                 AddHandler button.Click, AddressOf UserSelectedWinner
             End Try
@@ -573,7 +573,30 @@ Public Class MainForm
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         PreviousClicked = False
         If CurrentCategory.ID + 1 > NumberOfCategories Then
-            ' end.. me..
+            If CurrentCategory.FirstWinner = "" Then
+                If MsgBox("Warning: you have not selected a First Choice (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
+                    Return
+                End If
+            Else
+                If Not FirstCache.ContainsKey(CurrentCategory.FirstWinner) Then
+                    FirstCache.Add(CurrentCategory.FirstWinner, Students(CurrentCategory.FirstWinner))
+                Else
+                    MsgBox("NotChanged") ''if you set the last first choice to something and go back and change it to [black] it calls this which means the value doesnt change also the warning for leaving it blank doesnt appear either
+                End If
+            End If
+            If CurrentCategory.SecondWinner = "" Then
+                If MsgBox("Warning: you have not selected a Second Choice (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
+                    Return
+                End If
+            Else
+                If Not SecondCache.ContainsKey(CurrentCategory.SecondWinner) Then
+                    SecondCache.Add(CurrentCategory.SecondWinner, Students(CurrentCategory.SecondWinner))
+                End If
+            End If
+            If CurrentCategory.FirstWinner = CurrentCategory.SecondWinner And Not String.IsNullOrWhiteSpace(CurrentCategory.FirstWinner) Then
+                MsgBox("You have nominated the same person twice - this is forbidden" + vbCrLf + "Please select two different people as your two winners", MsgBoxStyle.Critical, "Error - duplicate")
+                Return
+            End If
             second_panel_prompt.Visible = True
             btnStart.Text = ".."
             btnStart.Visible = False
@@ -602,7 +625,7 @@ Public Class MainForm
             End If
         Else
             If CurrentCategory.FirstWinner = "" Then
-                If MsgBox("Warning: you have not selected a First winner (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
+                If MsgBox("Warning: you have not selected a First Choice (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
                     Return
                 End If
             Else
@@ -611,7 +634,7 @@ Public Class MainForm
                 End If
             End If
             If CurrentCategory.SecondWinner = "" Then
-                If MsgBox("Warning: you have not selected a Second winner (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
+                If MsgBox("Warning: you have not selected a Second Choice (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
                     Return
                 End If
             Else
@@ -686,8 +709,6 @@ Public Class MainForm
     Private Sub DisableDueToQuery(isFirst As Boolean)
         txtQuerySecond.ReadOnly = True
         txtQueryFirst.ReadOnly = True
-        lblQuerySecond.Visible = Not isFirst
-        lblQueryFirst.Visible = isFirst
         FirstDisplayPanel.Visible = isFirst
         SecondDisplayPanel.Visible = Not isFirst
     End Sub
@@ -755,6 +776,7 @@ Public Class MainForm
         finalPromptPanel.Hide()
     End Sub
     Private Sub cmdBack_Click(sender As Object, e As EventArgs) Handles cmdBack.Click
+
         finalPromptPanel.Visible = False
         second_panel_prompt.Visible = False
     End Sub
@@ -767,5 +789,11 @@ Public Class MainForm
         End Try
     End Sub
 
+    Private Sub lblFirstPanelDisplay_Click(sender As Object, e As EventArgs) Handles lblFirstPanelDisplay.Click
 
+    End Sub
+
+    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
+
+    End Sub
 End Class
