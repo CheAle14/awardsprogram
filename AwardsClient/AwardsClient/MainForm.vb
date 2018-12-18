@@ -5,6 +5,8 @@ Public Class MainForm
     Public Const HardCodedConnectionIP = "127.0.0.1"
 
     Private CurrentIPStage = 0 ' 0 = Not tried, 1 = Tried github ip, 2 = tried hardcoded, >3 = currently looping.
+    Dim FirstChosen As Boolean = False
+    Dim SecoundChosen As Boolean = False
     Public ReadOnly Property ConnectionIP As String
         Get
             Dim ip = ""
@@ -555,6 +557,7 @@ Public Class MainForm
     Private FirstButtons As New List(Of Button)
 
     Private Sub UserSelectedWinner(sender As Object, e As EventArgs)
+
         Dim btnClicked = DirectCast(sender, Button)
         Dim sex = btnClicked.Name.Split("-")(0)
         Dim accName = DirectCast(btnClicked.Tag, String)
@@ -563,10 +566,12 @@ Public Class MainForm
             CurrentCategory.SecondWinner = accName
             txtQuerySecond.Text = CurrentCategory.SecondDisplay
             SecondDisplayPanel.Hide()
+            SecoundChosen = True
         Else
             CurrentCategory.FirstWinner = accName
             txtQueryFirst.Text = CurrentCategory.FirstDisplay
             FirstDisplayPanel.Hide()
+            FirstChosen = True
         End If
     End Sub
 
@@ -580,8 +585,6 @@ Public Class MainForm
             Else
                 If Not FirstCache.ContainsKey(CurrentCategory.FirstWinner) Then
                     FirstCache.Add(CurrentCategory.FirstWinner, Students(CurrentCategory.FirstWinner))
-                Else
-                    MsgBox("NotChanged") ''if you set the last first choice to something and go back and change it to [black] it calls this which means the value doesnt change also the warning for leaving it blank doesnt appear either
                 End If
             End If
             If CurrentCategory.SecondWinner = "" Then
@@ -721,6 +724,12 @@ Public Class MainForm
     Private lastQuery As String = ""
 
     Private Sub txtQueryFirst_TextChanged(sender As Object, e As EventArgs) Handles txtQueryFirst.TextChanged
+        If FirstChosen = True Then
+            If txtQueryFirst.Text IsNot CurrentCategory.FirstWinner Then
+                CurrentCategory.FirstWinner = ""
+                FirstChosen = False
+            End If
+        End If
         If txtQueryFirst.Text.Length >= LettersBeforeQuery AndAlso txtQueryFirst.Text.Contains(")") = False Then
             ' query it.
             If txtQueryFirst.Text.StartsWith(lastQuery) Then
@@ -736,6 +745,12 @@ Public Class MainForm
     End Sub
 
     Private Sub txtQuerySecond_TextChanged(sender As Object, e As EventArgs) Handles txtQuerySecond.TextChanged
+        If SecoundChosen = True Then
+            If txtQuerySecond.Text IsNot CurrentCategory.SecondWinner Then
+                CurrentCategory.SecondWinner = ""
+                SecoundChosen = False
+            End If
+        End If
         If txtQuerySecond.Text.Length >= LettersBeforeQuery AndAlso txtQuerySecond.Text.Contains(")") = False Then
             ' query it.
             If txtQuerySecond.Text.StartsWith(lastQuery) Then
