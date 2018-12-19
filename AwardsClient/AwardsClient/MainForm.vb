@@ -36,8 +36,7 @@ Public Class MainForm
 
     Public Students As New Dictionary(Of String, Student) ' account name
 
-    Dim FirstCache As New Dictionary(Of String, Student)
-    Dim SecondCache As New Dictionary(Of String, Student)
+    Dim AllChache As New Dictionary(Of String, Student)
 
     Public Categories As New Dictionary(Of Integer, Category)
 
@@ -583,8 +582,8 @@ Public Class MainForm
                     Return
                 End If
             Else
-                If Not FirstCache.ContainsKey(CurrentCategory.FirstWinner) Then
-                    FirstCache.Add(CurrentCategory.FirstWinner, Students(CurrentCategory.FirstWinner))
+                If Not AllChache.ContainsKey(CurrentCategory.FirstWinner) Then
+                    AllChache.Add(CurrentCategory.FirstWinner, Students(CurrentCategory.FirstWinner))
                 End If
             End If
             If CurrentCategory.SecondWinner = "" Then
@@ -592,8 +591,8 @@ Public Class MainForm
                     Return
                 End If
             Else
-                If Not SecondCache.ContainsKey(CurrentCategory.SecondWinner) Then
-                    SecondCache.Add(CurrentCategory.SecondWinner, Students(CurrentCategory.SecondWinner))
+                If Not AllChache.ContainsKey(CurrentCategory.SecondWinner) Then
+                    AllChache.Add(CurrentCategory.SecondWinner, Students(CurrentCategory.SecondWinner))
                 End If
             End If
             If CurrentCategory.FirstWinner = CurrentCategory.SecondWinner And Not String.IsNullOrWhiteSpace(CurrentCategory.FirstWinner) Then
@@ -627,8 +626,8 @@ Public Class MainForm
                     Return
                 End If
             Else
-                If Not FirstCache.ContainsKey(CurrentCategory.FirstWinner) Then
-                    FirstCache.Add(CurrentCategory.FirstWinner, Students(CurrentCategory.FirstWinner))
+                If Not AllChache.ContainsKey(CurrentCategory.FirstWinner) Then
+                    AllChache.Add(CurrentCategory.FirstWinner, Students(CurrentCategory.FirstWinner))
                 End If
             End If
             If CurrentCategory.SecondWinner = "" Then
@@ -636,8 +635,8 @@ Public Class MainForm
                     Return
                 End If
             Else
-                If Not SecondCache.ContainsKey(CurrentCategory.SecondWinner) Then
-                    SecondCache.Add(CurrentCategory.SecondWinner, Students(CurrentCategory.SecondWinner))
+                If Not AllChache.ContainsKey(CurrentCategory.SecondWinner) Then
+                    AllChache.Add(CurrentCategory.SecondWinner, Students(CurrentCategory.SecondWinner))
                 End If
             End If
             If CurrentCategory.FirstWinner = CurrentCategory.SecondWinner And Not String.IsNullOrWhiteSpace(CurrentCategory.FirstWinner) Then
@@ -662,12 +661,12 @@ Public Class MainForm
             ' Show cache of Firsts/Seconds.
 
             Dim Firsts As New Dictionary(Of String, String) 'name: display
-            For Each st In FirstCache
+            For Each st In AllChache
                 Firsts.Add(st.Key, st.Value.ToString("FN LN (TT)"))
             Next
 
             Dim Seconds As New Dictionary(Of String, String) 'name: display
-            For Each st In SecondCache
+            For Each st In AllChache
                 Seconds.Add(st.Key, st.Value.ToString("FN LN (TT)"))
             Next
             If Firsts.Count > 0 Then
