@@ -617,7 +617,9 @@ Public Class MainForm
             finalPromptPanel.Visible = True
             Me.Invoke(Sub()
                           Dim response = InputBox("Please type a category you think should be added" + vbCrLf + "Or some other category-related change.", "Category Altrication", "TYPE HERE")
-                          Send("QUES:" + response)
+                          If Not (String.IsNullOrWhiteSpace(response) Or response = "TYPE HERE") Then
+                              Send("QUES:" + response)
+                          End If
                       End Sub)
         Else
             If CurrentCategory.FirstWinner = "" Then
