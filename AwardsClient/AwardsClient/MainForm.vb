@@ -6,7 +6,7 @@ Public Class MainForm
 
     Private CurrentIPStage = 0 ' 0 = Not tried, 1 = Tried github ip, 2 = tried hardcoded, >3 = currently looping.
     Dim FirstChosen As Boolean = False
-    Dim SecoundChosen As Boolean = False
+    Dim SecondChosen As Boolean = False
     Public ReadOnly Property ConnectionIP As String
         Get
             Dim ip = ""
@@ -342,6 +342,7 @@ Public Class MainForm
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 #If DEBUG Then
         DebugForm.Show()
+        CurrentIPStage = 1 ' skips github checks if Debug, uses hardcoded first.
 #End If
         Me.Size = New Size(652, 405)
         Me.MinimumSize = New Size(652, 405)
@@ -565,7 +566,7 @@ Public Class MainForm
             CurrentCategory.SecondWinner = accName
             txtQuerySecond.Text = CurrentCategory.SecondDisplay
             SecondDisplayPanel.Hide()
-            SecoundChosen = True
+            SecondChosen = True
         Else
             CurrentCategory.FirstWinner = accName
             txtQueryFirst.Text = CurrentCategory.FirstDisplay
@@ -726,9 +727,11 @@ Public Class MainForm
 
     Private Sub txtQueryFirst_TextChanged(sender As Object, e As EventArgs) Handles txtQueryFirst.TextChanged
         If FirstChosen = True Then
-            If txtQueryFirst.Text IsNot CurrentCategory.FirstWinner Then
-                'CurrentCategory.FirstWinner = ""
-                FirstChosen = False
+            If txtQueryFirst.Text <> CurrentCategory.FirstDisplay Then
+                FirstChosen = False ' set it to false as soon as it is modified
+            End If
+            If txtQueryFirst.Text = "" Then ' also, remove the winner if the winner is removed.
+                CurrentCategory.FirstWinner = ""
             End If
         End If
         If txtQueryFirst.Text.Length >= LettersBeforeQuery AndAlso txtQueryFirst.Text.Contains(")") = False Then
@@ -746,10 +749,12 @@ Public Class MainForm
     End Sub
 
     Private Sub txtQuerySecond_TextChanged(sender As Object, e As EventArgs) Handles txtQuerySecond.TextChanged
-        If SecoundChosen = True Then
-            If txtQuerySecond.Text IsNot CurrentCategory.SecondWinner Then
-                'CurrentCategory.SecondWinner = ""
-                SecoundChosen = False
+        If SecondChosen = True Then
+            If txtQuerySecond.Text <> CurrentCategory.SecondDisplay Then
+                SecondChosen = False ' set it to false as soon as it is modified
+            End If
+            If txtQuerySecond.Text = "" Then ' also, remove the winner if the winner is removed.
+                CurrentCategory.SecondWinner = ""
             End If
         End If
         If txtQuerySecond.Text.Length >= LettersBeforeQuery AndAlso txtQuerySecond.Text.Contains(")") = False Then
