@@ -536,7 +536,7 @@ Public Class MainForm
             End Try
             button.Text = display
             button.Tag = accName
-            If button.Tag = Environment.UserName Then
+            If button.Tag.ToString().ToLower() = Environment.UserName.ToString().ToLower() Then
                 button.Enabled = False
                 button.Text += " (You)"
             Else
@@ -727,7 +727,7 @@ Public Class MainForm
     Private Sub txtQueryFirst_TextChanged(sender As Object, e As EventArgs) Handles txtQueryFirst.TextChanged
         If FirstChosen = True Then
             If txtQueryFirst.Text IsNot CurrentCategory.FirstWinner Then
-                CurrentCategory.FirstWinner = ""
+                'CurrentCategory.FirstWinner = ""
                 FirstChosen = False
             End If
         End If
@@ -748,7 +748,7 @@ Public Class MainForm
     Private Sub txtQuerySecond_TextChanged(sender As Object, e As EventArgs) Handles txtQuerySecond.TextChanged
         If SecoundChosen = True Then
             If txtQuerySecond.Text IsNot CurrentCategory.SecondWinner Then
-                CurrentCategory.SecondWinner = ""
+                'CurrentCategory.SecondWinner = ""
                 SecoundChosen = False
             End If
         End If
