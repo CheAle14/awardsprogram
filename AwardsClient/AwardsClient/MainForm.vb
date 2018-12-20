@@ -418,10 +418,10 @@ Public Class MainForm
         If CurrentCategory IsNot Nothing Then
             lblPrompt.Text = CurrentCategory.Prompt
             lblNumRemain.Text = $"{CurrentCategory.ID}/{NumberOfCategories}"
-
+            FirstChosen = CurrentCategory.FirstDisplay <> ""
+            SecondChosen = CurrentCategory.SecondDisplay <> ""
             txtQuerySecond.Text = If(CurrentCategory.SecondDisplay = "", txtQuerySecond.Text, CurrentCategory.SecondDisplay)
             txtQueryFirst.Text = If(CurrentCategory.FirstDisplay = "", txtQueryFirst.Text, CurrentCategory.FirstDisplay)
-
             If txtQueryFirst.Text.Length >= LettersBeforeQuery OrElse txtQuerySecond.Text.Length >= LettersBeforeQuery Then
                 ' show a "drop down" in the form of buttons..
 
@@ -559,15 +559,17 @@ Public Class MainForm
     Private Sub UserSelectedWinner(sender As Object, e As EventArgs)
 
         Dim btnClicked = DirectCast(sender, Button)
-        Dim sex = btnClicked.Name.Split("-")(0)
+        Dim whichSideWasButtonOn = btnClicked.Name.Split("-")(0)
         Dim accName = DirectCast(btnClicked.Tag, String)
         lastQuery = "ssssssssssssssssssssssssssssssss" ' so it doesnt query again
-        If sex = "Second" Then
+        If whichSideWasButtonOn = "Second" Then
+            SecondChosen = False
             CurrentCategory.SecondWinner = accName
             txtQuerySecond.Text = CurrentCategory.SecondDisplay
             SecondDisplayPanel.Hide()
             SecondChosen = True
         Else
+            FirstChosen = False
             CurrentCategory.FirstWinner = accName
             txtQueryFirst.Text = CurrentCategory.FirstDisplay
             FirstDisplayPanel.Hide()
@@ -577,6 +579,8 @@ Public Class MainForm
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         PreviousClicked = False
+        FirstChosen = False
+        SecondChosen = False
         If CurrentCategory.ID + 1 > NumberOfCategories Then
             If CurrentCategory.FirstWinner = "" Then
                 If MsgBox("Warning: you have not selected a First Choice (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
