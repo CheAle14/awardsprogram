@@ -6,7 +6,7 @@ Public Class MainForm
 
     Private CurrentIPStage = 0 ' 0 = Not tried, 1 = Tried github ip, 2 = tried hardcoded, >3 = currently looping.
     Dim FirstChosen As Boolean = False
-    Dim SecoundChosen As Boolean = False
+    Dim SecondChosen As Boolean = False
     Public ReadOnly Property ConnectionIP As String
         Get
             Dim ip = ""
@@ -110,6 +110,13 @@ Public Class MainForm
     Public Sub Log(message As String)
         DebugForm.Log("MainForm/ " + message)
     End Sub
+    Public Sub CatLog(message As String)
+        If CurrentCategory Is Nothing Then
+            Log(message)
+            Return
+        End If
+        DebugForm.Log("Main/" + CurrentCategory.ID.ToString() + "/" + message)
+    End Sub
 
     Private Disallowed As New List(Of Char) From {
     "`", "%"
@@ -143,6 +150,7 @@ Public Class MainForm
         ' hasnt disconnected, such as when it errors
         If Client.Connected Then
             HasConnectedAtleastOnce = True
+            Log("Connected to server")
             contactServerTimer.Stop()
             connThread.Abort()
             recieveMessageThread = New Threading.Thread(AddressOf ReceiveMessage)
@@ -342,6 +350,7 @@ Public Class MainForm
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 #If DEBUG Then
         DebugForm.Show()
+        CurrentIPStage = 1 ' skips github checks if Debug, uses hardcoded first.
 #End If
         Me.Size = New Size(652, 405)
         Me.MinimumSize = New Size(652, 405)
@@ -358,10 +367,8 @@ Public Class MainForm
         second_panel_prompt.BringToFront()
         first_panel_load.BringToFront()
 
-        Log("Loaded")
+        Log("Loaded for " + Environment.UserName)
         LoadedStartCon()
-
-        MsgBox("If you have any suggestions or bugs please report them to us" + vbCrLf + "Also if you have any suggestions for categories please tell us and we can consider")
     End Sub
     Private connThread As Threading.Thread
     Private Sub LoadedStartCon(Optional delay As Integer = 0)
@@ -417,10 +424,10 @@ Public Class MainForm
         If CurrentCategory IsNot Nothing Then
             lblPrompt.Text = CurrentCategory.Prompt
             lblNumRemain.Text = $"{CurrentCategory.ID}/{NumberOfCategories}"
-
+            FirstChosen = Not CurrentCategory.FirstDisplay = ""
+            SecondChosen = Not CurrentCategory.SecondDisplay = ""
             txtQuerySecond.Text = If(CurrentCategory.SecondDisplay = "", txtQuerySecond.Text, CurrentCategory.SecondDisplay)
             txtQueryFirst.Text = If(CurrentCategory.FirstDisplay = "", txtQueryFirst.Text, CurrentCategory.FirstDisplay)
-
             If txtQueryFirst.Text.Length >= LettersBeforeQuery OrElse txtQuerySecond.Text.Length >= LettersBeforeQuery Then
                 ' show a "drop down" in the form of buttons..
 
@@ -558,15 +565,17 @@ Public Class MainForm
     Private Sub UserSelectedWinner(sender As Object, e As EventArgs)
 
         Dim btnClicked = DirectCast(sender, Button)
-        Dim sex = btnClicked.Name.Split("-")(0)
+        Dim whichSideWasButtonOn = btnClicked.Name.Split("-")(0)
         Dim accName = DirectCast(btnClicked.Tag, String)
         lastQuery = "ssssssssssssssssssssssssssssssss" ' so it doesnt query again
-        If sex = "Second" Then
+        If whichSideWasButtonOn = "Second" Then
+            SecondChosen = False
             CurrentCategory.SecondWinner = accName
             txtQuerySecond.Text = CurrentCategory.SecondDisplay
             SecondDisplayPanel.Hide()
-            SecoundChosen = True
+            SecondChosen = True
         Else
+            FirstChosen = False
             CurrentCategory.FirstWinner = accName
             txtQueryFirst.Text = CurrentCategory.FirstDisplay
             FirstDisplayPanel.Hide()
@@ -576,6 +585,8 @@ Public Class MainForm
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         PreviousClicked = False
+        FirstChosen = False
+        SecondChosen = False
         If CurrentCategory.ID + 1 > NumberOfCategories Then
             If CurrentCategory.FirstWinner = "" Then
                 If MsgBox("Warning: you have not selected a First Choice (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
@@ -596,6 +607,7 @@ Public Class MainForm
                 End If
             End If
             If CurrentCategory.FirstWinner = CurrentCategory.SecondWinner And Not String.IsNullOrWhiteSpace(CurrentCategory.FirstWinner) Then
+                CatLog("Attempted to duplicate-vote for " + CurrentCategory.FirstWinner)
                 MsgBox("You have nominated the same person twice - this is forbidden" + vbCrLf + "Please select two different people as your two winners", MsgBoxStyle.Critical, "Error - duplicate")
                 Return
             End If
@@ -652,8 +664,8 @@ Public Class MainForm
                 ' but only gets it if needed
             End If
             CurrentCategory = nextCat
-            txtQuerySecond.Text = ""
-            txtQueryFirst.Text = ""
+            txtQuerySecond.Text = CurrentCategory.SecondDisplay
+            txtQueryFirst.Text = CurrentCategory.FirstDisplay
             RefreshCategoryUI()
             btnNext.Text = If(nextCat.ID = NumberOfCategories, "Finish", "Next")
 
@@ -687,8 +699,8 @@ Public Class MainForm
             PreviousClicked = True
             Dim nextCat = Categories(CurrentCategory.ID - 1)
             CurrentCategory = nextCat
-            txtQuerySecond.Text = ""
-            txtQueryFirst.Text = ""
+            txtQueryFirst.Text = CurrentCategory.SecondDisplay
+            txtQuerySecond.Text = CurrentCategory.FirstDisplay
             RefreshCategoryUI()
             btnNext.Text = If(nextCat.ID = NumberOfCategories, "Finish", "Next")
         End If
@@ -726,9 +738,11 @@ Public Class MainForm
 
     Private Sub txtQueryFirst_TextChanged(sender As Object, e As EventArgs) Handles txtQueryFirst.TextChanged
         If FirstChosen = True Then
-            If txtQueryFirst.Text IsNot CurrentCategory.FirstWinner Then
-                'CurrentCategory.FirstWinner = ""
-                FirstChosen = False
+            If txtQueryFirst.Text <> CurrentCategory.FirstDisplay Then
+                FirstChosen = False ' set it to false as soon as it is modified
+            End If
+            If txtQueryFirst.Text = "" Then ' also, remove the winner if the winner is removed.
+                CurrentCategory.FirstWinner = ""
             End If
         End If
         If txtQueryFirst.Text.Length >= LettersBeforeQuery AndAlso txtQueryFirst.Text.Contains(")") = False Then
@@ -746,10 +760,12 @@ Public Class MainForm
     End Sub
 
     Private Sub txtQuerySecond_TextChanged(sender As Object, e As EventArgs) Handles txtQuerySecond.TextChanged
-        If SecoundChosen = True Then
-            If txtQuerySecond.Text IsNot CurrentCategory.SecondWinner Then
-                'CurrentCategory.SecondWinner = ""
-                SecoundChosen = False
+        If SecondChosen = True Then
+            If txtQuerySecond.Text <> CurrentCategory.SecondDisplay Then
+                SecondChosen = False ' set it to false as soon as it is modified
+            End If
+            If txtQuerySecond.Text = "" Then ' also, remove the winner if the winner is removed.
+                CurrentCategory.SecondWinner = ""
             End If
         End If
         If txtQuerySecond.Text.Length >= LettersBeforeQuery AndAlso txtQuerySecond.Text.Contains(")") = False Then

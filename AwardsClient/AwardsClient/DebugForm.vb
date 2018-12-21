@@ -7,13 +7,16 @@ Public Class DebugForm
     Private Sub UpdateStatus(ByVal State As Object)
         _log += $"{DateTime.Now.ToString("hh:mm:ss.fff")}: " + CType(State, String) + vbCrLf
     End Sub
+    Private logPath As String = $"{DateTime.Now.ToString("yyyy_MM_dd")}_clientlog.txt"
     Public Sub Log(message As String)
         If Me.InvokeRequired Then
             Me.Invoke(Sub() Log(message))
             Return
         End If
         SyncLock obj
-            _log += $"{DateTime.Now.ToString("hh:mm:ss.fff")}: " + CType(message, String) + vbCrLf
+            Dim str = $"{DateTime.Now.ToString("hh:mm:ss.fff")}: " + CType(message, String) + vbCrLf
+            _log += str
+            System.IO.File.AppendAllText(logPath, str)
         End SyncLock
 
         'syncContext = AsyncOperationManager.SynchronizationContext()
