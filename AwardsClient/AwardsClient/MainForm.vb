@@ -6,7 +6,8 @@ Public Class MainForm
 
     Private CurrentIPStage = 0 ' 0 = Not tried, 1 = Tried github ip, 2 = tried hardcoded, >3 = currently looping.
     Dim FirstChosen As Boolean = False
-    Dim SecondChosen As Boolean = False
+    Dim SecoundChosen As Boolean = False
+    Dim Ready As Boolean = True
     Public ReadOnly Property ConnectionIP As String
         Get
             Dim ip = ""
@@ -425,9 +426,10 @@ Public Class MainForm
             lblPrompt.Text = CurrentCategory.Prompt
             lblNumRemain.Text = $"{CurrentCategory.ID}/{NumberOfCategories}"
             FirstChosen = Not CurrentCategory.FirstDisplay = ""
-            SecondChosen = Not CurrentCategory.SecondDisplay = ""
+            SecoundChosen = Not CurrentCategory.SecondDisplay = ""
             txtQuerySecond.Text = If(CurrentCategory.SecondDisplay = "", txtQuerySecond.Text, CurrentCategory.SecondDisplay)
             txtQueryFirst.Text = If(CurrentCategory.FirstDisplay = "", txtQueryFirst.Text, CurrentCategory.FirstDisplay)
+            Ready = True
             If txtQueryFirst.Text.Length >= LettersBeforeQuery OrElse txtQuerySecond.Text.Length >= LettersBeforeQuery Then
                 ' show a "drop down" in the form of buttons..
 
@@ -569,11 +571,11 @@ Public Class MainForm
         Dim accName = DirectCast(btnClicked.Tag, String)
         lastQuery = "ssssssssssssssssssssssssssssssss" ' so it doesnt query again
         If whichSideWasButtonOn = "Second" Then
-            SecondChosen = False
+            SecoundChosen = False
             CurrentCategory.SecondWinner = accName
             txtQuerySecond.Text = CurrentCategory.SecondDisplay
             SecondDisplayPanel.Hide()
-            SecondChosen = True
+            SecoundChosen = True
         Else
             FirstChosen = False
             CurrentCategory.FirstWinner = accName
@@ -586,7 +588,7 @@ Public Class MainForm
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
         PreviousClicked = False
         FirstChosen = False
-        SecondChosen = False
+        SecoundChosen = False
         If CurrentCategory.ID + 1 > NumberOfCategories Then
             If CurrentCategory.FirstWinner = "" Then
                 If MsgBox("Warning: you have not selected a First Choice (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
@@ -664,8 +666,9 @@ Public Class MainForm
                 ' but only gets it if needed
             End If
             CurrentCategory = nextCat
-            txtQuerySecond.Text = CurrentCategory.SecondDisplay
-            txtQueryFirst.Text = CurrentCategory.FirstDisplay
+            Ready = False
+            txtQuerySecond.Text = ""
+            txtQueryFirst.Text = ""
             RefreshCategoryUI()
             btnNext.Text = If(nextCat.ID = NumberOfCategories, "Finish", "Next")
 
@@ -699,8 +702,9 @@ Public Class MainForm
             PreviousClicked = True
             Dim nextCat = Categories(CurrentCategory.ID - 1)
             CurrentCategory = nextCat
-            txtQueryFirst.Text = CurrentCategory.SecondDisplay
-            txtQuerySecond.Text = CurrentCategory.FirstDisplay
+            Ready = False
+            txtQuerySecond.Text = ""
+            txtQueryFirst.Text = ""
             RefreshCategoryUI()
             btnNext.Text = If(nextCat.ID = NumberOfCategories, "Finish", "Next")
         End If
@@ -737,12 +741,10 @@ Public Class MainForm
     Private lastQuery As String = ""
 
     Private Sub txtQueryFirst_TextChanged(sender As Object, e As EventArgs) Handles txtQueryFirst.TextChanged
-        If FirstChosen = True Then
-            If txtQueryFirst.Text <> CurrentCategory.FirstDisplay Then
-                FirstChosen = False ' set it to false as soon as it is modified
-            End If
-            If txtQueryFirst.Text = "" Then ' also, remove the winner if the winner is removed.
+        If FirstChosen = True And Ready = True Then
+            If txtQueryFirst.Text.ToLower() <> CurrentCategory.FirstDisplay.ToLower() Then
                 CurrentCategory.FirstWinner = ""
+                FirstChosen = False
             End If
         End If
         If txtQueryFirst.Text.Length >= LettersBeforeQuery AndAlso txtQueryFirst.Text.Contains(")") = False Then
@@ -760,12 +762,10 @@ Public Class MainForm
     End Sub
 
     Private Sub txtQuerySecond_TextChanged(sender As Object, e As EventArgs) Handles txtQuerySecond.TextChanged
-        If SecondChosen = True Then
-            If txtQuerySecond.Text <> CurrentCategory.SecondDisplay Then
-                SecondChosen = False ' set it to false as soon as it is modified
-            End If
-            If txtQuerySecond.Text = "" Then ' also, remove the winner if the winner is removed.
+        If SecoundChosen = True And Ready = True Then
+            If txtQuerySecond.Text.ToLower() <> CurrentCategory.SecondDisplay.ToLower() Then
                 CurrentCategory.SecondWinner = ""
+                SecoundChosen = False
             End If
         End If
         If txtQuerySecond.Text.Length >= LettersBeforeQuery AndAlso txtQuerySecond.Text.Contains(")") = False Then
