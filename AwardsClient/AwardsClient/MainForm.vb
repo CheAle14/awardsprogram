@@ -418,16 +418,8 @@ Public Class MainForm
         If CurrentCategory IsNot Nothing Then
             lblPrompt.Text = CurrentCategory.Prompt
             lblNumRemain.Text = $"{CurrentCategory.ID}/{NumberOfCategories}"
-            If CurrentCategory.FirstDisplay = "" Then
-                FirstChosen = False
-            Else
-                FirstChosen = True
-            End If
-            If CurrentCategory.SecondDisplay = "" Then
-                SecoundChosen = False
-            Else
-                SecoundChosen = True
-            End If
+            FirstChosen = Not CurrentCategory.FirstDisplay = ""
+            SecoundChosen = Not CurrentCategory.SecondDisplay = ""
             txtQuerySecond.Text = If(CurrentCategory.SecondDisplay = "", txtQuerySecond.Text, CurrentCategory.SecondDisplay)
             txtQueryFirst.Text = If(CurrentCategory.FirstDisplay = "", txtQueryFirst.Text, CurrentCategory.FirstDisplay)
             Ready = True
