@@ -110,6 +110,13 @@ Public Class MainForm
     Public Sub Log(message As String)
         DebugForm.Log("MainForm/ " + message)
     End Sub
+    Public Sub CatLog(message As String)
+        If CurrentCategory Is Nothing Then
+            Log(message)
+            Return
+        End If
+        DebugForm.Log("Main/" + CurrentCategory.ID.ToString() + "/" + message)
+    End Sub
 
     Private Disallowed As New List(Of Char) From {
     "`", "%"
@@ -143,6 +150,7 @@ Public Class MainForm
         ' hasnt disconnected, such as when it errors
         If Client.Connected Then
             HasConnectedAtleastOnce = True
+            Log("Connected to server")
             contactServerTimer.Stop()
             connThread.Abort()
             recieveMessageThread = New Threading.Thread(AddressOf ReceiveMessage)
@@ -359,10 +367,8 @@ Public Class MainForm
         second_panel_prompt.BringToFront()
         first_panel_load.BringToFront()
 
-        Log("Loaded")
+        Log("Loaded for " + Environment.UserName)
         LoadedStartCon()
-
-        MsgBox("If you have any suggestions or bugs please report them to us" + vbCrLf + "Also if you have any suggestions for categories please tell us and we can consider")
     End Sub
     Private connThread As Threading.Thread
     Private Sub LoadedStartCon(Optional delay As Integer = 0)
@@ -418,8 +424,8 @@ Public Class MainForm
         If CurrentCategory IsNot Nothing Then
             lblPrompt.Text = CurrentCategory.Prompt
             lblNumRemain.Text = $"{CurrentCategory.ID}/{NumberOfCategories}"
-            FirstChosen = CurrentCategory.FirstDisplay <> ""
-            SecondChosen = CurrentCategory.SecondDisplay <> ""
+            FirstChosen = Not CurrentCategory.FirstDisplay = ""
+            SecondChosen = Not CurrentCategory.SecondDisplay = ""
             txtQuerySecond.Text = If(CurrentCategory.SecondDisplay = "", txtQuerySecond.Text, CurrentCategory.SecondDisplay)
             txtQueryFirst.Text = If(CurrentCategory.FirstDisplay = "", txtQueryFirst.Text, CurrentCategory.FirstDisplay)
             If txtQueryFirst.Text.Length >= LettersBeforeQuery OrElse txtQuerySecond.Text.Length >= LettersBeforeQuery Then
@@ -601,6 +607,7 @@ Public Class MainForm
                 End If
             End If
             If CurrentCategory.FirstWinner = CurrentCategory.SecondWinner And Not String.IsNullOrWhiteSpace(CurrentCategory.FirstWinner) Then
+                CatLog("Attempted to duplicate-vote for " + CurrentCategory.FirstWinner)
                 MsgBox("You have nominated the same person twice - this is forbidden" + vbCrLf + "Please select two different people as your two winners", MsgBoxStyle.Critical, "Error - duplicate")
                 Return
             End If
@@ -657,8 +664,8 @@ Public Class MainForm
                 ' but only gets it if needed
             End If
             CurrentCategory = nextCat
-            txtQuerySecond.Text = ""
-            txtQueryFirst.Text = ""
+            txtQuerySecond.Text = CurrentCategory.SecondDisplay
+            txtQueryFirst.Text = CurrentCategory.FirstDisplay
             RefreshCategoryUI()
             btnNext.Text = If(nextCat.ID = NumberOfCategories, "Finish", "Next")
 
@@ -692,8 +699,8 @@ Public Class MainForm
             PreviousClicked = True
             Dim nextCat = Categories(CurrentCategory.ID - 1)
             CurrentCategory = nextCat
-            txtQuerySecond.Text = ""
-            txtQueryFirst.Text = ""
+            txtQueryFirst.Text = CurrentCategory.SecondDisplay
+            txtQuerySecond.Text = CurrentCategory.FirstDisplay
             RefreshCategoryUI()
             btnNext.Text = If(nextCat.ID = NumberOfCategories, "Finish", "Next")
         End If
