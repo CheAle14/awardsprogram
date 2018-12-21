@@ -18,7 +18,6 @@ Public Class DebugForm
             _log += str
             System.IO.File.AppendAllText(logPath, str)
         End SyncLock
-
         'syncContext = AsyncOperationManager.SynchronizationContext()
         'syncContext.Post(New Threading.SendOrPostCallback(AddressOf UpdateStatus), message)
     End Sub
