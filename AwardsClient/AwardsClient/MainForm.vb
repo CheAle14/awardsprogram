@@ -25,7 +25,9 @@ Public Class MainForm
                     ip = "10.249.68." + (CurrentIPStage - (1 + 255)).ToString()
                 End If
             End If
-            CurrentIPStage += 1
+            If Not HasConnectedAtleastOnce Then
+                CurrentIPStage += 1
+            End If
             Return ip
         End Get
     End Property
@@ -157,7 +159,7 @@ Public Class MainForm
             recieveMessageThread.Start()
             AddHandler Me.Messaged, AddressOf MessageRecievedHandler
             EndConnection("Connected, waiting for server to confirm be ready..")
-            Send(Environment.UserName)
+            Send("mukanu14")
         End If
     End Sub
 
@@ -184,7 +186,12 @@ Public Class MainForm
             HasConnectedAtleastOnce = True
             first_panel_load.Hide()
         ElseIf message = "Accepted" Then
+            CurrentIPStage -= 1 ' since it will be one ahead since it increments as it returns the ConnectionIP
             lblOpeningMessage.Text = "The server has indicated that your vote was accepted" + vbCrLf + "Thanks for voting and have a nice day."
+            lblOpeningMessage.Text += vbCrLf
+            lblOpeningMessage.Text += "You may see your vote at http://" + ConnectionIP + "/"
+            lblOpeningMessage.Text += vbCrLf
+            lblOpeningMessage.Text += "You may see other statistics at http://" + ConnectionIP + "/all"
         ElseIf message = "Rejected" Then
             lblOpeningMessage.Text = "Uh oh!" + vbCrLf + "The server has indicated that your vote was rejected, though a reason was not given" + vbCrLf + vbCrLf + "You may have already voted, or attempted to vote for yourself.. it isn't clear"
         ElseIf message.StartsWith("Rejected") Then
