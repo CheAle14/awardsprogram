@@ -159,7 +159,7 @@ Public Class MainForm
             recieveMessageThread.Start()
             AddHandler Me.Messaged, AddressOf MessageRecievedHandler
             EndConnection("Connected, waiting for server to confirm be ready..")
-            Send("mukanu14")
+            Send("bakbor14")
         End If
     End Sub
 
@@ -373,6 +373,12 @@ Public Class MainForm
 
         second_panel_prompt.BringToFront()
         first_panel_load.BringToFront()
+
+        For Each panel As Panel In New List(Of Panel) From {FirstDisplayPanel, SecondDisplayPanel}
+            panel.AutoScroll = True
+            panel.HorizontalScroll.Enabled = False
+            panel.HorizontalScroll.Visible = False
+        Next
 
         Log("Loaded for " + Environment.UserName)
         LoadedStartCon()
