@@ -271,7 +271,7 @@ Partial Class MainForm
         Me.finalPromptPanel.Font = New System.Drawing.Font("MS Reference Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.finalPromptPanel.ForeColor = System.Drawing.SystemColors.ButtonHighlight
         Me.finalPromptPanel.Location = New System.Drawing.Point(1240, 91)
-        Me.finalPromptPanel.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.finalPromptPanel.Margin = New System.Windows.Forms.Padding(4)
         Me.finalPromptPanel.Name = "finalPromptPanel"
         Me.finalPromptPanel.Size = New System.Drawing.Size(461, 303)
         Me.finalPromptPanel.TabIndex = 16
@@ -282,7 +282,7 @@ Partial Class MainForm
         Me.cmdConfirm.Font = New System.Drawing.Font("MS Reference Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdConfirm.ForeColor = System.Drawing.Color.Black
         Me.cmdConfirm.Location = New System.Drawing.Point(0, 254)
-        Me.cmdConfirm.Margin = New System.Windows.Forms.Padding(5, 5, 5, 5)
+        Me.cmdConfirm.Margin = New System.Windows.Forms.Padding(5)
         Me.cmdConfirm.Name = "cmdConfirm"
         Me.cmdConfirm.Size = New System.Drawing.Size(461, 0)
         Me.cmdConfirm.TabIndex = 1
@@ -294,7 +294,7 @@ Partial Class MainForm
         Me.cmdBack.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.cmdBack.ForeColor = System.Drawing.Color.Black
         Me.cmdBack.Location = New System.Drawing.Point(0, 254)
-        Me.cmdBack.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cmdBack.Margin = New System.Windows.Forms.Padding(4)
         Me.cmdBack.Name = "cmdBack"
         Me.cmdBack.Size = New System.Drawing.Size(461, 49)
         Me.cmdBack.TabIndex = 2
@@ -312,15 +312,15 @@ Partial Class MainForm
         DataGridViewCellStyle1.BackColor = System.Drawing.Color.IndianRed
         DataGridViewCellStyle1.Font = New System.Drawing.Font("MS Reference Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         DataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black
-        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight
-        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText
+        DataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.IndianRed
+        DataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3})
         Me.DataGridView1.Dock = System.Windows.Forms.DockStyle.Top
         Me.DataGridView1.Location = New System.Drawing.Point(0, 0)
-        Me.DataGridView1.Margin = New System.Windows.Forms.Padding(5, 5, 5, 5)
+        Me.DataGridView1.Margin = New System.Windows.Forms.Padding(5)
         Me.DataGridView1.Name = "DataGridView1"
         Me.DataGridView1.ReadOnly = True
         Me.DataGridView1.RowHeadersVisible = False

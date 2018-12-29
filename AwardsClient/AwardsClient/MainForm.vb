@@ -159,7 +159,7 @@ Public Class MainForm
             recieveMessageThread.Start()
             AddHandler Me.Messaged, AddressOf MessageRecievedHandler
             EndConnection("Connected, waiting for server to confirm be ready..")
-            Send("bakbor14")
+            Send(Environment.UserName.ToLower())
         End If
     End Sub
 
@@ -256,7 +256,7 @@ Public Class MainForm
             Dim First = QueryIsSecond
             Dim splited = message.Split("#").Where(Function(x) String.IsNullOrWhiteSpace(x) = False)
             For Each value In splited
-                Dim stuSplit = value.Split("-")
+                Dim stuSplit = value.Split(":")
                 Dim newSt = New Student(stuSplit(0), stuSplit(1), stuSplit(2), stuSplit(3))
                 If Students.ContainsKey(newSt.AccountName) Then
                     Continue For
