@@ -207,9 +207,16 @@ Public Class MainForm
             first_panel_load.Hide()
             second_panel_prompt.Show()
             message = message.Replace("REJECT:", "")
-            If message = "Voted" Then
-                lblOpeningMessage.Text = "Refused!" + vbCrLf + vbCrLf + "The server closed the connection because you have already voted"
-            End If
+            Dim str = ""
+            Select Case message
+                Case "Voted"
+                    str = "Refused!" + vbCrLf + vbCrLf + "The server closed the connection because you have already voted"
+                Case "Blocked-Online"
+                    str = "You are only able to see the online version:" + vbCrLf + "http://" + ConnectionIP + "/" + vbCrLf + "or" + vbCrLf + "http://" + ConnectionIP + "/all" + vbCrLf + vbCrLf + "(You may need to connect here again to re-authenticate)"
+                Case Else
+                    str = "Refused!" + vbCrLf + vbCrLf + "The reason is unknown or was not given; you are unable to vote"
+            End Select
+            lblOpeningMessage.Text = str
             HasConnectedAtleastOnce = True
             Client.Close()
             btnStart.Visible = False
