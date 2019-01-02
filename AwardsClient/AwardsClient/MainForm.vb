@@ -151,7 +151,10 @@ Public Class MainForm
         ' for some reason, this also gets called when the client 
         ' hasnt disconnected, such as when it errors
         If Client.Connected Then
-            HasConnectedAtleastOnce = True
+            If Not HasConnectedAtleastOnce Then
+                HasConnectedAtleastOnce = True
+                CurrentIPStage -= 1 ' since we should deduct one after connecting, and we've clearly recieved a message so..
+            End If
             Log("Connected to server")
             contactServerTimer.Stop()
             connThread.Abort()
@@ -171,6 +174,11 @@ Public Class MainForm
 
         DebugForm.Log("Server/ " + message)
 
+        If Not HasConnectedAtleastOnce Then
+            HasConnectedAtleastOnce = True
+            CurrentIPStage -= 1 ' since we should deduct one after connecting, and we've clearly recieved a message so..
+        End If
+
         If message.StartsWith("Ready:") Then
             message = message.Replace("Ready:", "")
             btnStart.Visible = True
@@ -183,7 +191,6 @@ Public Class MainForm
         ElseIf message = "UnknownUser" Then
             lblOpeningMessage.Text = "Errored" + vbCrLf + "Your account name is unknown." + vbCrLf + "Please contact someone."
             btnStart.Visible = False
-            HasConnectedAtleastOnce = True
             first_panel_load.Hide()
         ElseIf message = "Accepted" Then
             CurrentIPStage -= 1 ' since it will be one ahead since it increments as it returns the ConnectionIP
@@ -217,7 +224,6 @@ Public Class MainForm
                     str = "Refused!" + vbCrLf + vbCrLf + "The reason is unknown or was not given; you are unable to vote"
             End Select
             lblOpeningMessage.Text = str
-            HasConnectedAtleastOnce = True
             Client.Close()
             btnStart.Visible = False
         ElseIf message.StartsWith("CTS:") Then
