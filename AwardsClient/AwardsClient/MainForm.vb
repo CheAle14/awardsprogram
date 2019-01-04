@@ -11,7 +11,7 @@ Public Class MainForm
         Get
             Dim ip = ""
             If CurrentIPStage = 0 Then ' use the /dev/ branch for now, for testing purposes - eventually change it back to /master/
-                Dim url = "https://raw.githubusercontent.com/TheGrandCoding/awardsserver/dev/AwardsServer/ServerIP"
+                Dim url = "https://raw.githubusercontent.com/TheGrandCoding/awardsserver/master/AwardsServer/ServerIP"
                 Using wc = New WebClient()
                     ip = wc.DownloadString(url)
                 End Using
@@ -652,12 +652,6 @@ Public Class MainForm
             finalPromptPanel.Dock = DockStyle.Fill
             finalPromptPanel.BringToFront()
             finalPromptPanel.Visible = True
-            Me.Invoke(Sub()
-                          Dim response = InputBox("Please type a category you think should be added" + vbCrLf + "Or some other category-related change.", "Category Altrication", "TYPE HERE")
-                          If Not (String.IsNullOrWhiteSpace(response) Or response = "TYPE HERE") Then
-                              Send("QUES:" + response)
-                          End If
-                      End Sub)
         Else
             If CurrentCategory.FirstWinner = "" Then
                 If MsgBox("Warning: you have not selected a First Choice (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
