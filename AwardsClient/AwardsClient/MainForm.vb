@@ -11,7 +11,7 @@ Public Class MainForm
         Get
             Dim ip = ""
             If CurrentIPStage = 0 Then ' use the /dev/ branch for now, for testing purposes - eventually change it back to /master/
-                Dim url = "https://raw.githubusercontent.com/TheGrandCoding/awardsserver/dev/AwardsServer/ServerIP"
+                Dim url = "https://raw.githubusercontent.com/TheGrandCoding/awardsserver/master/AwardsServer/ServerIP"
                 Using wc = New WebClient()
                     ip = wc.DownloadString(url)
                 End Using
@@ -151,7 +151,10 @@ Public Class MainForm
         ' for some reason, this also gets called when the client 
         ' hasnt disconnected, such as when it errors
         If Client.Connected Then
-            HasConnectedAtleastOnce = True
+            If Not HasConnectedAtleastOnce Then
+                HasConnectedAtleastOnce = True
+                CurrentIPStage -= 1 ' since we should deduct one after connecting, and we've clearly recieved a message so..
+            End If
             Log("Connected to server")
             contactServerTimer.Stop()
             connThread.Abort()
@@ -159,7 +162,7 @@ Public Class MainForm
             recieveMessageThread.Start()
             AddHandler Me.Messaged, AddressOf MessageRecievedHandler
             EndConnection("Connected, waiting for server to confirm be ready..")
-            Send("bakbor14")
+            Send(Environment.UserName.ToLower())
         End If
     End Sub
 
@@ -170,6 +173,11 @@ Public Class MainForm
         End If
 
         DebugForm.Log("Server/ " + message)
+
+        If Not HasConnectedAtleastOnce Then
+            HasConnectedAtleastOnce = True
+            CurrentIPStage -= 1 ' since we should deduct one after connecting, and we've clearly recieved a message so..
+        End If
 
         If message.StartsWith("Ready:") Then
             message = message.Replace("Ready:", "")
@@ -183,7 +191,6 @@ Public Class MainForm
         ElseIf message = "UnknownUser" Then
             lblOpeningMessage.Text = "Errored" + vbCrLf + "Your account name is unknown." + vbCrLf + "Please contact someone."
             btnStart.Visible = False
-            HasConnectedAtleastOnce = True
             first_panel_load.Hide()
         ElseIf message = "Accepted" Then
             CurrentIPStage -= 1 ' since it will be one ahead since it increments as it returns the ConnectionIP
@@ -207,10 +214,16 @@ Public Class MainForm
             first_panel_load.Hide()
             second_panel_prompt.Show()
             message = message.Replace("REJECT:", "")
-            If message = "Voted" Then
-                lblOpeningMessage.Text = "Refused!" + vbCrLf + vbCrLf + "The server closed the connection because you have already voted"
-            End If
-            HasConnectedAtleastOnce = True
+            Dim str = ""
+            Select Case message
+                Case "Voted"
+                    str = "Refused!" + vbCrLf + vbCrLf + "The server closed the connection because you have already voted"
+                Case "Blocked-Online"
+                    str = "You are only able to see the online version:" + vbCrLf + "http://" + ConnectionIP + "/" + vbCrLf + "or" + vbCrLf + "http://" + ConnectionIP + "/all" + vbCrLf + vbCrLf + "(You may need to connect here again to re-authenticate)"
+                Case Else
+                    str = "Refused!" + vbCrLf + vbCrLf + "The reason is unknown or was not given; you are unable to vote"
+            End Select
+            lblOpeningMessage.Text = str
             Client.Close()
             btnStart.Visible = False
         ElseIf message.StartsWith("CTS:") Then
@@ -256,7 +269,7 @@ Public Class MainForm
             Dim First = QueryIsSecond
             Dim splited = message.Split("#").Where(Function(x) String.IsNullOrWhiteSpace(x) = False)
             For Each value In splited
-                Dim stuSplit = value.Split("-")
+                Dim stuSplit = value.Split(":")
                 Dim newSt = New Student(stuSplit(0), stuSplit(1), stuSplit(2), stuSplit(3))
                 If Students.ContainsKey(newSt.AccountName) Then
                     Continue For
@@ -639,12 +652,6 @@ Public Class MainForm
             finalPromptPanel.Dock = DockStyle.Fill
             finalPromptPanel.BringToFront()
             finalPromptPanel.Visible = True
-            Me.Invoke(Sub()
-                          Dim response = InputBox("Please type a category you think should be added" + vbCrLf + "Or some other category-related change.", "Category Altrication", "TYPE HERE")
-                          If Not (String.IsNullOrWhiteSpace(response) Or response = "TYPE HERE") Then
-                              Send("QUES:" + response)
-                          End If
-                      End Sub)
         Else
             If CurrentCategory.FirstWinner = "" Then
                 If MsgBox("Warning: you have not selected a First Choice (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
