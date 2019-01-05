@@ -25,9 +25,6 @@ Public Class MainForm
                     ip = "10.249.68." + (CurrentIPStage - (1 + 255)).ToString()
                 End If
             End If
-            If Not HasConnectedAtleastOnce Then
-                CurrentIPStage += 1
-            End If
             Return ip
         End Get
     End Property
@@ -151,10 +148,7 @@ Public Class MainForm
         ' for some reason, this also gets called when the client 
         ' hasnt disconnected, such as when it errors
         If Client.Connected Then
-            If Not HasConnectedAtleastOnce Then
-                HasConnectedAtleastOnce = True
-                CurrentIPStage -= 1 ' since we should deduct one after connecting, and we've clearly recieved a message so..
-            End If
+            HasConnectedAtleastOnce = True
             Log("Connected to server")
             contactServerTimer.Stop()
             connThread.Abort()
@@ -176,7 +170,6 @@ Public Class MainForm
 
         If Not HasConnectedAtleastOnce Then
             HasConnectedAtleastOnce = True
-            CurrentIPStage -= 1 ' since we should deduct one after connecting, and we've clearly recieved a message so..
         End If
 
         If message.StartsWith("Ready:") Then
@@ -193,7 +186,7 @@ Public Class MainForm
             btnStart.Visible = False
             first_panel_load.Hide()
         ElseIf message = "Accepted" Then
-            CurrentIPStage -= 1 ' since it will be one ahead since it increments as it returns the ConnectionIP
+            'CurrentIPStage -= 1 ' since it will be one ahead since it increments as it returns the ConnectionIP
             lblOpeningMessage.Text = "The server has indicated that your vote was accepted" + vbCrLf + "Thanks for voting and have a nice day."
             lblOpeningMessage.Text += vbCrLf
             lblOpeningMessage.Text += "You may see your vote at http://" + ConnectionIP + "/"
@@ -347,6 +340,7 @@ Public Class MainForm
         If Client.Connected Then
             Return
         End If
+        CurrentIPStage += 1
         Try
             Client.EndConnect(conn)
         Catch ex As Exception
@@ -370,7 +364,6 @@ Public Class MainForm
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 #If DEBUG Then
         DebugForm.Show()
-        CurrentIPStage = 1 ' skips github checks if Debug, uses hardcoded first.
 #End If
         Me.Size = New Size(652, 405)
         Me.MinimumSize = New Size(652, 405)
