@@ -192,6 +192,7 @@ Public Class MainForm
             lblOpeningMessage.Text += "You may see your vote at http://" + ConnectionIP + "/"
             lblOpeningMessage.Text += vbCrLf
             lblOpeningMessage.Text += "You may see other statistics at http://" + ConnectionIP + "/all"
+            Process.Start("chrome.exe", $"http://{ConnectionIP}/")
         ElseIf message = "Rejected" Then
             lblOpeningMessage.Text = "Uh oh!" + vbCrLf + "The server has indicated that your vote was rejected, though a reason was not given" + vbCrLf + vbCrLf + "You may have already voted, or attempted to vote for yourself.. it isn't clear"
         ElseIf message.StartsWith("Rejected") Then
