@@ -364,6 +364,7 @@ Public Class MainForm
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 #If DEBUG Then
         DebugForm.Show()
+        CurrentIPStage = 1
 #End If
         Me.Size = New Size(652, 405)
         Me.MinimumSize = New Size(652, 405)
