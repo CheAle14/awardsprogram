@@ -131,7 +131,7 @@
     <None Include="logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\download.jpg" />
+    <Content Include="Resources\c_lion.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
