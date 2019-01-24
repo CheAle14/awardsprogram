@@ -3,6 +3,10 @@ Imports System.Net.Sockets
 
 Public Class MainForm
     Public Const HardCodedConnectionIP = "127.0.0.1"
+    Public Const WebServerEnabled = False ' Unless I add in a message sent from the server to the client, the client has no way of knowing
+    ''''''''''''''''''''''''''''''''''''''' and im just not going to bother adding even more messages sent.
+    Public Const MaximumStudentsDisplayInDropDown = 15
+    Public Const LettersBeforeQuery = 3
 
     Private CurrentIPStage = 0 ' 0 = Not tried, 1 = Tried github ip, 2 = tried hardcoded, >3 = currently looping.
     Dim FirstChosen As Boolean = False
@@ -25,16 +29,11 @@ Public Class MainForm
                     ip = "10.249.68." + (CurrentIPStage - (1 + 255)).ToString()
                 End If
             End If
-            If Not HasConnectedAtleastOnce Then
-                CurrentIPStage += 1
-            End If
             Return ip
         End Get
     End Property
     Public ConnectionPort As Integer = 56567
     Public Client As TcpClient
-    Public Const MaximumStudentsDisplayInDropDown = 15
-    Public Const LettersBeforeQuery = 3
 
     Public Students As New Dictionary(Of String, Student) ' account name
 
@@ -176,7 +175,6 @@ Public Class MainForm
 
         If Not HasConnectedAtleastOnce Then
             HasConnectedAtleastOnce = True
-            CurrentIPStage -= 1 ' since we should deduct one after connecting, and we've clearly recieved a message so..
         End If
 
         If message.StartsWith("Ready:") Then
@@ -193,12 +191,15 @@ Public Class MainForm
             btnStart.Visible = False
             first_panel_load.Hide()
         ElseIf message = "Accepted" Then
-            CurrentIPStage -= 1 ' since it will be one ahead since it increments as it returns the ConnectionIP
-            lblOpeningMessage.Text = "The server has indicated that your vote was accepted" + vbCrLf + "Thanks for voting and have a nice day."
-            lblOpeningMessage.Text += vbCrLf
-            lblOpeningMessage.Text += "You may see your vote at http://" + ConnectionIP + "/"
-            lblOpeningMessage.Text += vbCrLf
-            lblOpeningMessage.Text += "You may see other statistics at http://" + ConnectionIP + "/all"
+            'CurrentIPStage -= 1 ' since it will be one ahead since it increments as it returns the ConnectionIP
+            If WebServerEnabled Then
+                lblOpeningMessage.Text = "The server has indicated that your vote was accepted" + vbCrLf + "Thanks for voting and have a nice day."
+                lblOpeningMessage.Text += vbCrLf
+                lblOpeningMessage.Text += "You may see your vote at http://" + ConnectionIP + "/"
+                lblOpeningMessage.Text += vbCrLf
+                lblOpeningMessage.Text += "You may see other statistics at http://" + ConnectionIP + "/all"
+                Process.Start("chrome.exe", $"http://{ConnectionIP}/")
+            End If
         ElseIf message = "Rejected" Then
             lblOpeningMessage.Text = "Uh oh!" + vbCrLf + "The server has indicated that your vote was rejected, though a reason was not given" + vbCrLf + vbCrLf + "You may have already voted, or attempted to vote for yourself.. it isn't clear"
         ElseIf message.StartsWith("Rejected") Then
@@ -219,7 +220,11 @@ Public Class MainForm
                 Case "Voted"
                     str = "Refused!" + vbCrLf + vbCrLf + "The server closed the connection because you have already voted"
                 Case "Blocked-Online"
-                    str = "You are only able to see the online version:" + vbCrLf + "http://" + ConnectionIP + "/" + vbCrLf + "or" + vbCrLf + "http://" + ConnectionIP + "/all" + vbCrLf + vbCrLf + "(You may need to connect here again to re-authenticate)"
+                    If WebServerEnabled Then
+                        str = "You are only able to see the online version:" + vbCrLf + "http://" + ConnectionIP + "/" + vbCrLf + "or" + vbCrLf + "http://" + ConnectionIP + "/all" + vbCrLf + vbCrLf + "(You may need to connect here again to re-authenticate)"
+                    Else
+                        str = "You are blocked from voting." + vbCrLf + "You have no alternatives."
+                    End If
                 Case Else
                     str = "Refused!" + vbCrLf + vbCrLf + "The reason is unknown or was not given; you are unable to vote"
             End Select
@@ -347,6 +352,7 @@ Public Class MainForm
         If Client.Connected Then
             Return
         End If
+        CurrentIPStage += 1
         Try
             Client.EndConnect(conn)
         Catch ex As Exception
@@ -370,7 +376,7 @@ Public Class MainForm
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 #If DEBUG Then
         DebugForm.Show()
-        CurrentIPStage = 1 ' skips github checks if Debug, uses hardcoded first.
+        CurrentIPStage = 1
 #End If
         Me.Size = New Size(652, 405)
         Me.MinimumSize = New Size(652, 405)
