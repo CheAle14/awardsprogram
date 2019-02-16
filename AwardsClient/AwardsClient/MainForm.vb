@@ -849,4 +849,29 @@ Public Class MainForm
     Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
 
     End Sub
+
+    Public Sub StartBugReport()
+        If BugReportForm.Visible Then
+        Else
+            BugReportForm.ShowDialog()
+            Dim report = BugReportForm.Report
+            If report.Submitted Then
+                Send($"REPORT:{DirectCast(report.ConcernType, Integer)};{report.PrimaryConcern};{report.AdditionalData}")
+            End If
+        End If
+    End Sub
+
+    Private Sub btnReportBug_Click(sender As Object, e As EventArgs)
+        StartBugReport()
+    End Sub
+
+    Private Sub MainForm_KeyUp(sender As Object, e As KeyEventArgs) Handles MyBase.KeyUp
+        If e.Shift AndAlso e.Control AndAlso e.KeyCode = Keys.H Then
+            StartBugReport()
+        End If
+    End Sub
+
+    Private Sub btnBugReport_Click(sender As Object, e As EventArgs) Handles btnBugReport.Click
+        StartBugReport()
+    End Sub
 End Class
