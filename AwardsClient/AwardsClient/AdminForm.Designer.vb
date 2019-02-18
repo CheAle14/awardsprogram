@@ -38,27 +38,27 @@ Partial Class AdminForm
         Me.btnRefreshVoters = New System.Windows.Forms.Button()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
         Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+        Me.rtbAdminChat = New System.Windows.Forms.RichTextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.boxSysops = New System.Windows.Forms.ListBox()
-        Me.rtbAdminChat = New System.Windows.Forms.RichTextBox()
-        Me.btnSendChat = New System.Windows.Forms.Button()
-        Me.txtChat = New System.Windows.Forms.TextBox()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+        Me.txtChat = New System.Windows.Forms.TextBox()
+        Me.btnSendChat = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         CType(Me.dgvQueue, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage2.SuspendLayout()
         CType(Me.dgvVoters, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabPage4.SuspendLayout()
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer1.Panel1.SuspendLayout()
-        Me.SplitContainer1.Panel2.SuspendLayout()
-        Me.SplitContainer1.SuspendLayout()
         CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer2.Panel1.SuspendLayout()
         Me.SplitContainer2.Panel2.SuspendLayout()
         Me.SplitContainer2.SuspendLayout()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.Panel1.SuspendLayout()
+        Me.SplitContainer1.Panel2.SuspendLayout()
+        Me.SplitContainer1.SuspendLayout()
         Me.SuspendLayout()
         '
         'TabControl1
@@ -81,7 +81,7 @@ Partial Class AdminForm
         Me.TabPage1.Location = New System.Drawing.Point(4, 25)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(792, 421)
+        Me.TabPage1.Size = New System.Drawing.Size(954, 421)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Current Queue"
         Me.TabPage1.UseVisualStyleBackColor = True
@@ -99,7 +99,7 @@ Partial Class AdminForm
         Me.dgvQueue.ReadOnly = True
         Me.dgvQueue.RowHeadersVisible = False
         Me.dgvQueue.RowTemplate.Height = 24
-        Me.dgvQueue.Size = New System.Drawing.Size(786, 383)
+        Me.dgvQueue.Size = New System.Drawing.Size(948, 383)
         Me.dgvQueue.TabIndex = 1
         '
         'Column1
@@ -137,7 +137,7 @@ Partial Class AdminForm
         Me.btnRefreshQueue.Dock = System.Windows.Forms.DockStyle.Top
         Me.btnRefreshQueue.Location = New System.Drawing.Point(3, 3)
         Me.btnRefreshQueue.Name = "btnRefreshQueue"
-        Me.btnRefreshQueue.Size = New System.Drawing.Size(786, 32)
+        Me.btnRefreshQueue.Size = New System.Drawing.Size(948, 32)
         Me.btnRefreshQueue.TabIndex = 0
         Me.btnRefreshQueue.Text = "Refresh"
         Me.btnRefreshQueue.UseVisualStyleBackColor = True
@@ -149,7 +149,7 @@ Partial Class AdminForm
         Me.TabPage2.Location = New System.Drawing.Point(4, 25)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(792, 421)
+        Me.TabPage2.Size = New System.Drawing.Size(954, 421)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Current Voters"
         Me.TabPage2.UseVisualStyleBackColor = True
@@ -167,7 +167,7 @@ Partial Class AdminForm
         Me.dgvVoters.ReadOnly = True
         Me.dgvVoters.RowHeadersVisible = False
         Me.dgvVoters.RowTemplate.Height = 24
-        Me.dgvVoters.Size = New System.Drawing.Size(786, 387)
+        Me.dgvVoters.Size = New System.Drawing.Size(948, 387)
         Me.dgvVoters.TabIndex = 1
         '
         'Column5
@@ -195,7 +195,7 @@ Partial Class AdminForm
         Me.btnRefreshVoters.Dock = System.Windows.Forms.DockStyle.Top
         Me.btnRefreshVoters.Location = New System.Drawing.Point(3, 3)
         Me.btnRefreshVoters.Name = "btnRefreshVoters"
-        Me.btnRefreshVoters.Size = New System.Drawing.Size(786, 28)
+        Me.btnRefreshVoters.Size = New System.Drawing.Size(948, 28)
         Me.btnRefreshVoters.TabIndex = 0
         Me.btnRefreshVoters.Text = "Refresh"
         Me.btnRefreshVoters.UseVisualStyleBackColor = True
@@ -204,7 +204,7 @@ Partial Class AdminForm
         '
         Me.TabPage3.Location = New System.Drawing.Point(4, 25)
         Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Size = New System.Drawing.Size(792, 421)
+        Me.TabPage3.Size = New System.Drawing.Size(954, 421)
         Me.TabPage3.TabIndex = 2
         Me.TabPage3.Text = "Manual Vote"
         Me.TabPage3.UseVisualStyleBackColor = True
@@ -219,6 +219,33 @@ Partial Class AdminForm
         Me.TabPage4.TabIndex = 3
         Me.TabPage4.Text = "[Chat]"
         Me.TabPage4.UseVisualStyleBackColor = True
+        '
+        'SplitContainer2
+        '
+        Me.SplitContainer2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer2.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer2.Name = "SplitContainer2"
+        '
+        'SplitContainer2.Panel1
+        '
+        Me.SplitContainer2.Panel1.Controls.Add(Me.rtbAdminChat)
+        '
+        'SplitContainer2.Panel2
+        '
+        Me.SplitContainer2.Panel2.Controls.Add(Me.Label1)
+        Me.SplitContainer2.Panel2.Controls.Add(Me.boxSysops)
+        Me.SplitContainer2.Size = New System.Drawing.Size(954, 397)
+        Me.SplitContainer2.SplitterDistance = 578
+        Me.SplitContainer2.TabIndex = 6
+        '
+        'rtbAdminChat
+        '
+        Me.rtbAdminChat.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.rtbAdminChat.Location = New System.Drawing.Point(0, 0)
+        Me.rtbAdminChat.Name = "rtbAdminChat"
+        Me.rtbAdminChat.Size = New System.Drawing.Size(578, 397)
+        Me.rtbAdminChat.TabIndex = 2
+        Me.rtbAdminChat.Text = ""
         '
         'Label1
         '
@@ -240,33 +267,6 @@ Partial Class AdminForm
         Me.boxSysops.Size = New System.Drawing.Size(372, 397)
         Me.boxSysops.TabIndex = 3
         '
-        'rtbAdminChat
-        '
-        Me.rtbAdminChat.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rtbAdminChat.Location = New System.Drawing.Point(0, 0)
-        Me.rtbAdminChat.Name = "rtbAdminChat"
-        Me.rtbAdminChat.Size = New System.Drawing.Size(578, 397)
-        Me.rtbAdminChat.TabIndex = 2
-        Me.rtbAdminChat.Text = ""
-        '
-        'btnSendChat
-        '
-        Me.btnSendChat.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btnSendChat.Location = New System.Drawing.Point(0, 0)
-        Me.btnSendChat.Name = "btnSendChat"
-        Me.btnSendChat.Size = New System.Drawing.Size(289, 24)
-        Me.btnSendChat.TabIndex = 1
-        Me.btnSendChat.Text = "Button1"
-        Me.btnSendChat.UseVisualStyleBackColor = True
-        '
-        'txtChat
-        '
-        Me.txtChat.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtChat.Location = New System.Drawing.Point(0, 0)
-        Me.txtChat.Name = "txtChat"
-        Me.txtChat.Size = New System.Drawing.Size(661, 22)
-        Me.txtChat.TabIndex = 0
-        '
         'SplitContainer1
         '
         Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Bottom
@@ -284,23 +284,23 @@ Partial Class AdminForm
         Me.SplitContainer1.SplitterDistance = 661
         Me.SplitContainer1.TabIndex = 5
         '
-        'SplitContainer2
+        'txtChat
         '
-        Me.SplitContainer2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer2.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer2.Name = "SplitContainer2"
+        Me.txtChat.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtChat.Location = New System.Drawing.Point(0, 0)
+        Me.txtChat.Name = "txtChat"
+        Me.txtChat.Size = New System.Drawing.Size(661, 22)
+        Me.txtChat.TabIndex = 0
         '
-        'SplitContainer2.Panel1
+        'btnSendChat
         '
-        Me.SplitContainer2.Panel1.Controls.Add(Me.rtbAdminChat)
-        '
-        'SplitContainer2.Panel2
-        '
-        Me.SplitContainer2.Panel2.Controls.Add(Me.Label1)
-        Me.SplitContainer2.Panel2.Controls.Add(Me.boxSysops)
-        Me.SplitContainer2.Size = New System.Drawing.Size(954, 397)
-        Me.SplitContainer2.SplitterDistance = 578
-        Me.SplitContainer2.TabIndex = 6
+        Me.btnSendChat.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btnSendChat.Location = New System.Drawing.Point(0, 0)
+        Me.btnSendChat.Name = "btnSendChat"
+        Me.btnSendChat.Size = New System.Drawing.Size(289, 24)
+        Me.btnSendChat.TabIndex = 1
+        Me.btnSendChat.Text = "Button1"
+        Me.btnSendChat.UseVisualStyleBackColor = True
         '
         'AdminForm
         '
@@ -316,15 +316,15 @@ Partial Class AdminForm
         Me.TabPage2.ResumeLayout(False)
         CType(Me.dgvVoters, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabPage4.ResumeLayout(False)
+        Me.SplitContainer2.Panel1.ResumeLayout(False)
+        Me.SplitContainer2.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer2.ResumeLayout(False)
         Me.SplitContainer1.Panel1.ResumeLayout(False)
         Me.SplitContainer1.Panel1.PerformLayout()
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
-        Me.SplitContainer2.Panel1.ResumeLayout(False)
-        Me.SplitContainer2.Panel2.ResumeLayout(False)
-        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer2.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub

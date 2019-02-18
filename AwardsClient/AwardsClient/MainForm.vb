@@ -2,7 +2,7 @@
 Imports System.Net.Sockets
 
 Public Class MainForm
-    Public Const HardCodedConnectionIP = "127.0.0.1"
+    Public Const HardCodedConnectionIP = "195.147.75.156"
     Public Const WebServerEnabled = False ' Unless I add in a message sent from the server to the client, the client has no way of knowing
     ''''''''''''''''''''''''''''''''''''''' and im just not going to bother adding even more messages sent.
     Public Const MaximumStudentsDisplayInDropDown = 15
@@ -36,6 +36,31 @@ Public Class MainForm
     Public Client As TcpClient
 
     Public Students As New Dictionary(Of String, Student) ' account name
+
+    Public ReadOnly Property AllKnownStudents As Dictionary(Of String, Student)
+        Get
+            Dim dict As New Dictionary(Of String, Student)
+            For Each stud As Student In Students.Values
+                dict.Add(stud.AccountName, stud)
+            Next
+            For Each stud As Student In AdminForm.CurrentQueue
+                If dict.ContainsKey(stud.AccountName) Then
+                    dict(stud.AccountName) = stud
+                Else
+                    dict.Add(stud.AccountName, stud)
+                End If
+            Next
+            For Each stud As Student In AdminForm.CurrentVoters
+                If dict.ContainsKey(stud.AccountName) Then
+                    dict(stud.AccountName) = stud
+                Else
+                    dict.Add(stud.AccountName, stud)
+                End If
+            Next
+            Return dict
+        End Get
+    End Property
+
 
     Dim AllChache As New Dictionary(Of String, Student)
 
@@ -266,7 +291,12 @@ Public Class MainForm
                         str = "You are blocked from voting." + vbCrLf + "You have no alternatives."
                     End If
                 Case Else
-                    str = "Refused!" + vbCrLf + vbCrLf + "The reason is unknown or was not given; you are unable to vote"
+                    If message.StartsWith("Kicked") Then
+                        message = message.Substring("Kicked".Length)
+                        str = "Refused!" + vbCrLf + "You have been kicked previously, reason was:" + vbCrLf + message
+                    Else
+                        str = "Refused!" + vbCrLf + vbCrLf + "The reason is unknown or was not given; you are unable to vote"
+                    End If
             End Select
             lblOpeningMessage.Text = str
             Client.Close()
@@ -364,6 +394,12 @@ Public Class MainForm
                 End Select
                 AdminForm.Visible = CurrentAuth > Authentication.Student
             End If
+        ElseIf message.StartsWith("Kicked:") Then
+            message = message.Substring("Kicked:".Length)
+            first_panel_load.Hide()
+            second_panel_prompt.Show()
+            btnStart.Visible = False
+            lblOpeningMessage.Text = "You have been kicked" + vbCrLf + "Reason:" + vbCrLf + message
         End If
     End Sub
 
@@ -431,8 +467,8 @@ Public Class MainForm
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 #If DEBUG Then
         DebugForm.Show()
-        CurrentIPStage = 1
 #End If
+        CurrentIPStage = 1
         Me.Size = New Size(652, 405)
         Me.MinimumSize = New Size(652, 405)
         Me.MaximumSize = New Size(652, 405)

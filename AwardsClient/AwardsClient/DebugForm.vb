@@ -16,6 +16,7 @@ Public Class DebugForm
         SyncLock obj
             Dim str = $"{DateTime.Now.ToString("hh:mm:ss.fff")}: " + CType(message, String) + vbCrLf
             _log += str
+            Console.WriteLine(str)
             System.IO.File.AppendAllText(logPath, str)
         End SyncLock
         'syncContext = AsyncOperationManager.SynchronizationContext()

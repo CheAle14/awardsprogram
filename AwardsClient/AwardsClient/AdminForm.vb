@@ -119,6 +119,37 @@ Public Class AdminForm
     Private Sub AdminForm_Activated(sender As Object, e As EventArgs) Handles MyBase.Activated
         ReloadUI()
     End Sub
+
+    Private Sub KickStudent(stud As Student)
+        Dim reason = InputBox("Provide a reason to kick " + stud.ToString(), "Kick Reason")
+        If Not String.IsNullOrWhiteSpace(reason) Then
+            MainForm.Send("/KICK:" + stud.AccountName + ":" + reason)
+        End If
+    End Sub
+
+    Private Sub dgvQueue_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvQueue.CellContentClick
+        If e.RowIndex < 0 Or e.ColumnIndex < 0 Then
+            Return
+        End If
+        If e.ColumnIndex = 3 Then
+            Dim row = dgvQueue.Rows.Item(e.RowIndex)
+            Dim name = row.Cells.Item(1).Value
+            Dim student = MainForm.AllKnownStudents.Item(name)
+            KickStudent(student)
+        End If
+    End Sub
+
+    Private Sub dgvVoters_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvVoters.CellContentClick
+        If e.RowIndex < 0 Or e.ColumnIndex < 0 Then
+            Return
+        End If
+        If e.ColumnIndex = 2 Then
+            Dim row = dgvVoters.Rows.Item(e.RowIndex)
+            Dim name = row.Cells.Item(1).Value
+            Dim student = MainForm.AllKnownStudents.Item(name)
+            KickStudent(student)
+        End If
+    End Sub
 End Class
 
 Public Class AdminMessage
