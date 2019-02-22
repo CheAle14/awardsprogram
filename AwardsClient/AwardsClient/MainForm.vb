@@ -2,7 +2,7 @@
 Imports System.Net.Sockets
 
 Public Class MainForm
-    Public Const HardCodedConnectionIP = "195.147.75.156"
+    Public Const HardCodedConnectionIP = "127.0.0.1"
     Public Const WebServerEnabled = False ' Unless I add in a message sent from the server to the client, the client has no way of knowing
     ''''''''''''''''''''''''''''''''''''''' and im just not going to bother adding even more messages sent.
     Public Const MaximumStudentsDisplayInDropDown = 15
@@ -945,7 +945,7 @@ Public Class MainForm
             BugReportForm.ShowDialog()
             Dim report = BugReportForm.Report
             If report.Submitted Then
-                Send($"REPORT:{DirectCast(report.ConcernType, Integer)};{report.PrimaryConcern};{report.AdditionalData}")
+                Send($"REPORT:{DirectCast(report.ConcernType, Integer)};{report.PrimaryConcern};{report.AdditionalData};{report.LogBase64Encoded}")
             End If
         End If
     End Sub

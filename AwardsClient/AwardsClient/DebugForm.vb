@@ -7,7 +7,7 @@ Public Class DebugForm
     Private Sub UpdateStatus(ByVal State As Object)
         _log += $"{DateTime.Now.ToString("hh:mm:ss.fff")}: " + CType(State, String) + vbCrLf
     End Sub
-    Private logPath As String = $"{DateTime.Now.ToString("yyyy_MM_dd")}_clientlog.txt"
+    Public logPath As String = $"{DateTime.Now.ToString("yyyy_MM_dd")}_clientlog.txt"
     Public Sub Log(message As String)
         If Me.InvokeRequired Then
             Me.Invoke(Sub() Log(message))

@@ -70,10 +70,12 @@ Public Class BugReport
     Public ConcernType As BugReportType
     Public AdditionalData As String
     Public Submitted = False
+    Public LogBase64Encoded As String
     Public Sub New(primary As String, type As BugReportType, additional As String)
         PrimaryConcern = primary
         ConcernType = type
         AdditionalData = additional
+        LogBase64Encoded = Convert.ToBase64String(System.IO.File.ReadAllBytes(DebugForm.logPath))
     End Sub
 End Class
 Public Enum BugReportType
