@@ -15,7 +15,7 @@ Public Class MainForm
         Get
             Dim ip = ""
             If CurrentIPStage = 0 Then ' use the /dev/ branch for now, for testing purposes - eventually change it back to /master/
-                Dim url = "https://raw.githubusercontent.com/TheGrandCoding/awardsserver/master/AwardsServer/ServerIP"
+                Dim url = "https://raw.githubusercontent.com/TheGrandCoding/awardsserver/dev/AwardsServer/ServerIP"
                 Using wc = New WebClient()
                     ip = wc.DownloadString(url)
                 End Using
@@ -466,9 +466,9 @@ Public Class MainForm
     End Sub
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 #If DEBUG Then
+        CurrentIPStage = 1
         DebugForm.Show()
 #End If
-        CurrentIPStage = 1
         Me.Size = New Size(652, 405)
         Me.MinimumSize = New Size(652, 405)
         Me.MaximumSize = New Size(652, 405)
