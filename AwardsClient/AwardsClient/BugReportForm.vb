@@ -18,7 +18,9 @@ Public Class BugReportForm
         Me.Size = FirstSize
         txtPrimary.Text = ""
         txtSecondary.Text = ""
+        cboType.SelectedText = ""
         cboType.SelectedIndex = -1
+        cboType.SelectedItem = Nothing
     End Sub
     Public Shared Function GetEnumDescription(e As [Enum]) As String
         Dim t As Type = e.GetType()
