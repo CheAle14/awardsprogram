@@ -50,6 +50,32 @@ Public Class AdminForm
                     Dim newSt = New Student(stuSplit(0), stuSplit(1), stuSplit(2), stuSplit(3), DirectCast(Integer.Parse(stuSplit(4)), Authentication), stuSplit(5))
                     CurrentVoters.Add(newSt)
                 Next
+            ElseIf message.StartsWith("MANRD:") Then
+                message = message.Replace("MANRD:", "")
+                Dim splited = message.Split("#").Where(Function(x) Not String.IsNullOrWhiteSpace(x))
+                Dim count = 1
+                dgvManualVotes.Rows.Clear()
+                For Each msg As String In splited
+                    Dim row As New List(Of String)
+                    Dim catString = count.ToString("00")
+                    Dim category As Category = Nothing
+                    If MainForm.Categories.TryGetValue(count, category) Then
+                        catString += ": " + category.Prompt
+                    End If
+                    row.Add(catString)
+                    Dim catSplit = msg.Split(";")
+                    For Each student In catSplit
+                        Dim stuSplit = msg.Split(":")
+                        Dim newSt = New Student(stuSplit(0), stuSplit(1), stuSplit(2), stuSplit(3), DirectCast(Integer.Parse(stuSplit(4)), Authentication), stuSplit(5))
+                        If MainForm.AllKnownStudents.ContainsKey(stuSplit(0)) Then
+                        Else
+                            MainForm.Students.Add(newSt.AccountName, newSt)
+                        End If
+                        row.Add(newSt.ToString("FN LN TT"))
+                    Next
+                    count += 1
+                    dgvManualVotes.Rows.Add(row.ToArray())
+                Next
             End If
             ReloadUI()
         End If
@@ -148,6 +174,24 @@ Public Class AdminForm
             Dim name = row.Cells.Item(1).Value
             Dim student = MainForm.AllKnownStudents.Item(name)
             KickStudent(student)
+        End If
+    End Sub
+
+    Private Sub btnSubmitManualVote_Click(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub btnPerformManualVote_Click(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub txtNameOfManualVote_TextChanged(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub btnReadyManualVote_Click(sender As Object, e As EventArgs) Handles btnReadyManualVote.Click
+        If Not String.IsNullOrWhiteSpace(txtNameOfManualVote.Text) Then
+            MainForm.Send("/MANR:" + txtNameOfManualVote.Text)
         End If
     End Sub
 End Class
