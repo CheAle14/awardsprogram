@@ -138,8 +138,10 @@ Public Class AdminForm
     End Sub
 
     Private Sub btnSendChat_Click(sender As Object, e As EventArgs) Handles btnSendChat.Click
-        SendAChat()
-        txtChat.Text = ""
+        If txtChat.Focused Then
+            SendAChat()
+            txtChat.Text = ""
+        End If
     End Sub
 
     Private Sub AdminForm_Activated(sender As Object, e As EventArgs) Handles MyBase.Activated
