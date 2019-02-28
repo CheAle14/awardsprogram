@@ -79,9 +79,9 @@ Partial Class AdminForm
         Me.TabPage3.Controls.Add(Me.txtNameOfManualVote)
         Me.TabPage3.Controls.Add(Me.Label2)
         Me.TabPage3.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage3.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPage3.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPage3.Padding = New System.Windows.Forms.Padding(2)
         Me.TabPage3.Size = New System.Drawing.Size(714, 340)
         Me.TabPage3.TabIndex = 7
         Me.TabPage3.Text = "Manual Vote"
@@ -90,7 +90,7 @@ Partial Class AdminForm
         'btnSubmitManualVote
         '
         Me.btnSubmitManualVote.Location = New System.Drawing.Point(624, 0)
-        Me.btnSubmitManualVote.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnSubmitManualVote.Margin = New System.Windows.Forms.Padding(2)
         Me.btnSubmitManualVote.Name = "btnSubmitManualVote"
         Me.btnSubmitManualVote.Size = New System.Drawing.Size(83, 25)
         Me.btnSubmitManualVote.TabIndex = 4
@@ -100,7 +100,7 @@ Partial Class AdminForm
         'btnReadyManualVote
         '
         Me.btnReadyManualVote.Location = New System.Drawing.Point(333, 0)
-        Me.btnReadyManualVote.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnReadyManualVote.Margin = New System.Windows.Forms.Padding(2)
         Me.btnReadyManualVote.Name = "btnReadyManualVote"
         Me.btnReadyManualVote.Size = New System.Drawing.Size(83, 25)
         Me.btnReadyManualVote.TabIndex = 3
@@ -115,7 +115,7 @@ Partial Class AdminForm
         Me.dgvManualVotes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.dgvManualVotes.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn1, Me.Column15, Me.Column16})
         Me.dgvManualVotes.Location = New System.Drawing.Point(8, 25)
-        Me.dgvManualVotes.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.dgvManualVotes.Margin = New System.Windows.Forms.Padding(2)
         Me.dgvManualVotes.Name = "dgvManualVotes"
         Me.dgvManualVotes.RowHeadersVisible = False
         Me.dgvManualVotes.RowTemplate.Height = 24
@@ -139,8 +139,8 @@ Partial Class AdminForm
         '
         'txtNameOfManualVote
         '
-        Me.txtNameOfManualVote.Location = New System.Drawing.Point(183, 5)
-        Me.txtNameOfManualVote.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtNameOfManualVote.Location = New System.Drawing.Point(181, 3)
+        Me.txtNameOfManualVote.Margin = New System.Windows.Forms.Padding(2)
         Me.txtNameOfManualVote.Name = "txtNameOfManualVote"
         Me.txtNameOfManualVote.Size = New System.Drawing.Size(146, 20)
         Me.txtNameOfManualVote.TabIndex = 1
@@ -160,7 +160,7 @@ Partial Class AdminForm
         Me.TabPage4.Controls.Add(Me.SplitContainer2)
         Me.TabPage4.Controls.Add(Me.SplitContainer1)
         Me.TabPage4.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage4.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPage4.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPage4.Name = "TabPage4"
         Me.TabPage4.Size = New System.Drawing.Size(714, 340)
         Me.TabPage4.TabIndex = 3
@@ -171,7 +171,7 @@ Partial Class AdminForm
         '
         Me.SplitContainer2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.SplitContainer2.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer2.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.SplitContainer2.Margin = New System.Windows.Forms.Padding(2)
         Me.SplitContainer2.Name = "SplitContainer2"
         '
         'SplitContainer2.Panel1
@@ -191,7 +191,7 @@ Partial Class AdminForm
         '
         Me.rtbAdminChat.Dock = System.Windows.Forms.DockStyle.Fill
         Me.rtbAdminChat.Location = New System.Drawing.Point(0, 0)
-        Me.rtbAdminChat.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.rtbAdminChat.Margin = New System.Windows.Forms.Padding(2)
         Me.rtbAdminChat.Name = "rtbAdminChat"
         Me.rtbAdminChat.Size = New System.Drawing.Size(431, 320)
         Me.rtbAdminChat.TabIndex = 2
@@ -213,7 +213,7 @@ Partial Class AdminForm
         Me.boxSysops.Dock = System.Windows.Forms.DockStyle.Fill
         Me.boxSysops.FormattingEnabled = True
         Me.boxSysops.Location = New System.Drawing.Point(0, 0)
-        Me.boxSysops.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.boxSysops.Margin = New System.Windows.Forms.Padding(2)
         Me.boxSysops.Name = "boxSysops"
         Me.boxSysops.Size = New System.Drawing.Size(280, 320)
         Me.boxSysops.TabIndex = 3
@@ -222,7 +222,7 @@ Partial Class AdminForm
         '
         Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.SplitContainer1.Location = New System.Drawing.Point(0, 320)
-        Me.SplitContainer1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.SplitContainer1.Margin = New System.Windows.Forms.Padding(2)
         Me.SplitContainer1.Name = "SplitContainer1"
         '
         'SplitContainer1.Panel1
@@ -241,7 +241,7 @@ Partial Class AdminForm
         '
         Me.txtChat.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txtChat.Location = New System.Drawing.Point(0, 0)
-        Me.txtChat.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.txtChat.Margin = New System.Windows.Forms.Padding(2)
         Me.txtChat.Name = "txtChat"
         Me.txtChat.Size = New System.Drawing.Size(493, 20)
         Me.txtChat.TabIndex = 0
@@ -250,7 +250,7 @@ Partial Class AdminForm
         '
         Me.btnSendChat.Dock = System.Windows.Forms.DockStyle.Fill
         Me.btnSendChat.Location = New System.Drawing.Point(0, 0)
-        Me.btnSendChat.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnSendChat.Margin = New System.Windows.Forms.Padding(2)
         Me.btnSendChat.Name = "btnSendChat"
         Me.btnSendChat.Size = New System.Drawing.Size(218, 20)
         Me.btnSendChat.TabIndex = 1
@@ -262,9 +262,9 @@ Partial Class AdminForm
         Me.TabPage2.Controls.Add(Me.dgvVoters)
         Me.TabPage2.Controls.Add(Me.btnRefreshVoters)
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage2.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPage2.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPage2.Padding = New System.Windows.Forms.Padding(2)
         Me.TabPage2.Size = New System.Drawing.Size(714, 340)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Current Voters"
@@ -279,7 +279,7 @@ Partial Class AdminForm
         Me.dgvVoters.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column5, Me.Column6, Me.Column7})
         Me.dgvVoters.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgvVoters.Location = New System.Drawing.Point(2, 25)
-        Me.dgvVoters.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.dgvVoters.Margin = New System.Windows.Forms.Padding(2)
         Me.dgvVoters.Name = "dgvVoters"
         Me.dgvVoters.ReadOnly = True
         Me.dgvVoters.RowHeadersVisible = False
@@ -311,7 +311,7 @@ Partial Class AdminForm
         '
         Me.btnRefreshVoters.Dock = System.Windows.Forms.DockStyle.Top
         Me.btnRefreshVoters.Location = New System.Drawing.Point(2, 2)
-        Me.btnRefreshVoters.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnRefreshVoters.Margin = New System.Windows.Forms.Padding(2)
         Me.btnRefreshVoters.Name = "btnRefreshVoters"
         Me.btnRefreshVoters.Size = New System.Drawing.Size(710, 23)
         Me.btnRefreshVoters.TabIndex = 0
@@ -323,9 +323,9 @@ Partial Class AdminForm
         Me.TabPage1.Controls.Add(Me.dgvQueue)
         Me.TabPage1.Controls.Add(Me.btnRefreshQueue)
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPage1.Margin = New System.Windows.Forms.Padding(2)
         Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabPage1.Padding = New System.Windows.Forms.Padding(2)
         Me.TabPage1.Size = New System.Drawing.Size(714, 340)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Current Queue"
@@ -340,7 +340,7 @@ Partial Class AdminForm
         Me.dgvQueue.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3, Me.Column4})
         Me.dgvQueue.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dgvQueue.Location = New System.Drawing.Point(2, 28)
-        Me.dgvQueue.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.dgvQueue.Margin = New System.Windows.Forms.Padding(2)
         Me.dgvQueue.Name = "dgvQueue"
         Me.dgvQueue.ReadOnly = True
         Me.dgvQueue.RowHeadersVisible = False
@@ -382,7 +382,7 @@ Partial Class AdminForm
         '
         Me.btnRefreshQueue.Dock = System.Windows.Forms.DockStyle.Top
         Me.btnRefreshQueue.Location = New System.Drawing.Point(2, 2)
-        Me.btnRefreshQueue.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.btnRefreshQueue.Margin = New System.Windows.Forms.Padding(2)
         Me.btnRefreshQueue.Name = "btnRefreshQueue"
         Me.btnRefreshQueue.Size = New System.Drawing.Size(710, 26)
         Me.btnRefreshQueue.TabIndex = 0
@@ -397,7 +397,7 @@ Partial Class AdminForm
         Me.TabControl1.Controls.Add(Me.TabPage4)
         Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TabControl1.Location = New System.Drawing.Point(0, 0)
-        Me.TabControl1.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.TabControl1.Margin = New System.Windows.Forms.Padding(2)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
         Me.TabControl1.Size = New System.Drawing.Size(722, 366)
@@ -410,7 +410,7 @@ Partial Class AdminForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(722, 366)
         Me.Controls.Add(Me.TabControl1)
-        Me.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Margin = New System.Windows.Forms.Padding(2)
         Me.Name = "AdminForm"
         Me.Text = "<> Form"
         Me.TabPage3.ResumeLayout(False)
