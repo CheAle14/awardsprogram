@@ -65,8 +65,12 @@ Public Class AdminForm
                     row.Add(catString)
                     Dim catSplit = msg.Split(";")
                     For Each student In catSplit
+                        If String.IsNullOrWhiteSpace(student) Then
+                            row.Add("")
+                            Continue For
+                        End If
                         Dim stuSplit = msg.Split(":")
-                        Dim newSt = New Student(stuSplit(0), stuSplit(1), stuSplit(2), stuSplit(3), DirectCast(Integer.Parse(stuSplit(4)), Authentication), stuSplit(5))
+                        Dim newSt = New Student(stuSplit(0), stuSplit(1), stuSplit(2), stuSplit(3))
                         If MainForm.AllKnownStudents.ContainsKey(stuSplit(0)) Then
                         Else
                             MainForm.Students.Add(newSt.AccountName, newSt)
@@ -76,6 +80,24 @@ Public Class AdminForm
                     count += 1
                     dgvManualVotes.Rows.Add(row.ToArray())
                 Next
+            ElseIf message.StartsWith("QUERY:") Then
+                message = message.Replace("QUERY:", "")
+                Dim split = message.Split(":").Where(Function(x) Not String.IsNullOrWhiteSpace(x))
+                Dim rowIndex = Integer.Parse(split.ElementAt(0))
+                Dim colIndex = Integer.Parse(split.ElementAt(1))
+                Dim queryT = split.ElementAt(2)
+                Dim studentSplit = queryT.Split(";")
+                Dim student As Student = New Student(studentSplit(0),
+                                                     studentSplit(1),
+                                                     studentSplit(2),
+                                                     studentSplit(3))
+                If Not MainForm.Students.ContainsKey(student.AccountName) Then
+                    MainForm.Students.Add(student.AccountName, student)
+                End If
+                Dim row = dgvManualVotes.Rows.Item(rowIndex)
+                Dim cell = row.Cells.Item(colIndex)
+                cell.Value = student.ToString("FN LN TT")
+                cell.Tag = student
             End If
             ReloadUI()
         End If
@@ -193,6 +215,36 @@ Public Class AdminForm
         If Not String.IsNullOrWhiteSpace(txtNameOfManualVote.Text) Then
             MainForm.Send("/MANR:" + txtNameOfManualVote.Text)
         End If
+    End Sub
+
+    Private Sub dgvManualVotes_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles dgvManualVotes.CellEndEdit
+        If e.RowIndex < 0 Or e.ColumnIndex < 0 Then
+            Return
+        End If
+        Dim row = dgvManualVotes.Rows.Item(e.RowIndex)
+        Dim text As String = row.Cells.Item(e.ColumnIndex).Value
+        Dim user As Student = Nothing
+        If MainForm.AllKnownStudents.TryGetValue(text, user) Then
+            row.Cells.Item(e.ColumnIndex).Value = user.ToString("FN LN TT")
+            row.Cells.Item(e.ColumnIndex).Tag = user
+        Else
+            MainForm.Send($"/QUERY:{e.RowIndex}:{e.ColumnIndex}:" + text)
+        End If
+    End Sub
+
+    Private Sub btnSubmitManualVote_Click_1(sender As Object, e As EventArgs) Handles btnSubmitManualVote.Click
+        Dim sending As String = "/MANVOTE:"
+        If String.IsNullOrWhiteSpace(txtNameOfManualVote.Text) Then
+            Return
+        End If
+        sending += txtNameOfManualVote.Text + ":"
+        For Each row As DataGridViewRow In dgvManualVotes.Rows
+            Dim first As Student = row.Cells.Item(1).Tag
+            Dim second As Student = row.Cells.Item(2).Tag
+            Dim str = If(first Is Nothing, "", first.AccountName) + ";" + If(second Is Nothing, "", second.AccountName)
+            sending += str + "#"
+        Next
+        MainForm.Send(sending)
     End Sub
 End Class
 
