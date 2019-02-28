@@ -89,20 +89,20 @@ Partial Class AdminForm
         '
         'btnSubmitManualVote
         '
-        Me.btnSubmitManualVote.Location = New System.Drawing.Point(624, 6)
+        Me.btnSubmitManualVote.Location = New System.Drawing.Point(624, 0)
         Me.btnSubmitManualVote.Margin = New System.Windows.Forms.Padding(2)
         Me.btnSubmitManualVote.Name = "btnSubmitManualVote"
-        Me.btnSubmitManualVote.Size = New System.Drawing.Size(83, 19)
+        Me.btnSubmitManualVote.Size = New System.Drawing.Size(83, 25)
         Me.btnSubmitManualVote.TabIndex = 4
         Me.btnSubmitManualVote.Text = "Submit"
         Me.btnSubmitManualVote.UseVisualStyleBackColor = True
         '
         'btnReadyManualVote
         '
-        Me.btnReadyManualVote.Location = New System.Drawing.Point(333, 6)
+        Me.btnReadyManualVote.Location = New System.Drawing.Point(333, 0)
         Me.btnReadyManualVote.Margin = New System.Windows.Forms.Padding(2)
         Me.btnReadyManualVote.Name = "btnReadyManualVote"
-        Me.btnReadyManualVote.Size = New System.Drawing.Size(83, 19)
+        Me.btnReadyManualVote.Size = New System.Drawing.Size(83, 25)
         Me.btnReadyManualVote.TabIndex = 3
         Me.btnReadyManualVote.Text = "Ready"
         Me.btnReadyManualVote.UseVisualStyleBackColor = True
@@ -139,7 +139,7 @@ Partial Class AdminForm
         '
         'txtNameOfManualVote
         '
-        Me.txtNameOfManualVote.Location = New System.Drawing.Point(183, 5)
+        Me.txtNameOfManualVote.Location = New System.Drawing.Point(181, 3)
         Me.txtNameOfManualVote.Margin = New System.Windows.Forms.Padding(2)
         Me.txtNameOfManualVote.Name = "txtNameOfManualVote"
         Me.txtNameOfManualVote.Size = New System.Drawing.Size(146, 20)
@@ -183,7 +183,7 @@ Partial Class AdminForm
         Me.SplitContainer2.Panel2.Controls.Add(Me.Label1)
         Me.SplitContainer2.Panel2.Controls.Add(Me.boxSysops)
         Me.SplitContainer2.Size = New System.Drawing.Size(714, 320)
-        Me.SplitContainer2.SplitterDistance = 432
+        Me.SplitContainer2.SplitterDistance = 431
         Me.SplitContainer2.SplitterWidth = 3
         Me.SplitContainer2.TabIndex = 6
         '
@@ -193,7 +193,7 @@ Partial Class AdminForm
         Me.rtbAdminChat.Location = New System.Drawing.Point(0, 0)
         Me.rtbAdminChat.Margin = New System.Windows.Forms.Padding(2)
         Me.rtbAdminChat.Name = "rtbAdminChat"
-        Me.rtbAdminChat.Size = New System.Drawing.Size(432, 320)
+        Me.rtbAdminChat.Size = New System.Drawing.Size(431, 320)
         Me.rtbAdminChat.TabIndex = 2
         Me.rtbAdminChat.Text = ""
         '
@@ -203,7 +203,7 @@ Partial Class AdminForm
         Me.Label1.Location = New System.Drawing.Point(0, 300)
         Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(279, 20)
+        Me.Label1.Size = New System.Drawing.Size(280, 20)
         Me.Label1.TabIndex = 4
         Me.Label1.Text = "Sysops / Sysadmins"
         Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -215,7 +215,7 @@ Partial Class AdminForm
         Me.boxSysops.Location = New System.Drawing.Point(0, 0)
         Me.boxSysops.Margin = New System.Windows.Forms.Padding(2)
         Me.boxSysops.Name = "boxSysops"
-        Me.boxSysops.Size = New System.Drawing.Size(279, 320)
+        Me.boxSysops.Size = New System.Drawing.Size(280, 320)
         Me.boxSysops.TabIndex = 3
         '
         'SplitContainer1
@@ -233,7 +233,7 @@ Partial Class AdminForm
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.btnSendChat)
         Me.SplitContainer1.Size = New System.Drawing.Size(714, 20)
-        Me.SplitContainer1.SplitterDistance = 494
+        Me.SplitContainer1.SplitterDistance = 493
         Me.SplitContainer1.SplitterWidth = 3
         Me.SplitContainer1.TabIndex = 5
         '
@@ -243,7 +243,7 @@ Partial Class AdminForm
         Me.txtChat.Location = New System.Drawing.Point(0, 0)
         Me.txtChat.Margin = New System.Windows.Forms.Padding(2)
         Me.txtChat.Name = "txtChat"
-        Me.txtChat.Size = New System.Drawing.Size(494, 20)
+        Me.txtChat.Size = New System.Drawing.Size(493, 20)
         Me.txtChat.TabIndex = 0
         '
         'btnSendChat
@@ -252,9 +252,9 @@ Partial Class AdminForm
         Me.btnSendChat.Location = New System.Drawing.Point(0, 0)
         Me.btnSendChat.Margin = New System.Windows.Forms.Padding(2)
         Me.btnSendChat.Name = "btnSendChat"
-        Me.btnSendChat.Size = New System.Drawing.Size(217, 20)
+        Me.btnSendChat.Size = New System.Drawing.Size(218, 20)
         Me.btnSendChat.TabIndex = 1
-        Me.btnSendChat.Text = "Button1"
+        Me.btnSendChat.Text = "Send"
         Me.btnSendChat.UseVisualStyleBackColor = True
         '
         'TabPage2
@@ -405,6 +405,7 @@ Partial Class AdminForm
         '
         'AdminForm
         '
+        Me.AcceptButton = Me.btnSendChat
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(722, 366)
