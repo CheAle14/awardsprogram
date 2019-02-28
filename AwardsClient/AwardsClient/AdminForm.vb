@@ -196,6 +196,10 @@ Public Class AdminForm
             MainForm.Send("/MANR:" + txtNameOfManualVote.Text)
         End If
     End Sub
+
+    Private Sub dgvManualVotes_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvManualVotes.CellContentClick
+
+    End Sub
 End Class
 
 Public Class AdminMessage
