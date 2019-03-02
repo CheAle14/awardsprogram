@@ -15,7 +15,7 @@ Public Class MainForm
         Get
             Dim ip = ""
             If CurrentIPStage = 0 Then ' use the /dev/ branch for now, for testing purposes - eventually change it back to /master/
-                Dim url = "https://raw.githubusercontent.com/TheGrandCoding/awardsserver/dev/AwardsServer/ServerIP"
+                Dim url = "https://raw.githubusercontent.com/TheGrandCoding/awardsserver/master/AwardsServer/ServerIP"
                 Using wc = New WebClient()
                     ip = wc.DownloadString(url)
                 End Using
