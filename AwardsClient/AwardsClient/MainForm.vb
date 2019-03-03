@@ -1,4 +1,4 @@
-﻿Imports System.Net
+Imports System.Net
 Imports System.Net.Sockets
 
 Public Class MainForm
@@ -37,6 +37,31 @@ Public Class MainForm
 
     Public Students As New Dictionary(Of String, Student) ' account name
 
+    Public ReadOnly Property AllKnownStudents As Dictionary(Of String, Student)
+        Get
+            Dim dict As New Dictionary(Of String, Student)
+            For Each stud As Student In Students.Values
+                dict.Add(stud.AccountName, stud)
+            Next
+            For Each stud As Student In AdminForm.CurrentQueue
+                If dict.ContainsKey(stud.AccountName) Then
+                    dict(stud.AccountName) = stud
+                Else
+                    dict.Add(stud.AccountName, stud)
+                End If
+            Next
+            For Each stud As Student In AdminForm.CurrentVoters
+                If dict.ContainsKey(stud.AccountName) Then
+                    dict(stud.AccountName) = stud
+                Else
+                    dict.Add(stud.AccountName, stud)
+                End If
+            Next
+            Return dict
+        End Get
+    End Property
+
+
     Dim AllChache As New Dictionary(Of String, Student)
 
     Public Categories As New Dictionary(Of Integer, Category)
@@ -47,6 +72,15 @@ Public Class MainForm
 
     Public HasConnectedAtleastOnce = False
 
+    Public Shared CurrentAuth As Authentication = Authentication.Student
+
+    Public Enum Authentication
+        None = 0
+        Student = 1
+        Sysop = 2
+        Sysadmin = 3
+    End Enum
+
     Public Class Student
         Public AccountName As String
         Public FirstName As String
@@ -54,12 +88,36 @@ Public Class MainForm
         Public Tutor As String
         <Obsolete("Removed. See: TheGrandCoding/awardsprogram#15", True)>
         Public Sex As Char
+
+        Public Auth As Authentication?
+        Public IP As String ' potentially null
+        Public PositionInQueue As Integer ' potentially nul
+
         Public Sub New(accn As String, fn As String, ln As String, tt As String)
             AccountName = accn
             FirstName = fn
             LastName = ln
             Tutor = tt
         End Sub
+
+        Public Sub New(accn As String, fn As String, ln As String, tt As String, _auth As Authentication, _ip As String)
+            AccountName = accn
+            FirstName = fn
+            LastName = ln
+            Tutor = tt
+            Auth = _auth
+            IP = _ip
+        End Sub
+
+        Public Sub New(accn As String, fn As String, ln As String, tt As String, _queuePos As Integer, _ip As String)
+            AccountName = accn
+            FirstName = fn
+            LastName = ln
+            Tutor = tt
+            PositionInQueue = _queuePos
+            IP = _ip
+        End Sub
+
         Public Overrides Function ToString() As String
             Return Me.ToString("FN LN (TT)")
         End Function
@@ -123,7 +181,7 @@ Public Class MainForm
     "`", "%"
     }
 
-    Private Sub Send(message As String)
+    Public Sub Send(message As String)
         Try
             For Each item In Disallowed
                 message = message.Replace(item, "")
@@ -177,7 +235,12 @@ Public Class MainForm
             HasConnectedAtleastOnce = True
         End If
 
-        If message.StartsWith("Ready:") Then
+        If message.StartsWith("/") Then
+            message = message.Substring(1)
+            If CurrentAuth > Authentication.Student Then
+                AdminForm.HandleAuthMessages(message)
+            End If
+        ElseIf message.StartsWith("Ready:") Then
             message = message.Replace("Ready:", "")
             btnStart.Visible = True
             lblOpeningMessage.Text = "Hello, " + message + vbCrLf _
@@ -228,7 +291,12 @@ Public Class MainForm
                         str = "You are blocked from voting." + vbCrLf + "You have no alternatives."
                     End If
                 Case Else
-                    str = "Refused!" + vbCrLf + vbCrLf + "The reason is unknown or was not given; you are unable to vote"
+                    If message.StartsWith("Kicked") Then
+                        message = message.Substring("Kicked".Length)
+                        str = "Refused!" + vbCrLf + "You have been kicked previously, reason was:" + vbCrLf + message
+                    Else
+                        str = "Refused!" + vbCrLf + vbCrLf + "The reason is unknown or was not given; you are unable to vote"
+                    End If
             End Select
             lblOpeningMessage.Text = str
             Client.Close()
@@ -311,6 +379,27 @@ Public Class MainForm
             second_panel_prompt.Show()
             btnStart.Visible = False
             lblOpeningMessage.Text = "You are currently in a queue, since many people are trying to vote." + vbCrLf + vbCrLf + $"You are {message} in line."
+        ElseIf message.StartsWith("Auth:") Then
+            message = message.Replace("Auth:", "")
+            If System.Enum.TryParse(message, CurrentAuth) Then
+                ' success
+                Select Case CurrentAuth
+                    Case Authentication.None
+                    Case Authentication.Student
+                        Me.Text = "Y11 Awards"
+                    Case Authentication.Sysop
+                        Me.Text = "Y11 Awards | System operator"
+                    Case Authentication.Sysadmin
+                        Me.Text = "Y11 Awards | System administrator"
+                End Select
+                AdminForm.Visible = CurrentAuth > Authentication.Student
+            End If
+        ElseIf message.StartsWith("Kicked:") Then
+            message = message.Substring("Kicked:".Length)
+            first_panel_load.Hide()
+            second_panel_prompt.Show()
+            btnStart.Visible = False
+            lblOpeningMessage.Text = "You have been kicked" + vbCrLf + "Reason:" + vbCrLf + message
         End If
     End Sub
 
@@ -377,8 +466,8 @@ Public Class MainForm
     End Sub
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 #If DEBUG Then
-        DebugForm.Show()
         CurrentIPStage = 1
+        DebugForm.Show()
 #End If
         Me.Size = New Size(652, 405)
         Me.MinimumSize = New Size(652, 405)
@@ -848,5 +937,30 @@ Public Class MainForm
 
     Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
 
+    End Sub
+
+    Public Sub StartBugReport()
+        If BugReportForm.Visible Then
+        Else
+            BugReportForm.ShowDialog()
+            Dim report = BugReportForm.Report
+            If report.Submitted Then
+                Send($"REPORT:{DirectCast(report.ConcernType, Integer)};{report.PrimaryConcern};{report.AdditionalData};{report.LogBase64Encoded}")
+            End If
+        End If
+    End Sub
+
+    Private Sub btnReportBug_Click(sender As Object, e As EventArgs)
+        StartBugReport()
+    End Sub
+
+    Private Sub MainForm_KeyUp(sender As Object, e As KeyEventArgs) Handles MyBase.KeyUp
+        If e.Shift AndAlso e.Control AndAlso e.KeyCode = Keys.H Then
+            StartBugReport()
+        End If
+    End Sub
+
+    Private Sub btnBugReport_Click(sender As Object, e As EventArgs) Handles btnBugReport.Click
+        StartBugReport()
     End Sub
 End Class

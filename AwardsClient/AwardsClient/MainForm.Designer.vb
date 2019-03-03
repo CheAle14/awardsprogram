@@ -51,6 +51,7 @@ Partial Class MainForm
         Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lblQueryFirst = New System.Windows.Forms.Label()
         Me.lblQuerySecond = New System.Windows.Forms.Label()
+        Me.btnBugReport = New System.Windows.Forms.Button()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.first_panel_load.SuspendLayout()
@@ -72,6 +73,18 @@ Partial Class MainForm
         Me.first_panel_load.Name = "first_panel_load"
         Me.first_panel_load.Size = New System.Drawing.Size(215, 175)
         Me.first_panel_load.TabIndex = 0
+        '
+        'PictureBox2
+        '
+        Me.PictureBox2.BackgroundImage = Global.AwardsClient.My.Resources.Resources.logo
+        Me.PictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.PictureBox2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.PictureBox2.Location = New System.Drawing.Point(0, 0)
+        Me.PictureBox2.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(215, 76)
+        Me.PictureBox2.TabIndex = 3
+        Me.PictureBox2.TabStop = False
         '
         'lblFirstPanelDisplay
         '
@@ -100,6 +113,18 @@ Partial Class MainForm
         Me.second_panel_prompt.Name = "second_panel_prompt"
         Me.second_panel_prompt.Size = New System.Drawing.Size(233, 175)
         Me.second_panel_prompt.TabIndex = 1
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.BackgroundImage = Global.AwardsClient.My.Resources.Resources.logo
+        Me.PictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.PictureBox1.Dock = System.Windows.Forms.DockStyle.Top
+        Me.PictureBox1.Location = New System.Drawing.Point(0, 0)
+        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(233, 62)
+        Me.PictureBox1.TabIndex = 2
+        Me.PictureBox1.TabStop = False
         '
         'lblOpeningMessage
         '
@@ -140,6 +165,7 @@ Partial Class MainForm
         '
         Me.lblNumRemain.Font = New System.Drawing.Font("MS Reference Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblNumRemain.ForeColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.lblNumRemain.Location = New System.Drawing.Point(12, 8)
         Me.lblNumRemain.Location = New System.Drawing.Point(12, 9)
         Me.lblNumRemain.Name = "lblNumRemain"
         Me.lblNumRemain.Size = New System.Drawing.Size(72, 23)
@@ -354,6 +380,15 @@ Partial Class MainForm
         Me.lblQuerySecond.Text = "Searching..."
         Me.lblQuerySecond.Visible = False
         '
+        'Button1
+        '
+        Me.btnBugReport.BackColor = System.Drawing.Color.LightCoral
+        Me.btnBugReport.Location = New System.Drawing.Point(319, 394)
+        Me.btnBugReport.Name = "Button1"
+        Me.btnBugReport.Size = New System.Drawing.Size(125, 28)
+        Me.btnBugReport.TabIndex = 17
+        Me.btnBugReport.Text = "Report a bug"
+        Me.btnBugReport.UseVisualStyleBackColor = False
         'PictureBox1
         '
         Me.PictureBox1.BackgroundImage = Global.AwardsClient.My.Resources.Resources.logo
@@ -385,6 +420,7 @@ Partial Class MainForm
         Me.BackColor = System.Drawing.Color.IndianRed
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
         Me.ClientSize = New System.Drawing.Size(1444, 452)
+        Me.Controls.Add(Me.btnBugReport)
         Me.Controls.Add(Me.finalPromptPanel)
         Me.Controls.Add(Me.SecondDisplayPanel)
         Me.Controls.Add(Me.FirstDisplayPanel)
@@ -401,6 +437,7 @@ Partial Class MainForm
         Me.Controls.Add(Me.second_panel_prompt)
         Me.Controls.Add(Me.first_panel_load)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
+        Me.KeyPreview = True
         Me.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
         Me.MaximizeBox = False
         Me.MinimizeBox = False
@@ -446,4 +483,5 @@ Partial Class MainForm
     Friend WithEvents PictureBox2 As PictureBox
     Friend WithEvents lblQueryFirst As Label
     Friend WithEvents lblQuerySecond As Label
+    Friend WithEvents btnBugReport As Button
 End Class
