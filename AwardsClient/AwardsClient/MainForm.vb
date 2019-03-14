@@ -17,12 +17,14 @@ Public Class MainForm
             If CurrentIPStage = 0 Then ' use the /dev/ branch for now, for testing purposes - eventually change it back to /master/
                 Dim url = "https://raw.githubusercontent.com/TheGrandCoding/awardsserver/master/AwardsServer/ServerIP"
                 Using wc = New WebClient()
-                    ip = wc.DownloadString(url)
+                    ip = wc.DownloadString(url).Trim() ' Remove any newlines (or other whitespace) added by Github
                 End Using
             ElseIf CurrentIPStage = 1 Then
                 ip = HardCodedConnectionIP
             Else
                 ' We have tried the above, so now we need to loop through them all.
+                ' Shouldnt get to this stage really
+                ' Will literally take years to go through everything
                 Dim baseString = "10.249.67."
                 ip = baseString + (CurrentIPStage - 1).ToString()
                 If (CurrentIPStage - 2) > 255 Then
