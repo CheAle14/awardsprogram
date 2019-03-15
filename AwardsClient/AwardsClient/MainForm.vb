@@ -13,6 +13,14 @@ Public Class MainForm
     Dim SecondChosen As Boolean = False
 
     Public VoteOnBehalfOf As String ' We vote for another user, so we can use the search/query function.
+    Public ReadOnly Property AccountCurrentVoting As String
+        Get
+            If String.IsNullOrWhiteSpace(VoteOnBehalfOf) Then
+                Return Environment.UserName.ToLower()
+            End If
+            Return VoteOnBehalfOf.ToLower()
+        End Get
+    End Property
 
     Public ReadOnly Property ConnectionIP As String
         Get
@@ -648,7 +656,7 @@ Public Class MainForm
             End Try
             button.Text = display
             button.Tag = accName
-            If button.Tag.ToString().ToLower() = Environment.UserName.ToLower() Then
+            If button.Tag.ToString().ToLower() = AccountCurrentVoting Then
                 button.Enabled = False
                 button.Text += " (You)"
             Else
@@ -684,7 +692,7 @@ Public Class MainForm
             End Try
             button.Text = display
             button.Tag = accName
-            If button.Tag.ToString().ToLower() = Environment.UserName.ToString().ToLower() Then
+            If button.Tag.ToString().ToLower() = AccountCurrentVoting Then
                 button.Enabled = False
                 button.Text += " (You)"
             Else
