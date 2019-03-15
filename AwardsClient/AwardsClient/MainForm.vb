@@ -11,6 +11,9 @@ Public Class MainForm
     Private CurrentIPStage = 0 ' 0 = Not tried, 1 = Tried github ip, 2 = tried hardcoded, >3 = currently looping.
     Dim FirstChosen As Boolean = False
     Dim SecondChosen As Boolean = False
+
+    Public VoteOnBehalfOf As String ' We vote for another user, so we can use the search/query function.
+
     Public ReadOnly Property ConnectionIP As String
         Get
             Dim ip = ""
@@ -188,6 +191,7 @@ Public Class MainForm
             For Each item In Disallowed
                 message = message.Replace(item, "")
             Next
+            Log($"Send/ " + message)
             message = $"%{message}`"
             Dim stream = Client.GetStream()
             Dim bytes = System.Text.Encoding.UTF8.GetBytes(message)
@@ -221,7 +225,11 @@ Public Class MainForm
             recieveMessageThread.Start()
             AddHandler Me.Messaged, AddressOf MessageRecievedHandler
             EndConnection("Connected, waiting for server to confirm be ready..")
-            Send(Environment.UserName.ToLower())
+            Dim sendString = Environment.UserName.ToLower()
+            If Not String.IsNullOrWhiteSpace(VoteOnBehalfOf) Then
+                sendString += "#" + VoteOnBehalfOf.ToLower()
+            End If
+            Send(sendString)
         End If
     End Sub
 
@@ -493,6 +501,14 @@ Public Class MainForm
         Next
 
         Log("Loaded for " + Environment.UserName)
+
+        If IO.File.Exists("admin_vote.txt") Then
+            Dim user = InputBox("Please enter the account login of the student you would like to vote on behalf of, or leave blank to continue as normal")
+            If Not String.IsNullOrEmpty(user) Then
+                VoteOnBehalfOf = user
+                Log("Voting on behalf of: " + user)
+            End If
+        End If
         LoadedStartCon()
     End Sub
     Private connThread As Threading.Thread

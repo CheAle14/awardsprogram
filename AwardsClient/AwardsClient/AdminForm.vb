@@ -248,6 +248,21 @@ Public Class AdminForm
         Next
         MainForm.Send(sending)
     End Sub
+
+    Private Sub btnToggleVoteBehalf_Click(sender As Object, e As EventArgs) Handles btnToggleVoteBehalf.Click
+        Try
+            If IO.File.Exists("admin_vote.txt") Then
+                IO.File.Delete("admin_vote.txt")
+                MsgBox("You will no longer be prompted to votet on behalf of another user")
+            Else
+                IO.File.Create("admin_vote.txt")
+                MsgBox("You will need to close your client and re-open to start voting on behalf of the user" + vbCrLf + vbCrLf + "WARNING;" + vbCrLf + "You will not have any administrator permissions: You will appear as the given user.")
+            End If
+        Catch ex As Exception
+            MainForm.Log(ex.ToString())
+            MsgBox($"Unable to enable: " + ex.Message)
+        End Try
+    End Sub
 End Class
 
 Public Class AdminMessage
