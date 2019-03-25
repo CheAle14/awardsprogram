@@ -81,6 +81,11 @@ Public Class MainForm
 
     Public CurrentCategory As Category
 
+    ''' <summary>
+    ''' Whether the user double-clicked the <see cref="DataGridView1"/> to go back, rather than use 'Back' button
+    ''' </summary>
+    Public HasShortcutWentBack = False
+
     Public NumberOfCategories = 0
 
     Public HasConnectedAtleastOnce = False
@@ -571,6 +576,9 @@ Public Class MainForm
             End Try
         End If
         If CurrentCategory IsNot Nothing Then
+            If HasShortcutWentBack Then
+                btnNext.Text = "Finish"
+            End If
             lblPrompt.Text = CurrentCategory.Prompt
             lblNumRemain.Text = $"{CurrentCategory.ID}/{NumberOfCategories}"
             FirstChosen = Not CurrentCategory.FirstDisplay = ""
@@ -736,7 +744,7 @@ Public Class MainForm
         PreviousClicked = False
         FirstChosen = False
         SecondChosen = False
-        If CurrentCategory.ID + 1 > NumberOfCategories Then
+        If CurrentCategory.ID + 1 > NumberOfCategories Or HasShortcutWentBack Then
             If CurrentCategory.FirstWinner = "" Then
                 If MsgBox("Warning: you have not selected a First Choice (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
                     Return
@@ -766,7 +774,7 @@ Public Class MainForm
             lblOpeningMessage.Text = "Your submission is currently being looked at, please wait.."
             DataGridView1.Rows.Clear()
             For Each category In Categories
-                Dim row() As String = {category.Value.Prompt, category.Value.FirstDisplay, category.Value.SecondDisplay}
+                Dim row() As String = {category.Value.ID, category.Value.Prompt, category.Value.FirstDisplay, category.Value.SecondDisplay}
                 DataGridView1.Rows.Add(row)
             Next
             finalPromptPanel.Location = New Point(0, 0)
@@ -775,6 +783,7 @@ Public Class MainForm
             finalPromptPanel.Dock = DockStyle.Fill
             finalPromptPanel.BringToFront()
             finalPromptPanel.Visible = True
+            HasShortcutWentBack = False ' reset it
         Else
             If CurrentCategory.FirstWinner = "" Then
                 If MsgBox("Warning: you have not selected a First Choice (you need to search then click their button)" + vbCrLf + vbCrLf + "Are you sure you want to continue?", MsgBoxStyle.YesNo, "Missing Name") = vbNo Then
@@ -961,10 +970,6 @@ Public Class MainForm
 
     End Sub
 
-    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentClick
-
-    End Sub
-
     Public Sub StartBugReport()
         If BugReportForm.Visible Then
         Else
@@ -988,5 +993,25 @@ Public Class MainForm
 
     Private Sub btnBugReport_Click(sender As Object, e As EventArgs) Handles btnBugReport.Click
         StartBugReport()
+    End Sub
+
+    Private Sub DataGridView1_CellContentDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridView1.CellContentDoubleClick
+        ' Double click, we want to send the person to the category so they can edit it
+        ' Additionally, we may want to display a 'Finish' button, or change 'Next' to Finish, so they can jump straight back
+        If e.ColumnIndex >= 0 And e.RowIndex >= 0 Then
+            Dim catId As Integer = 0
+            If Integer.TryParse(DataGridView1.Rows(e.RowIndex).Cells(0).Value, catId) Then
+                Dim cat As Category = Nothing
+                If Categories.TryGetValue(catId, cat) Then
+                    HasShortcutWentBack = True ' to display a 'Finish' button, so they can jump straight back
+                    CurrentCategory = cat
+                    txtQuerySecond.Text = CurrentCategory.SecondDisplay ' to make sure whatever they prior votes
+                    txtQueryFirst.Text = CurrentCategory.FirstDisplay   ' are back in the TxT boxes
+                    RefreshCategoryUI()
+                    finalPromptPanel.Hide() ' hide the confirm table
+                    second_panel_prompt.Hide() ' hide the "Your submission is being looked at"
+                End If
+            End If
+        End If
     End Sub
 End Class

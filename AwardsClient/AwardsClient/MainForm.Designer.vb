@@ -27,9 +27,11 @@ Partial Class MainForm
         Dim DataGridViewCellStyle2 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
         Me.first_panel_load = New System.Windows.Forms.Panel()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
         Me.lblFirstPanelDisplay = New System.Windows.Forms.Label()
         Me.contactServerTimer = New System.Windows.Forms.Timer(Me.components)
         Me.second_panel_prompt = New System.Windows.Forms.Panel()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.lblOpeningMessage = New System.Windows.Forms.Label()
         Me.btnStart = New System.Windows.Forms.Button()
         Me.lblPrompt = New System.Windows.Forms.Label()
@@ -46,20 +48,19 @@ Partial Class MainForm
         Me.cmdConfirm = New System.Windows.Forms.Button()
         Me.cmdBack = New System.Windows.Forms.Button()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
-        Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.lblQueryFirst = New System.Windows.Forms.Label()
         Me.lblQuerySecond = New System.Windows.Forms.Label()
         Me.btnBugReport = New System.Windows.Forms.Button()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.Column4 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column2 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.Column3 = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.first_panel_load.SuspendLayout()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.second_panel_prompt.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.finalPromptPanel.SuspendLayout()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'first_panel_load
@@ -165,7 +166,6 @@ Partial Class MainForm
         '
         Me.lblNumRemain.Font = New System.Drawing.Font("MS Reference Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblNumRemain.ForeColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.lblNumRemain.Location = New System.Drawing.Point(12, 8)
         Me.lblNumRemain.Location = New System.Drawing.Point(12, 9)
         Me.lblNumRemain.Name = "lblNumRemain"
         Me.lblNumRemain.Size = New System.Drawing.Size(72, 23)
@@ -273,8 +273,8 @@ Partial Class MainForm
         Me.finalPromptPanel.Controls.Add(Me.DataGridView1)
         Me.finalPromptPanel.Font = New System.Drawing.Font("MS Reference Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.finalPromptPanel.ForeColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.finalPromptPanel.Location = New System.Drawing.Point(1653, 112)
-        Me.finalPromptPanel.Margin = New System.Windows.Forms.Padding(5, 5, 5, 5)
+        Me.finalPromptPanel.Location = New System.Drawing.Point(1319, 78)
+        Me.finalPromptPanel.Margin = New System.Windows.Forms.Padding(5)
         Me.finalPromptPanel.Name = "finalPromptPanel"
         Me.finalPromptPanel.Size = New System.Drawing.Size(461, 303)
         Me.finalPromptPanel.TabIndex = 16
@@ -297,7 +297,7 @@ Partial Class MainForm
         Me.cmdBack.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.cmdBack.ForeColor = System.Drawing.Color.Black
         Me.cmdBack.Location = New System.Drawing.Point(0, 254)
-        Me.cmdBack.Margin = New System.Windows.Forms.Padding(5, 5, 5, 5)
+        Me.cmdBack.Margin = New System.Windows.Forms.Padding(5)
         Me.cmdBack.Name = "cmdBack"
         Me.cmdBack.Size = New System.Drawing.Size(461, 49)
         Me.cmdBack.TabIndex = 2
@@ -320,7 +320,7 @@ Partial Class MainForm
         DataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.[True]
         Me.DataGridView1.ColumnHeadersDefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column1, Me.Column2, Me.Column3})
+        Me.DataGridView1.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Column4, Me.Column1, Me.Column2, Me.Column3})
         DataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft
         DataGridViewCellStyle2.BackColor = System.Drawing.Color.IndianRed
         DataGridViewCellStyle2.Font = New System.Drawing.Font("MS Reference Sans Serif", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -337,24 +337,6 @@ Partial Class MainForm
         Me.DataGridView1.RowHeadersVisible = False
         Me.DataGridView1.Size = New System.Drawing.Size(461, 254)
         Me.DataGridView1.TabIndex = 0
-        '
-        'Column1
-        '
-        Me.Column1.HeaderText = "Category"
-        Me.Column1.Name = "Column1"
-        Me.Column1.ReadOnly = True
-        '
-        'Column2
-        '
-        Me.Column2.HeaderText = "First Choice:"
-        Me.Column2.Name = "Column2"
-        Me.Column2.ReadOnly = True
-        '
-        'Column3
-        '
-        Me.Column3.HeaderText = "Second Choice:"
-        Me.Column3.Name = "Column3"
-        Me.Column3.ReadOnly = True
         '
         'lblQueryFirst
         '
@@ -380,38 +362,40 @@ Partial Class MainForm
         Me.lblQuerySecond.Text = "Searching..."
         Me.lblQuerySecond.Visible = False
         '
-        'Button1
+        'btnBugReport
         '
         Me.btnBugReport.BackColor = System.Drawing.Color.LightCoral
         Me.btnBugReport.Location = New System.Drawing.Point(319, 394)
-        Me.btnBugReport.Name = "Button1"
+        Me.btnBugReport.Name = "btnBugReport"
         Me.btnBugReport.Size = New System.Drawing.Size(125, 28)
         Me.btnBugReport.TabIndex = 17
         Me.btnBugReport.Text = "Report a bug"
         Me.btnBugReport.UseVisualStyleBackColor = False
-        'PictureBox1
         '
-        Me.PictureBox1.BackgroundImage = Global.AwardsClient.My.Resources.Resources.logo
-        Me.PictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.PictureBox1.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PictureBox1.Location = New System.Drawing.Point(0, 0)
-        Me.PictureBox1.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(233, 62)
-        Me.PictureBox1.TabIndex = 2
-        Me.PictureBox1.TabStop = False
+        'Column4
         '
-        'PictureBox2
+        Me.Column4.HeaderText = "ID"
+        Me.Column4.Name = "Column4"
+        Me.Column4.ReadOnly = True
+        Me.Column4.Visible = False
         '
-        Me.PictureBox2.BackgroundImage = Global.AwardsClient.My.Resources.Resources.logo
-        Me.PictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.PictureBox2.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PictureBox2.Location = New System.Drawing.Point(0, 0)
-        Me.PictureBox2.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(215, 76)
-        Me.PictureBox2.TabIndex = 3
-        Me.PictureBox2.TabStop = False
+        'Column1
+        '
+        Me.Column1.HeaderText = "Category"
+        Me.Column1.Name = "Column1"
+        Me.Column1.ReadOnly = True
+        '
+        'Column2
+        '
+        Me.Column2.HeaderText = "First Choice:"
+        Me.Column2.Name = "Column2"
+        Me.Column2.ReadOnly = True
+        '
+        'Column3
+        '
+        Me.Column3.HeaderText = "Second Choice:"
+        Me.Column3.Name = "Column3"
+        Me.Column3.ReadOnly = True
         '
         'MainForm
         '
@@ -419,7 +403,7 @@ Partial Class MainForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.IndianRed
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.ClientSize = New System.Drawing.Size(1444, 452)
+        Me.ClientSize = New System.Drawing.Size(1924, 452)
         Me.Controls.Add(Me.btnBugReport)
         Me.Controls.Add(Me.finalPromptPanel)
         Me.Controls.Add(Me.SecondDisplayPanel)
@@ -446,11 +430,11 @@ Partial Class MainForm
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Year 11 Awards"
         Me.first_panel_load.ResumeLayout(False)
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.second_panel_prompt.ResumeLayout(False)
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.finalPromptPanel.ResumeLayout(False)
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -474,9 +458,6 @@ Partial Class MainForm
     Friend WithEvents SecondDisplayPanel As Panel
     Friend WithEvents finalPromptPanel As Panel
     Friend WithEvents DataGridView1 As DataGridView
-    Friend WithEvents Column1 As DataGridViewTextBoxColumn
-    Friend WithEvents Column2 As DataGridViewTextBoxColumn
-    Friend WithEvents Column3 As DataGridViewTextBoxColumn
     Friend WithEvents cmdConfirm As Button
     Friend WithEvents cmdBack As Button
     Friend WithEvents PictureBox1 As PictureBox
@@ -484,4 +465,8 @@ Partial Class MainForm
     Friend WithEvents lblQueryFirst As Label
     Friend WithEvents lblQuerySecond As Label
     Friend WithEvents btnBugReport As Button
+    Friend WithEvents Column4 As DataGridViewTextBoxColumn
+    Friend WithEvents Column1 As DataGridViewTextBoxColumn
+    Friend WithEvents Column2 As DataGridViewTextBoxColumn
+    Friend WithEvents Column3 As DataGridViewTextBoxColumn
 End Class
